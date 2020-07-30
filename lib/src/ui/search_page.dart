@@ -35,6 +35,7 @@ class SearchPage extends StatelessWidget {
   }
 }
 
+// these lists are just dummy lists for testing purposes
 List recentSearches = [
   'Test 1',
   'Test 2',
@@ -141,8 +142,6 @@ class CustomSearchDelegate extends SearchDelegate {
       },
       itemCount: suggestionList.length,
     );
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
   }
 
 }
