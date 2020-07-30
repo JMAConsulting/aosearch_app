@@ -8,16 +8,22 @@ class App extends StatelessWidget {
       home: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white70,
-            title: Container(
-              padding: EdgeInsets.all(10.0),
-              child: Image.asset('images/AO_logo.png'),
+            title: SafeArea(
+              child: Container(
+                height: 100,
+                margin: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/AO_logo.png'),
+                    fit: BoxFit.fitHeight
+                  )
+                ),
+              ),
             ),
           ),
           body: SearchPage()
       ),
     );
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }
 

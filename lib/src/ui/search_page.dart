@@ -14,5 +14,3 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-// these lists are just dummy lists for testing purposes
-
