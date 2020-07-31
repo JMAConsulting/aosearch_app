@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'select_date_time.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -75,8 +76,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                   });
                                 },
                                 items: <String>[
+                                  // function returns these
                                   'English',
-                                  'French'
+                                  'French',
+                                  'German'
                                 ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -135,6 +138,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               ),
             ),
           ),
+          SelectDateTime(),
           RaisedButton(
             onPressed: () {
               if (_formKey.currentState.validate()) {
