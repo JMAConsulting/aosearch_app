@@ -13,6 +13,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   final _formKey = GlobalKey<FormState>();
   String languages = 'English';
   String acceptingNewClients = 'Any';
+  SelectDateTime startDate = SelectDateTime();
+  SelectDateTime endDate = SelectDateTime();
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +63,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.all(10.0),
                           padding: EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
@@ -103,7 +105,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.all(10.0),
                           padding: EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
@@ -138,7 +139,23 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               ),
             ),
           ),
-          SelectDateTime(),
+          Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  FormField(
+                      builder: (FormFieldState state) {
+                        return startDate;
+                      }
+                  ),
+                  FormField(
+                    builder: (FormFieldState state) {
+                      return endDate;
+                    },
+                  )
+                ],
+              )
+          ),
           RaisedButton(
             onPressed: () {
               if (_formKey.currentState.validate()) {
@@ -155,3 +172,4 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 }
+

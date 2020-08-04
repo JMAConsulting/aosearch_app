@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ui/search_page.dart';
 
-class App extends StatelessWidget {
+class SearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

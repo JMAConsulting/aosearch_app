@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class SelectDateTime extends StatefulWidget {
+
   @override
   _SelectDateTimeState createState() => _SelectDateTimeState();
+
 }
 
 class _SelectDateTimeState extends State<SelectDateTime> {
@@ -25,14 +27,16 @@ class _SelectDateTimeState extends State<SelectDateTime> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListTile(
-        leading: Icon(Icons.date_range),
-        title: Text(
-          "${selectedDate.toLocal()}".split(' ')[0]
+      child: Expanded(
+        child: ListTile(
+          leading: Icon(Icons.date_range),
+          title: Text(
+            "${selectedDate.toLocal()}".split(' ')[0]
+          ),
+          onTap: () {
+            _selectDate(context);
+          }),
         ),
-        onTap: () {
-          _selectDate(context);
-        }),
       );
     }
 }
