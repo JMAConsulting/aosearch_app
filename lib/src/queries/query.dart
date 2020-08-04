@@ -1,9 +1,9 @@
 class Query {
   String keyword;
-  String language;
+  String languages;
   String acceptingNewClients;
   DateTime startDate;
   DateTime endDate;
 
-  Query(this.keyword, this.language, this.acceptingNewClients, this.startDate, this.endDate);
+  Query(this.keyword, this.languages, this.acceptingNewClients, this.startDate, this.endDate);
 }

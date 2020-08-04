@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'select_date_time.dart';
+import '../queries/state_container.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -10,7 +11,9 @@ class AdvancedSearchForm extends StatefulWidget {
 
 class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
+  get container => StateContainer.of(context);
   final _formKey = GlobalKey<FormState>();
+  String keyword;
   String languages = 'English';
   String acceptingNewClients = 'Any';
   SelectDateTime startDate = SelectDateTime();
@@ -34,6 +37,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                       return 'Please enter some text';
                     }
                     return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      keyword = value;
+                    });
                   },
                   decoration: InputDecoration(
                     hintText: 'Enter your search term here',
@@ -160,9 +168,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 // this is where we would pass the information from the form to the server
-                Scaffold
-                    .of(context)
-                    .showSnackBar(SnackBar(content: Text('Processing Data')));
+                container.updateQuery(keyword, languages, acceptingNewClients, startDate, endDate);
               }
             },
             child: Text('Search'),

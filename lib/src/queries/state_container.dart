@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import 'query.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
@@ -39,9 +38,9 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer> {
    Query query;
 
-   void updateQuery({keyword, language, acceptingNewClients, startDate, endDate}) {
+   void updateQuery({keyword, languages, acceptingNewClients, startDate, endDate}) {
      if (query == null) {
-       query = new Query(keyword, language, acceptingNewClients, startDate, endDate);
+       query = new Query(keyword, languages, acceptingNewClients, startDate, endDate);
        setState(() {
          query = query;
        });
