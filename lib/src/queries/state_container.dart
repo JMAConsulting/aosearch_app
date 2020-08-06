@@ -38,7 +38,10 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer> {
    Query query;
 
-   void updateQuery({keyword, languages, acceptingNewClients, startDate, endDate}) {
+   Query getQuery() {
+     return query;
+   }
+   void updateQuery(String keyword, String languages, String acceptingNewClients, DateTime startDate, DateTime endDate) {
      if (query == null) {
        query = new Query(keyword, languages, acceptingNewClients, startDate, endDate);
        setState(() {

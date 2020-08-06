@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'select_date_time.dart';
 import '../queries/state_container.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -16,9 +17,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   String keyword;
   String languages = 'English';
   String acceptingNewClients = 'Any';
-  SelectDateTime startDate = SelectDateTime();
-  SelectDateTime endDate = SelectDateTime();
-
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  final dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
@@ -151,16 +152,43 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  FormField(
-                      builder: (FormFieldState state) {
-                        return startDate;
-                      }
+                  Expanded(
+                    child: DateTimeField(
+                      format: dateFormat,
+                      initialValue: DateTime.now(),
+                      onShowPicker: (context, value) {
+                        return showDatePicker(
+                            context: context,
+                            initialDate: value ?? DateTime.now(),
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime(DateTime.now().year + 5)
+                        );
+                      },
+                      onChanged: (date) {
+                        setState(() {
+                          startDate = date;
+                        });
+                      },
+                    ),
                   ),
-                  FormField(
-                    builder: (FormFieldState state) {
-                      return endDate;
-                    },
-                  )
+                  Expanded(
+                    child: DateTimeField(
+                      format: dateFormat,
+                      initialValue: DateTime.now(),
+                      onShowPicker: (context, value) {
+                        return showDatePicker(
+                            context: context,
+                            initialDate: value ?? DateTime.now(),
+                            firstDate: DateTime(2010),
+                            lastDate: DateTime(DateTime.now().year + 5)
+                        );
+                      },
+                      onChanged: (date) {
+                        setState(() {
+                          endDate = date;
+                        });
+                      }),
+                    )
                 ],
               )
           ),
@@ -169,6 +197,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               if (_formKey.currentState.validate()) {
                 // this is where we would pass the information from the form to the server
                 container.updateQuery(keyword, languages, acceptingNewClients, startDate, endDate);
+                print(container.getQuery());
               }
             },
             child: Text('Search'),
