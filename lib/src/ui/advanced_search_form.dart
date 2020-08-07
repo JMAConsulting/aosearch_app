@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../queries/state_container.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'keyword_field.dart';
+import 'dropdown_field.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -15,6 +17,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   get container => StateContainer.of(context);
   final _formKey = GlobalKey<FormState>();
   String keyword;
+  KeywordField keywordField = new KeywordField();
   String languages = 'English';
   String acceptingNewClients = 'Any';
   DateTime startDate = DateTime.now();
@@ -32,26 +35,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: ListTile(
-                title: TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      keyword = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Enter your search term here',
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.search),
-                    )
-                  ),
-                ),
+                title: keywordField
               ),
             ),
           ),
@@ -62,87 +46,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            'Language'
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all()
-                          ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButtonFormField<String>(
-                                value: languages,
-                                icon: Icon(Icons.keyboard_arrow_down),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    languages = newValue;
-                                  });
-                                },
-                                items: <String>[
-                                  // function returns these
-                                  'English',
-                                  'French',
-                                  'German'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    ),
+                    child: DropDownField(['English', 'French', 'German'], 'updateLanguages', "Languages")
+                  ),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            'Accepting New Clients'
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all()
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButtonFormField(
-                              value: acceptingNewClients,
-                              icon: Icon(Icons.keyboard_arrow_down),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  acceptingNewClients = newValue;
-                                });
-                              },
-                              items: <String> [
-                                'Any',
-                                'Yes',
-                                'No'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String> (
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
+                    child: DropDownField(['Any', 'Yes', 'No'], "updateAcceptingNewClients", 'Accepting New Clients')
                   )
                 ],
               ),
