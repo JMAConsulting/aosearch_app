@@ -4,6 +4,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'keyword_field.dart';
 import 'dropdown_field.dart';
+import 'multiselect_field.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -17,8 +18,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   get container => StateContainer.of(context);
   final _formKey = GlobalKey<FormState>();
   String keyword;
+  String languages;
   KeywordField keywordField = new KeywordField();
-  String languages = 'English';
+
   String acceptingNewClients = 'Any';
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
@@ -46,7 +48,24 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child: DropDownField(['English', 'French', 'German'], 'updateLanguages', "Languages")
+                    child: MultiSelectField(
+                      [
+                        {
+                          "display": "English",
+                          "value": "English",
+                        },
+                        {
+                          "display": "French",
+                          "value": "French",
+                        },
+                        {
+                          "display": "Arabic",
+                          "value": "Arabic",
+                        },
+                      ],
+                      "updateAcceptingNewClients",
+                      "Languages"
+                    ),
                   ),
                   Expanded(
                     child: DropDownField(['Any', 'Yes', 'No'], "updateAcceptingNewClients", 'Accepting New Clients')
@@ -114,4 +133,3 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 }
-
