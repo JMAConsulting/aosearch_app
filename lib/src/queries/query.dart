@@ -5,23 +5,28 @@ class Query {
   DateTime _startDate;
   DateTime _endDate;
 
-  set keyword (String keyword) {
+  set keyword(String keyword) {
     _keyword = keyword;
   }
-  set languages (String languages) {
+
+  set languages(String languages) {
     _languages = languages;
   }
-  set acceptingNewClients (String acceptingNewClients) {
+
+  set acceptingNewClients(String acceptingNewClients) {
     _acceptingNewClients = acceptingNewClients;
   }
-  set startDate (DateTime startDate) {
+
+  set startDate(DateTime startDate) {
     _startDate = startDate;
   }
-  set endDate (DateTime endDate) {
+
+  set endDate(DateTime endDate) {
     _endDate = endDate;
   }
-  
-  Query(this._keyword, this._languages, this._acceptingNewClients, this._startDate, this._endDate);
+
+  Query(this._keyword, this._languages, this._acceptingNewClients,
+      this._startDate, this._endDate);
 
   @override
   String toString() {

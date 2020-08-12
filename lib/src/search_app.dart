@@ -13,17 +13,13 @@ class SearchApp extends StatelessWidget {
                 height: 100,
                 margin: EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('images/AO_logo.png'),
-                    fit: BoxFit.fitHeight
-                  )
-                ),
+                    image: DecorationImage(
+                        image: AssetImage('images/AO_logo.png'),
+                        fit: BoxFit.fitHeight)),
               ),
             ),
           ),
-          body: SearchPage()
-      ),
+          body: SearchPage()),
     );
   }
 }
-

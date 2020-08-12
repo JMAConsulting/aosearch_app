@@ -6,25 +6,29 @@ class DropDownField extends StatefulWidget {
   String _queryProperty;
   String _title;
 
-  DropDownField (List<String> dropDownValues, String queryProperty, String title) {
+  DropDownField(
+      List<String> dropDownValues, String queryProperty, String title) {
     _dropDownValues = dropDownValues;
     _queryProperty = queryProperty;
     _title = title;
   }
   @override
-  _DropDownFieldState createState() => _DropDownFieldState(_dropDownValues,  _queryProperty, _title);
+  _DropDownFieldState createState() =>
+      _DropDownFieldState(_dropDownValues, _queryProperty, _title);
 }
 
 class _DropDownFieldState extends State<DropDownField> {
   get container {
     return VariableContainer.of(context);
   }
+
   List<String> _dropDownValues;
   String _dropDownSelection;
   String _queryProperty;
   String _title;
 
-  _DropDownFieldState (List<String> dropDownValues, String queryProperty, String title) {
+  _DropDownFieldState(
+      List<String> dropDownValues, String queryProperty, String title) {
     _dropDownValues = dropDownValues;
     _dropDownSelection = dropDownValues[0];
     _queryProperty = queryProperty;
@@ -44,9 +48,7 @@ class _DropDownFieldState extends State<DropDownField> {
         children: <Widget>[
           Expanded(
             child: Container(
-              child: Text(
-                _title
-              ),
+              child: Text(_title),
             ),
           ),
           Expanded(
@@ -62,7 +64,8 @@ class _DropDownFieldState extends State<DropDownField> {
                       container._queryProperty = _dropDownSelection;
                     });
                   },
-                  items: _dropDownValues.map<DropdownMenuItem<String>>((String value) {
+                  items: _dropDownValues
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
