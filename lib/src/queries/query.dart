@@ -1,35 +1,32 @@
+
 class Query {
-  String _keyword;
-  String _languages;
-  String _acceptingNewClients;
-  DateTime _startDate;
-  DateTime _endDate;
+  String keyword;
+  List<dynamic> languages;
+  String acceptingNewClients;
+  DateTime startDate;
+  DateTime endDate;
+  List<dynamic> servicesAreProvided;
+  List<dynamic> ageGroupsServed;
 
-  set keyword(String keyword) {
-    _keyword = keyword;
-  }
-
-  set languages(String languages) {
-    _languages = languages;
-  }
-
-  set acceptingNewClients(String acceptingNewClients) {
-    _acceptingNewClients = acceptingNewClients;
-  }
-
-  set startDate(DateTime startDate) {
-    _startDate = startDate;
-  }
-
-  set endDate(DateTime endDate) {
-    _endDate = endDate;
-  }
-
-  Query(this._keyword, this._languages, this._acceptingNewClients,
-      this._startDate, this._endDate);
+  Query({
+      this.keyword,
+      this.languages,
+      this.acceptingNewClients,
+      this.startDate,
+      this.endDate,
+      this.servicesAreProvided,
+      this.ageGroupsServed,
+  });
 
   @override
   String toString() {
-    return "keyword = $_keyword languages = $_languages acceptingNewClients = $_acceptingNewClients startDate = ${_startDate.toString()} endDate = ${_endDate.toString()}";
+    return """keyword = $keyword 
+        languages = $languages 
+        acceptingNewClients = $acceptingNewClients 
+        startDate = ${startDate.toString()} 
+        endDate = ${endDate.toString()}
+        servicesAreProvided = $servicesAreProvided
+        ageGroupsServed = $ageGroupsServed 
+        """;
   }
 }
