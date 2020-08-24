@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/search_page.dart';
+import 'ui/advanced_search_form.dart';
 
 class SearchApp extends StatelessWidget {
   @override
@@ -19,7 +19,8 @@ class SearchApp extends StatelessWidget {
               ),
             ),
           ),
-          body: SearchPage()),
+          body: new AdvancedSearchForm(),
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 
-class Query {
+class SearchParameters {
   String keyword;
   List<dynamic> languages;
   String acceptingNewClients;
@@ -8,7 +8,7 @@ class Query {
   List<dynamic> servicesAreProvided;
   List<dynamic> ageGroupsServed;
 
-  Query({
+  SearchParameters({
       this.keyword,
       this.languages,
       this.acceptingNewClients,
