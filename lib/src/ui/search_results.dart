@@ -82,7 +82,7 @@ class _SearchResultsState extends State<SearchResults> {
       servicesProvided, keywords, languages) {
     var conditionGroupGroups = new List();
     if (ageGroupsServed != null) {
-      conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed}, "OR", false));
+      conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed.join(',')}, "OR", false));
     }
     if (types != null) {
       conditionGroupGroups.add(
@@ -95,7 +95,7 @@ class _SearchResultsState extends State<SearchResults> {
     }
     if (servicesProvided != null) {
       conditionGroupGroups.add(
-          buildConditionGroup({"custom_897": servicesProvided}, "OR", false));
+          buildConditionGroup({"custom_897": servicesProvided.join(',')}, "OR", false));
     }
     if (languages != null) {
       conditionGroupGroups.add(
@@ -151,7 +151,9 @@ class Result extends StatelessWidget {
   }
 
   getTitle(item) {
-    return item['title'] ?? item["organization_name"] ?? '';
+    var title = item['title'] ?? item["organization_name"] ?? '';
+    title = title.replaceAll('Self-employed ', '');
+    return title;
   }
 
   String getDescription(item) {
