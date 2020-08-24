@@ -7,6 +7,10 @@ final HttpLink _httpLink = HttpLink(
   uri: 'https://jma.staging.autismontario.com/graphql',
 );
 
+final HttpLink _frenchHttpLink = HttpLink(
+  uri: 'https://jma.staging.autismontario.com/fr/graphql',
+);
+
 final AuthLink _authLink = AuthLink(
   getToken: () async => '',
 );
@@ -19,6 +23,24 @@ ValueNotifier<GraphQLClient> client = ValueNotifier(
     link: _link,
   ),
 );
+
+ValueNotifier<GraphQLClient> frenchClient = ValueNotifier(
+  GraphQLClient(
+    cache: InMemoryCache(),
+    link: _authLink.concat(_frenchHttpLink),
+  ),
+);
+
+final String optionValueQuery = """
+query getOptionValues(\$value: [String]!) {
+  civicrmOptionValueQuery(filter: {conditions: {field: "option_group_id", value: \$value, operator: EQUAL}}) {
+    entities {
+      entityLabel
+      entityId
+    }
+  }
+}
+""";
 
 final String query = """
 query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput) {

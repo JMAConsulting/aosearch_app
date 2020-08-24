@@ -1,3 +1,4 @@
+import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import '../resources/languages.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'location.dart';
 import 'search_results.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import '../resources/api.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -35,7 +38,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
           children: [
             TextFormField(
               decoration: InputDecoration(
-                hintText: 'Enter your search term here',
+                hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
                 labelText: 'Keyword',
               ),
               initialValue: _formResult.keyword,
@@ -51,12 +54,13 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
             ),
             SizedBox(height: 8.0),
             ExpansionTile(
-              title: Text('Advanced Search Options'),
+              title: Text(SearchAppLocalizations.of(context).advSearchTitle),
               children: [Column(
                 children: [
                   DropDownFormField(
                     value: _acceptingNewClients,
-                    titleText: 'Accepting new Clients?',
+                    titleText: Text(SearchAppLocalizations.of(context).acceptingNewClientsTitle).data,
+//                    dataSource: getOptions({"optionGroupId": "195"}),
                     dataSource: acceptingNewClients,
                     valueField: 'value',
                     textField: 'display',
@@ -71,7 +75,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   ),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
-                    titleText: 'Languages',
+                    titleText: Text(SearchAppLocalizations.of(context).languagesTitle).data,
                     dataSource: language,
                     valueField: 'value',
                     textField: 'display',
@@ -187,8 +191,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                       builder: (context) => new ResultsPage(search: _formResult)
                     )
                   );
-                  // TODO: @Monish please add your call here on _formResult
-                  print(_formResult);
                 }
               },
             )
@@ -197,4 +199,30 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
       ),
     );
   }
+
+  getOptions(String $optionGroupId) {
+    Query(
+      options: QueryOptions(
+        documentNode: gql(optionValueQuery),
+        variables: {"value": $optionGroupId},
+      ),
+      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+        debugPrint(result.toString());
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+        if (result.loading) {
+          return Text('Loading');
+        }
+        // it can be either Map or List
+//        var repositories = result.data['civicrmOptionValueQuery']['entities'];
+//        var options = new Map();
+//        repositories.forEach((content, index) {
+//          options[content['entityLabel']] = content['entityLabel'];
+//        });
+//        return options;
+      }
+    );
+  }
 }
+

@@ -55,7 +55,7 @@ class _SearchResultsState extends State<SearchResults> {
       options: QueryOptions(
         documentNode: gql(query),
         variables: queryVariables(
-            appLanguage,
+            Localizations.localeOf(context).languageCode,
             type,
             search.ageGroupsServed,
             search.acceptingNewClients,

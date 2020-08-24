@@ -1,0 +1,27 @@
+{
+  "@@last_modified": "2020-08-24T16:39:49.550666",
+  "keywordHintText": "Enter your search term here",
+  "@keywordHintText": {
+    "description": "Keyword hint text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "advSearchTitle": "Advanced Search Options",
+  "@advSearchTitle": {
+    "description": "Advanced Search Title text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "acceptingNewClientsTitle": "Accepting new Clients?",
+  "@acceptingNewClientsTitle": {
+    "description": "Accepting New Clients title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languagesTitle": "Languages",
+  "@languagesTitle": {
+    "description": "LanguagesTitleField",
+    "type": "text",
+    "placeholders": {}
+  }
+}
