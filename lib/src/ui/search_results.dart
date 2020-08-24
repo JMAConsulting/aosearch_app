@@ -1,3 +1,4 @@
+import 'package:aoapp/src/resources/languages.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
@@ -44,7 +45,7 @@ class SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<SearchResults> {
   final SearchParameters search;
   var appLanguage = 'en';
-  var type = 'learning_resource';
+  var type = 'Service Listing';
   _SearchResultsState(this.search);
 
   @override
@@ -59,6 +60,8 @@ class _SearchResultsState extends State<SearchResults> {
             search.ageGroupsServed,
             search.acceptingNewClients,
             search.servicesAreProvided,
+            search.keyword,
+            search.languages,
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -75,18 +78,41 @@ class _SearchResultsState extends State<SearchResults> {
     );
   }
 
-  queryVariables(language, types, ageGroupsServed, acceptingNewClients, servicesProvided) {
+  queryVariables(appLanguage, types, ageGroupsServed, acceptingNewClients,
+      servicesProvided, keywords, languages) {
     var conditionGroupGroups = new List();
-    conditionGroupGroups.add(buildConditionGroup({"type": types}, "OR"));
+    if (ageGroupsServed != null) {
+      conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed}, "OR", false));
+    }
+    if (types != null) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"type": types ?? ''}, "OR", false));
+    }
+    if (acceptingNewClients != null && acceptingNewClients != 'Any') {
+      conditionGroupGroups.add(
+          buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
+              acceptingNewClients == "Yes" ? false : true));
+    }
+    if (servicesProvided != null) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"custom_897": servicesProvided}, "OR", false));
+    }
+    if (languages != null) {
+      conditionGroupGroups.add(
+        buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
+      );
+    }
     var conditionGroup = {
       "conjunction": "AND",
       'groups': conditionGroupGroups,
     };
     var variables = {
       "conditions": [],
-      "languages": [language, "und"],
+      "languages": [appLanguage, "und"],
       'conditionGroup': conditionGroup,
+      'fulltext': keywords,
     };
+    debugPrint(variables.toString());
     return variables;
   }
 }

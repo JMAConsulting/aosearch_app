@@ -57,15 +57,19 @@ query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$cond
 }
 """;
 
-queryVariable(String $value, String $name) =>
-    {"name": $name, "value": $value, "operator": "="};
+queryVariable(String $value, String $name, $negative) =>
+    {"name": $name, "value": $value, "operator": $negative ? "<>" : "="};
 
-buildConditionGroup(Map $queryConditions, String $conjunction) {
+buildConditionGroup(Map $queryConditions, String $conjunction, bool $negative) {
   var conditions = new List();
   $queryConditions.forEach((key, value) {
     var valueConditions = value.split(',');
     valueConditions.forEach((v) {
-      conditions.add(queryVariable(v, key));
+      if (v.contains(',')) {
+        v.replace(',', '');
+      }
+      v.trim();
+      conditions.add(queryVariable(v, key, $negative));
     });
   });
   var conditionGroup = {
