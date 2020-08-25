@@ -17,7 +17,7 @@ class _LocationWidgetState extends State<LocationWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (currentPosition != null) Text(currentAddress),
+        if (currentAddress != null) Text(currentAddress),
         FlatButton(
           child: Text(
             'Use my location'

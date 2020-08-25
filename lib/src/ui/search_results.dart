@@ -15,17 +15,15 @@ class ResultsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
-        title: SafeArea(
-        child: Center(
-          child: Container(
-          height: 100,
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/AO_logo.png'),
-              fit: BoxFit.fitHeight)),
-             ),
-        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/AO_logo.png',
+              height: AppBar().preferredSize.height,
+              fit: BoxFit.cover,
+            )
+          ],
         ),
       ),
       body: new SearchResults(search: search),

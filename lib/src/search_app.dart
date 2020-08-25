@@ -90,16 +90,15 @@ class SearchApp extends StatelessWidget {
       home: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white70,
-            title: SafeArea(
-              child: Container(
-                height: 100,
-                margin: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('images/AO_logo.png'),
-                        fit: BoxFit.fitHeight)
-                ),
-              ),
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                      'images/AO_logo.png',
+                      height: AppBar().preferredSize.height,
+                      fit: BoxFit.cover,
+                  )
+                ],
             ),
           ),
           body: new AdvancedSearchForm(),

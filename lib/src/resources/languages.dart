@@ -32,9 +32,6 @@ List<Map> language = [
     "display": "Mandarin",
     "value": "Mandarin"
   }, {
-    "display": "Mandarin",
-    "value": "Mandarin"
-  }, {
     "display": "Ojibway",
     "value": "Ojibway"
   }, {
