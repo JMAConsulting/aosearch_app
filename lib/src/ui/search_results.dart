@@ -129,6 +129,15 @@ class Result extends StatelessWidget {
           final item = list["searchAPISearch"]["documents"][index];
           return ListTile(
             onTap: () {},
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 64,
+                maxHeight: 64,
+              ),
+              child: Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+            ),
             title: Container(
               padding: EdgeInsets.all(5.0),
               height: 35.0,

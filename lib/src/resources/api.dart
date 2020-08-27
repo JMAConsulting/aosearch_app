@@ -40,9 +40,23 @@ query getOptionValues(\$value: [String]!) {
 }
 """;
 
+final String taxonomyTermJmaQuery = """
+query getChapters() {
+  taxonomyTermJmaQuery(filter: {conditions: {field: "vid", value:"group", operator: EQUAL}}, limit: 100) {
+    entities {
+      entityLabel
+      entityId
+    }
+  }
+}
+""";
+
 final String query = """
 query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput) {
-  searchAPISearch(index_id: "default", language: \$languages, condition_group: \$conditionGroup, fulltext: \$fullText, facets: [{field: "type", min_count: 1, limit: 0, operator: "=", missing: false}, {field: "field_chapter_reference", min_count: 1, limit: 0, operator: "=", missing: false}]) {
+  searchAPISearch(index_id: "default", language: \$languages, condition_group: \$conditionGroup, fulltext: \$fullText,
+   facets: [{field: "type", min_count: 1, limit: 0, operator: "=", missing: false}, {field: "field_chapter_reference", min_count: 1, limit: 0, operator: "=", missing: false}],
+   sort: [{field: "search_api_relevance", value: "desc"}, {field: "organization_name", value: "asc"}, {field: "start_date", value: "asc"}]
+ ) {
     documents {
       ... on DefaultDoc {
         type

@@ -5,6 +5,7 @@ import '../l10n/messages_all.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../src/resources/api.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'queries/search_parameters.dart';
 
 class SearchAppLocalizations {
   SearchAppLocalizations(this.localeName);
@@ -49,6 +50,15 @@ class SearchAppLocalizations {
       'Accepting new Clients?',
       name: 'acceptingNewClientsTitle',
       desc: 'Accepting New Clients title',
+      locale: localeName,
+    );
+  }
+
+  String get chaptersTitle {
+    return Intl.message(
+      'Chapters',
+      name: 'chaptersTitle',
+      desc: 'Chapters title',
       locale: localeName,
     );
   }
@@ -150,6 +160,7 @@ class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLoca
 }
 
 class SearchApp extends StatelessWidget {
+  SearchParameters _formResult = SearchParameters();
   @override
   Widget build(BuildContext context) {
     return MaterialApp (

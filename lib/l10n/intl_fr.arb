@@ -1,6 +1,6 @@
 {
   "@@last_modified": "2020-08-28T15:42:20.874641",
-  "keywordHintText": "Enter your search term here",
+  "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
     "type": "text",
@@ -12,13 +12,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "acceptingNewClientsTitle": "Accepting new Clients fr?",
+  "acceptingNewClientsTitle": "Accepte de nouveaux clients",
   "@acceptingNewClientsTitle": {
     "description": "Accepting New Clients title",
     "type": "text",
     "placeholders": {}
   },
-  "languagesTitle": "Languages",
+  "languagesTitle": "Langue(s)",
   "@languagesTitle": {
     "description": "LanguagesTitleField",
     "type": "text",
@@ -30,7 +30,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "servicesAreProvidedTitle": "Services are provided",
+  "servicesAreProvidedTitle": "Fourniture des services",
   "@servicesAreProvidedTitle": {
     "description": "servicesAreProvidedTitleField",
     "type": "text",
@@ -42,7 +42,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "ageGroupsTitleText": "Age groups served",
+  "ageGroupsTitleText": "Groupes d'âge desservis",
   "@ageGroupsTitleText": {
     "description": "ageGroupsTitleText",
     "type": "text",
@@ -54,19 +54,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "startDate": "Start Date",
+  "startDate": "de",
   "@startDate": {
     "description": "startDate",
     "type": "text",
     "placeholders": {}
   },
-  "endDate": "End Date",
+  "endDate": "A",
   "@endDate": {
     "description": "endDate",
     "type": "text",
     "placeholders": {}
   },
-  "dateErrorMessage": "End Date can't be before Start Date",
+  "dateErrorMessage": "La date de début doit être supérieure ou égale à la date d’achèvement",
   "@dateErrorMessage": {
     "description": "dateErrorMessage",
     "type": "text",

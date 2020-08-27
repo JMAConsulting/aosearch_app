@@ -1,6 +1,5 @@
 import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
-import '../resources/languages.dart';
 import 'package:intl/intl.dart';
 import '../queries/search_parameters.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -24,6 +23,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   final dateFormat = DateFormat('yyyy-MM-dd');
   DateTime _startDate;
   String _acceptingNewClients;
+  String _chapters;
 
 
   @override
@@ -60,6 +60,38 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               title: Text(SearchAppLocalizations.of(context).advSearchTitle),
               children: [Column(
                 children: [
+                  /**
+                  Query(
+                      options: QueryOptions(
+                        documentNode: gql(taxonomyTermJmaQuery),
+                      ),
+                      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                        print(result);
+                        if (result.hasException) {
+                          return Text(result.exception.toString());
+                        }
+                        if (result.loading) {
+                          return Text('Loading');
+                        }
+                        return DropDownFormField(
+                          value: _chapters,
+                          titleText: Text(SearchAppLocalizations
+                              .of(context)
+                              .chaptersTitle).data,
+                          dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                          valueField: 'entityLabel',
+                          textField: 'entityLabel',
+                          onChanged: (value) {
+                            setState(() {
+                              _chapters = value;
+                            });
+                          },
+                          onSaved: (value) {
+                            _formResult.chapters = value;
+                          },
+                        );
+                      }),
+                  */
                   Query(
                     options: QueryOptions(
                       documentNode: gql(optionValueQuery),
@@ -89,61 +121,89 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           _formResult.acceptingNewClients = value;
                         },
                       );
+                    }
+                  ),
+                  SizedBox(height: 8.0),
+                  Query(
+                    options: QueryOptions(
+                      documentNode: gql(optionValueQuery),
+                      variables: {"value": "languages"},
+                    ),
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      if (result.hasException) {
+                        return Text(result.exception.toString());
+                      }
+                      if (result.loading) {
+                        return Text('Loading');
+                      }
+                      return MultiSelectFormField(
+                        titleText: Text(SearchAppLocalizations
+                            .of(context)
+                            .languagesTitle).data,
+                        dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                        valueField: 'entityLabel',
+                        textField: 'entityLabel',
+                        hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                        onSaved: (values) {
+                          setState(() {
+                            _formResult.languages = values;
+                          });
+                        },
+                      );
+                    }
+                  ),
+                  SizedBox(height: 8.0),
+                  Query(
+                    options: QueryOptions(
+                      documentNode: gql(optionValueQuery),
+                      variables: {"value": "232"},
+                    ),
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      if (result.hasException) {
+                      return Text(result.exception.toString());
+                      }
+                      if (result.loading) {
+                      return Text('Loading');
+                      }
+                      return MultiSelectFormField(
+                        titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
+                        dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                        valueField: 'entityLabel',
+                        textField: 'entityLabel',
+                        hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
+                        onSaved: (values) {
+                          setState(() {
+                            _formResult.servicesAreProvided = values;
+                          });
+                        },
+                      );
                     }),
                   SizedBox(height: 8.0),
-                   Query(
-                     options: QueryOptions(
-                       documentNode: gql(optionValueQuery),
-                       variables: {"value": "languages"},
-                     ),
-                     builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                       if (result.hasException) {
-                         return Text(result.exception.toString());
-                       }
-                       if (result.loading) {
-                         return Text('Loading');
-                       }
-                       return MultiSelectFormField(
-                         titleText: Text(SearchAppLocalizations
-                             .of(context)
-                             .languagesTitle).data,
-                         dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                         valueField: 'entityLabel',
-                         textField: 'entityLabel',
-                         hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
-                         onSaved: (values) {
-                           setState(() {
-                             _formResult.languages = values;
-                           });
-                         },
-                       );
-                     }),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
-                    dataSource: services,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.servicesAreProvided = values;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
-                    dataSource: ageGroups,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.ageGroupsServed = values;
-                      });
-                    },
-                  ),
+                  Query(
+                      options: QueryOptions(
+                        documentNode: gql(optionValueQuery),
+                        variables: {"value": "233"},
+                      ),
+                      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                        if (result.hasException) {
+                          return Text(result.exception.toString());
+                        }
+                        if (result.loading) {
+                          return Text('Loading');
+                        }
+                        return MultiSelectFormField(
+                          titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
+                          dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                          valueField: 'entityLabel',
+                          textField: 'entityLabel',
+                          hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
+                          onSaved: (values) {
+                            setState(() {
+                              _formResult.ageGroupsServed = values;
+                            });
+                          },
+                        );
+                      }),
                   SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -258,4 +318,3 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 }
-
