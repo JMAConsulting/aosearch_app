@@ -1,4 +1,3 @@
-import 'package:aoapp/src/resources/languages.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
@@ -12,7 +11,9 @@ class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("Building ResultsPage");
-    return Scaffold(
+    return GraphQLProvider(
+      client: client,
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
         title: Row(
@@ -27,6 +28,7 @@ class ResultsPage extends StatelessWidget {
         ),
       ),
       body: new SearchResults(search: search),
+    ),
     );
   }
 }
@@ -42,7 +44,6 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   final SearchParameters search;
-  var appLanguage = 'en';
   var type = 'Service Listing';
   _SearchResultsState(this.search);
 

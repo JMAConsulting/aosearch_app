@@ -15,12 +15,10 @@ final AuthLink _authLink = AuthLink(
   getToken: () async => '',
 );
 
-final Link _link = _authLink.concat(_httpLink);
-
 ValueNotifier<GraphQLClient> client = ValueNotifier(
   GraphQLClient(
     cache: InMemoryCache(),
-    link: _link,
+    link: _authLink.concat(_httpLink),
   ),
 );
 
@@ -33,7 +31,7 @@ ValueNotifier<GraphQLClient> frenchClient = ValueNotifier(
 
 final String optionValueQuery = """
 query getOptionValues(\$value: [String]!) {
-  civicrmOptionValueQuery(filter: {conditions: {field: "option_group_id", value: \$value, operator: EQUAL}}) {
+  civicrmOptionValueJmaQuery(filter: {conditions: [{field: "option_group_id", value: \$value, operator: EQUAL}, {field: "is_active", value: "1", operator: EQUAL}]}) {
     entities {
       entityLabel
       entityId
