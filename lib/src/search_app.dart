@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'ui/advanced_search_form.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import '../l10n/messages_all.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import '../src/resources/api.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class SearchAppLocalizations {
   SearchAppLocalizations(this.localeName);
@@ -77,20 +79,20 @@ class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLoca
 class SearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: [
-        const SearchAppLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', ''),
-        const Locale('fr', ''),
-      ],
-      home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white70,
-            title: Row(
+    return MaterialApp (
+        localizationsDelegates: [
+          const SearchAppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('fr', ''),
+        ],
+        home: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white70,
+              title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
@@ -99,10 +101,10 @@ class SearchApp extends StatelessWidget {
                       fit: BoxFit.cover,
                   )
                 ],
+              ),
             ),
-          ),
-          body: new AdvancedSearchForm(),
-      ),
-    );
+            body: new AdvancedSearchForm(),
+          )
+       );
   }
 }

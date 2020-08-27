@@ -28,7 +28,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    debugPrint(Localizations.localeOf(context).languageCode);
+    return GraphQLProvider(
+        client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
+        child: SafeArea(
       top: false,
       bottom: false,
       child: Form(
@@ -74,7 +77,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         titleText: Text(SearchAppLocalizations
                             .of(context)
                             .acceptingNewClientsTitle).data,
-                        dataSource: result.data["civicrmOptionValueQuery"]["entities"],
+                        dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                         valueField: 'entityLabel',
                         textField: 'entityLabel',
                         onChanged: (value) {
@@ -91,7 +94,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                    Query(
                      options: QueryOptions(
                        documentNode: gql(optionValueQuery),
-                       variables: {"value": "195"},
+                       variables: {"value": "languages"},
                      ),
                      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                        if (result.hasException) {
@@ -104,9 +107,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                          titleText: Text(SearchAppLocalizations
                              .of(context)
                              .languagesTitle).data,
-                         dataSource: language,
-                         valueField: 'value',
-                         textField: 'display',
+                         dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                         valueField: 'entityLabel',
+                         textField: 'entityLabel',
                          hintText: 'Please choose one or more languages',
                          onSaved: (values) {
                            setState(() {
@@ -226,6 +229,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
           ],
         ),
       ),
+        ),
     );
   }
 
