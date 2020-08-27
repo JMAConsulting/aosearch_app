@@ -57,35 +57,64 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               title: Text(SearchAppLocalizations.of(context).advSearchTitle),
               children: [Column(
                 children: [
-                  DropDownFormField(
-                    value: _acceptingNewClients,
-                    titleText: Text(SearchAppLocalizations.of(context).acceptingNewClientsTitle).data,
-//                    dataSource: getOptions({"optionGroupId": "195"}),
-                    dataSource: acceptingNewClients,
-                    valueField: 'value',
-                    textField: 'display',
-                    onChanged: (value) {
-                      setState(() {
-                        _acceptingNewClients = value;
-                      });
-                    },
-                    onSaved: (value) {
-                      _formResult.acceptingNewClients = value;
-                    },
-                  ),
+                  Query(
+                    options: QueryOptions(
+                      documentNode: gql(optionValueQuery),
+                      variables: {"value": "195"},
+                    ),
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      if (result.hasException) {
+                        return Text(result.exception.toString());
+                      }
+                      if (result.loading) {
+                        return Text('Loading');
+                      }
+                      return DropDownFormField(
+                        value: _acceptingNewClients,
+                        titleText: Text(SearchAppLocalizations
+                            .of(context)
+                            .acceptingNewClientsTitle).data,
+                        dataSource: result.data["civicrmOptionValueQuery"]["entities"],
+                        valueField: 'entityLabel',
+                        textField: 'entityLabel',
+                        onChanged: (value) {
+                          setState(() {
+                            _acceptingNewClients = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          _formResult.acceptingNewClients = value;
+                        },
+                      );
+                    }),
                   SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: Text(SearchAppLocalizations.of(context).languagesTitle).data,
-                    dataSource: language,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: 'Please choose one or more languages',
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.languages = values;
-                      });
-                    },
-                  ),
+                   Query(
+                     options: QueryOptions(
+                       documentNode: gql(optionValueQuery),
+                       variables: {"value": "195"},
+                     ),
+                     builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                       if (result.hasException) {
+                         return Text(result.exception.toString());
+                       }
+                       if (result.loading) {
+                         return Text('Loading');
+                       }
+                       return MultiSelectFormField(
+                         titleText: Text(SearchAppLocalizations
+                             .of(context)
+                             .languagesTitle).data,
+                         dataSource: language,
+                         valueField: 'value',
+                         textField: 'display',
+                         hintText: 'Please choose one or more languages',
+                         onSaved: (values) {
+                           setState(() {
+                             _formResult.languages = values;
+                           });
+                         },
+                       );
+                     }),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
                     titleText: 'Services are provided',
@@ -200,7 +229,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 
-  getOptions(String $optionGroupId) {
+  getOptions(String $optionGroupId, String $widgetType) {
     Query(
       options: QueryOptions(
         documentNode: gql(optionValueQuery),
