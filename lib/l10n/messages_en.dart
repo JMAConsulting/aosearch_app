@@ -23,7 +23,15 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepting new Clients?"),
     "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Advanced Search Options"),
+    "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
+    "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Age groups served"),
+    "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("End Date can\'t be before Start Date"),
+    "endDate" : MessageLookupByLibrary.simpleMessage("End Date"),
     "keywordHintText" : MessageLookupByLibrary.simpleMessage("Enter your search term here"),
-    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Languages")
+    "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
+    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Languages"),
+    "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
+    "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Services are provided"),
+    "startDate" : MessageLookupByLibrary.simpleMessage("Start Date")
   };
 }

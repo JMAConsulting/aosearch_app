@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-24T16:39:49.550666",
+  "@@last_modified": "2020-08-28T15:42:20.874641",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -21,6 +21,54 @@
   "languagesTitle": "Languages",
   "@languagesTitle": {
     "description": "LanguagesTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languagesHintText": "Please choose one or more language",
+  "@languagesHintText": {
+    "description": "LanguagesTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servicesAreProvidedTitle": "Services are provided",
+  "@servicesAreProvidedTitle": {
+    "description": "servicesAreProvidedTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servicesAreProvidedHintText": "Please choose where you would like services to be provided",
+  "@servicesAreProvidedHintText": {
+    "description": "servicesAreProvidedHint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ageGroupsTitleText": "Age groups served",
+  "@ageGroupsTitleText": {
+    "description": "ageGroupsTitleText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ageGroupsHintText": "Please choose any appropriate age groups",
+  "@ageGroupsHintText": {
+    "description": "ageGroupsHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "startDate": "Start Date",
+  "@startDate": {
+    "description": "startDate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "endDate": "End Date",
+  "@endDate": {
+    "description": "endDate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dateErrorMessage": "End Date can't be before Start Date",
+  "@dateErrorMessage": {
+    "description": "dateErrorMessage",
     "type": "text",
     "placeholders": {}
   }

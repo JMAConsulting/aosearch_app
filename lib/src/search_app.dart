@@ -61,6 +61,79 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+   String get languagesHintText {
+    return Intl.message(
+      'Please choose one or more language',
+      name: 'languagesHintText',
+      desc: 'LanguagesTitleField',
+      locale: localeName,
+    );
+  }
+
+  String get servicesAreProvidedTitle {
+    return Intl.message(
+      'Services are provided',
+      name: 'servicesAreProvidedTitle',
+      desc: 'servicesAreProvidedTitleField',
+      locale: localeName,
+    );
+  }
+
+  String get servicesAreProvidedHintText {
+    return Intl.message(
+      'Please choose where you would like services to be provided',
+      name: 'servicesAreProvidedHintText',
+      desc: 'servicesAreProvidedHint',
+      locale: localeName,
+    );
+  }
+
+  String get ageGroupsTitleText {
+    return Intl.message(
+      'Age groups served',
+      name: 'ageGroupsTitleText',
+      desc: 'ageGroupsTitleText',
+      locale: localeName,
+    );
+  }
+
+  String get ageGroupsHintText {
+    return Intl.message(
+      'Please choose any appropriate age groups',
+      name: 'ageGroupsHintText',
+      desc: 'ageGroupsHintText',
+      locale: localeName,
+    );
+  }
+
+  String get startDate {
+    return Intl.message(
+      'Start Date',
+      name: 'startDate',
+      desc: 'startDate',
+      locale: localeName,
+    );
+  }
+
+  String get endDate {
+    return Intl.message(
+      'End Date',
+      name: 'endDate',
+      desc: 'endDate',
+      locale: localeName,
+    );
+  }
+
+  String get dateErrorMessage {
+    return Intl.message(
+      'End Date can\'t be before Start Date',
+      name: 'dateErrorMessage',
+      desc: 'dateErrorMessage',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {
@@ -80,31 +153,31 @@ class SearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp (
-        localizationsDelegates: [
-          const SearchAppLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', ''),
-          const Locale('fr', ''),
-        ],
-        home: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white70,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                      'images/AO_logo.png',
-                      height: AppBar().preferredSize.height,
-                      fit: BoxFit.cover,
-                  )
-                ],
-              ),
-            ),
-            body: new AdvancedSearchForm(),
-          )
-       );
+      localizationsDelegates: [
+        const SearchAppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('fr', ''),
+      ],
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white70,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'images/AO_logo.png',
+                 height: AppBar().preferredSize.height,
+                 fit: BoxFit.cover,
+              )
+            ],
+          ),
+        ),
+        body: new AdvancedSearchForm(),
+      )
+    );
   }
 }

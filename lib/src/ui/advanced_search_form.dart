@@ -110,7 +110,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                          dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                          valueField: 'entityLabel',
                          textField: 'entityLabel',
-                         hintText: 'Please choose one or more languages',
+                         hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
                          onSaved: (values) {
                            setState(() {
                              _formResult.languages = values;
@@ -120,11 +120,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                      }),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
-                    titleText: 'Services are provided',
+                    titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
                     dataSource: services,
                     valueField: 'value',
                     textField: 'display',
-                    hintText: 'Please choose where you would like services to be provided',
+                    hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
                     onSaved: (values) {
                       setState(() {
                         _formResult.servicesAreProvided = values;
@@ -133,11 +133,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   ),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
-                    titleText: 'Age groups served',
+                    titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
                     dataSource: ageGroups,
                     valueField: 'value',
                     textField: 'display',
-                    hintText: 'Please choose any appropriate age groups',
+                    hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
                     onSaved: (values) {
                       setState(() {
                         _formResult.ageGroupsServed = values;
@@ -150,7 +150,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     children: [
                       Column(
                         children: [
-                          Text('Start Date'),
+                          Text(SearchAppLocalizations.of(context).startDate),
                           SizedBox(
                             width: 150,
                             height: 50,
@@ -176,7 +176,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                       ),
                       Column(
                           children: [
-                            Text('End Date'),
+                            Text(SearchAppLocalizations.of(context).endDate),
                             SizedBox(
                               height: 50,
                               width: 150,
@@ -196,7 +196,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 validator: (value) {
                                   if (value != null) {
                                     if (value.isBefore(_startDate)) {
-                                      return "End Date can't be before Start Date";
+                                      return Text(SearchAppLocalizations.of(context).dateErrorMessage).data;
                                     }
                                   }
                                   return null;
