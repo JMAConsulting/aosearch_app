@@ -41,8 +41,8 @@ query getOptionValues(\$value: [String]!) {
 """;
 
 final String taxonomyTermJmaQuery = """
-query getChapters() {
-  taxonomyTermJmaQuery(filter: {conditions: {field: "vid", value:"group", operator: EQUAL}}, limit: 100) {
+query {
+  taxonomyTermQuery(filter:{conditions: {field: "vid", value: "group"}}, limit:100) {
     entities {
       entityLabel
       entityId

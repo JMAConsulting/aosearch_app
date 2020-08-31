@@ -9,6 +9,7 @@ import 'location.dart';
 import 'search_results.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../resources/api.dart';
+import '../resources/chapters.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -24,10 +25,20 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
   DateTime _startDate;
   String _acceptingNewClients;
+  String _catagories;
   String _chapters;
 
   @override
   Widget build(BuildContext context) {
+    const rowSpacer=TableRow(
+        children: [
+          SizedBox(
+            height: 18,
+          ),
+          SizedBox(
+            height: 18,
+          )
+        ]);
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -60,14 +71,44 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
-                        /**
+                        DropDownFormField(
+                          value: _catagories,
+                          titleText: 'Catagories',
+                          dataSource: catagories,
+                          valueField: 'entityId',
+                          textField: 'entityLabel',
+                          onChanged: (value) {
+                            setState(() {
+                              _catagories = value;
+                            });
+                          },
+                          onSaved: (value) {
+                            _formResult.catagories = value;
+                          },
+                        ),
+                        DropDownFormField(
+                          value: _chapters,
+                          titleText: 'Chapters',
+                          dataSource: chapters,
+                          valueField: 'entityId',
+                          textField: 'entityLabel',
+                          onChanged: (value) {
+                            setState(() {
+                              _chapters = value;
+                            });
+                          },
+                          onSaved: (value) {
+                            _formResult.chapters = value;
+                          },
+                        ),
+                         /**
                          Query(
                         options: QueryOptions(
                           documentNode: gql(taxonomyTermJmaQuery),
                         ),
                         builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                          print(result);
-                          if (result.hasException) {
+                          if (!result.hasException) {
+                            print(result);
                             return Text(result.exception.toString());
                           }
                           if (result.loading) {
@@ -78,7 +119,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
-                            dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                            dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                             valueField: 'entityLabel',
                             textField: 'entityLabel',
                             onChanged: (value) {
@@ -91,7 +132,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             },
                           );
                         }),
-                      */
                         Query(
                           options: QueryOptions(
                             documentNode: gql(optionValueQuery),
@@ -127,7 +167,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               },
                             );
                           }
-                        ),
+                        ),*/
                         SizedBox(height: 8.0),
                         Query(
                           options: QueryOptions(
@@ -278,6 +318,73 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         LocationWidget(),
                       ],
                     )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('Service Listing Legend'),
+                  children: [
+                    SizedBox(height: 10.0),
+                    Table(
+                        children: [
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+                                    Text('Accepting new clients'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
+                                    Text('Not accepting new clients'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
+                                    Text('Online'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
+                                    Text('Travels to nearby areas'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'),
+                                    Text('Travels to remote areas'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_verified_16px.svg'),
+                                    Text('Verified Listing'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                        ]
+                    ),
                   ],
                 ),
                 FlatButton(

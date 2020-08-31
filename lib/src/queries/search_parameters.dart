@@ -4,6 +4,7 @@ class SearchParameters {
   List<dynamic> languages;
   String acceptingNewClients;
   List<dynamic> chapters;
+  List<dynamic> catagories;
   DateTime startDate;
   DateTime endDate;
   List<dynamic> servicesAreProvided;
@@ -18,6 +19,7 @@ class SearchParameters {
       this.servicesAreProvided,
       this.ageGroupsServed,
       this.chapters,
+      this.catagories,
   });
 
   @override
@@ -29,7 +31,8 @@ class SearchParameters {
         endDate = ${endDate.toString()}
         servicesAreProvided = $servicesAreProvided
         ageGroupsServed = $ageGroupsServed
-        chapters = $chapters 
+        chapters = $chapters
+        type = $catagories
         """;
   }
 }
