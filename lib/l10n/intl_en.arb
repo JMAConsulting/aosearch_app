@@ -71,5 +71,29 @@
     "description": "dateErrorMessage",
     "type": "text",
     "placeholders": {}
+  },
+  "searchButtonText": "Search",
+  "@searchButtonText": {
+    "description": "searchButtonText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ownLocationText": "Use my location",
+  "@ownLocationText": {
+    "description": "ownLocationText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "keywordText": "Fulltext Search",
+  "@keywordText": {
+    "description": "keywordText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "anyText": "- Any -",
+  "@anyText": {
+    "description": "anyText",
+    "type": "text",
+    "placeholders": {}
   }
 }

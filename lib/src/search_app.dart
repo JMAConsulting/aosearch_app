@@ -144,6 +144,42 @@ class SearchAppLocalizations {
     );
   }
 
+  String get searchButtonText {
+    return Intl.message(
+      'Search',
+      name: 'searchButtonText',
+      desc: 'searchButtonText',
+      locale: localeName,
+    );
+  }
+
+  String get ownLocationText {
+    return Intl.message(
+      'Use my location',
+      name: 'ownLocationText',
+      desc: 'ownLocationText',
+      locale: localeName,
+    );
+  }
+
+  String get keywordText {
+    return Intl.message(
+      'Fulltext Search',
+      name: 'keywordText',
+      desc: 'keywordText',
+      locale: localeName,
+    );
+  }
+
+  String get anyText {
+    return Intl.message(
+      '- Any -',
+      name: 'anyText',
+      desc: 'anyText',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

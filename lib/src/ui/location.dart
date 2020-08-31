@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
+import '../search_app.dart';
 
 class LocationWidget extends StatefulWidget {
   @override
@@ -19,9 +20,7 @@ class _LocationWidgetState extends State<LocationWidget> {
       children: [
         if (currentAddress != null) Text(currentAddress),
         FlatButton(
-          child: Text(
-            'Use my location'
-          ),
+          child: Text(SearchAppLocalizations.of(context).ownLocationText),
           onPressed: () {
             getCurrentLocation();
           },

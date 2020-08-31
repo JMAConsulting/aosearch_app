@@ -21,17 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepting new Clients fr?"),
+    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepte de nouveaux clients"),
     "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Advanced Search Options"),
     "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
-    "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Age groups served"),
-    "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("End Date can\'t be before Start Date"),
-    "endDate" : MessageLookupByLibrary.simpleMessage("End Date"),
-    "keywordHintText" : MessageLookupByLibrary.simpleMessage("Enter your search term here"),
+    "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Groupes d\'âge desservis"),
+    "anyText" : MessageLookupByLibrary.simpleMessage("- Toutes -"),
+    "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("La date de début doit être supérieure ou égale à la date d’achèvement"),
+    "endDate" : MessageLookupByLibrary.simpleMessage("A"),
+    "keywordHintText" : MessageLookupByLibrary.simpleMessage("Recherche par mot clé"),
+    "keywordText" : MessageLookupByLibrary.simpleMessage("Recherche par mot-clé"),
     "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
-    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Languages"),
+    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Langue(s)"),
+    "ownLocationText" : MessageLookupByLibrary.simpleMessage("Depuis mon emplacement actuel"),
+    "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
     "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
-    "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Services are provided"),
-    "startDate" : MessageLookupByLibrary.simpleMessage("Start Date")
+    "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
+    "startDate" : MessageLookupByLibrary.simpleMessage("de")
   };
 }

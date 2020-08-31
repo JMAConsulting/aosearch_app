@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-28T15:42:20.874641",
+  "@@last_modified": "2020-08-31T07:39:14.946078",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -15,6 +15,12 @@
   "acceptingNewClientsTitle": "Accepting new Clients?",
   "@acceptingNewClientsTitle": {
     "description": "Accepting New Clients title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chaptersTitle": "Chapters",
+  "@chaptersTitle": {
+    "description": "Chapters title",
     "type": "text",
     "placeholders": {}
   },
@@ -69,6 +75,30 @@
   "dateErrorMessage": "End Date can't be before Start Date",
   "@dateErrorMessage": {
     "description": "dateErrorMessage",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchButtonText": "Search",
+  "@searchButtonText": {
+    "description": "searchButtonText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ownLocationText": "Use my location",
+  "@ownLocationText": {
+    "description": "ownLocationText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "keywordText": "Fulltext Search",
+  "@keywordText": {
+    "description": "keywordText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "anyText": "- Any -",
+  "@anyText": {
+    "description": "anyText",
     "type": "text",
     "placeholders": {}
   }

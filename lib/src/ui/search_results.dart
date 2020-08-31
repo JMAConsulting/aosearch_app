@@ -87,10 +87,10 @@ class _SearchResultsState extends State<SearchResults> {
       conditionGroupGroups.add(
           buildConditionGroup({"type": types ?? ''}, "OR", false));
     }
-    if (acceptingNewClients != null && acceptingNewClients != 'Any') {
+    if (acceptingNewClients != null && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
       conditionGroupGroups.add(
           buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
-              acceptingNewClients == "Yes" ? false : true));
+              acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
     }
     if (servicesProvided != null) {
       conditionGroupGroups.add(
