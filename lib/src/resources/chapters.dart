@@ -129,5 +129,9 @@ List<Map> catagories = [
   {
     "entityLabel": "Service Listing",
     "entityId": "Service Listing"
+  },
+  {
+    "entityLabel": "Event",
+    "entityId": "Event",
   }
 ];

@@ -32,7 +32,7 @@ class SearchParameters {
         servicesAreProvided = $servicesAreProvided
         ageGroupsServed = $ageGroupsServed
         chapters = $chapters
-        type = $catagories
+        catagories = $catagories
         """;
   }
 }

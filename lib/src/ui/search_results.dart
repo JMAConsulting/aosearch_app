@@ -62,7 +62,7 @@ class _SearchResultsState extends State<SearchResults> {
             search.keyword,
             search.languages,
             search.chapters,
-            search.catagories
+            search.catagories,
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -115,9 +115,8 @@ class _SearchResultsState extends State<SearchResults> {
       "conditions": [],
       "languages": [appLanguage, "und"],
       'conditionGroup': conditionGroup,
-      'fulltext': keywords,
+      'fullText': {"keys": keywords},
     };
-    debugPrint(variables.toString());
     return variables;
   }
 }
@@ -125,7 +124,6 @@ class _SearchResultsState extends State<SearchResults> {
 class Result extends StatelessWidget {
   Result({@required this.list});
   final list;
-
 
   @override
   Widget build(BuildContext context) {
