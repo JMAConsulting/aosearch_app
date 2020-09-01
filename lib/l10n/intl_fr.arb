@@ -18,6 +18,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "chaptersTitle": "Section locale",
+  "@chaptersTitle": {
+    "description": "Chapters title",
+    "type": "text",
+    "placeholders": {}
+  },
   "languagesTitle": "Langue(s)",
   "@languagesTitle": {
     "description": "LanguagesTitleField",
@@ -93,6 +99,18 @@
   "anyText": "- Toutes -",
   "@anyText": {
     "description": "anyText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryTitle": "Type de page",
+  "@categoryTitle": {
+    "description": "categoryTitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noResultText": "Aucun résultat trouvé.",
+  "@noResultText": {
+    "description": "noResultText",
     "type": "text",
     "placeholders": {}
   }

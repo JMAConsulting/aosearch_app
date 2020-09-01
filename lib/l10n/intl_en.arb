@@ -18,6 +18,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "chaptersTitle": "Chapters",
+  "@chaptersTitle": {
+    "description": "Chapters title",
+    "type": "text",
+    "placeholders": {}
+  },
   "languagesTitle": "Languages",
   "@languagesTitle": {
     "description": "LanguagesTitleField",
@@ -93,6 +99,18 @@
   "anyText": "- Any -",
   "@anyText": {
     "description": "anyText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryTitle": "Category",
+  "@categoryTitle": {
+    "description": "categoryTitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noResultText": "No results found.",
+  "@noResultText": {
+    "description": "noResultText",
     "type": "text",
     "placeholders": {}
   }

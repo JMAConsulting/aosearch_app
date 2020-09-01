@@ -1,3 +1,4 @@
+import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
@@ -55,12 +56,13 @@ class _SearchResultsState extends State<SearchResults> {
         documentNode: gql(query),
         variables: queryVariables(
             Localizations.localeOf(context).languageCode,
-            type,
             search.ageGroupsServed,
             search.acceptingNewClients,
             search.servicesAreProvided,
             search.keyword,
             search.languages,
+            search.chapters,
+            search.catagories
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -70,33 +72,37 @@ class _SearchResultsState extends State<SearchResults> {
                 ? Text(result.exception.toString())
                 : result.loading
                 ? CircularProgressIndicator()
-                : Result(list: result.data),
+                : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Result(list: result.data),
           ),
         );
       },
     );
   }
 
-  queryVariables(appLanguage, types, ageGroupsServed, acceptingNewClients,
-      servicesProvided, keywords, languages) {
+  queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
+      servicesProvided, keywords, languages, chapters, categories) {
     var conditionGroupGroups = new List();
-    if (ageGroupsServed != null) {
+    if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
       conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed.join(',')}, "OR", false));
     }
-    if (types != null) {
+    if (categories != null && !categories.isEmpty) {
       conditionGroupGroups.add(
-          buildConditionGroup({"type": types ?? ''}, "OR", false));
+          buildConditionGroup({"type": categories.join(',')}, "OR", false));
+    }
+    if (chapters != null && !chapters.isEmpty) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"field_chapter_reference": chapters.join(',')}, "OR", false));
     }
     if (acceptingNewClients != null && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
       conditionGroupGroups.add(
           buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
               acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
     }
-    if (servicesProvided != null) {
+    if (servicesProvided != null && !servicesProvided.isEmpty) {
       conditionGroupGroups.add(
           buildConditionGroup({"custom_897": servicesProvided.join(',')}, "OR", false));
     }
-    if (languages != null) {
+    if (languages != null && !languages.isEmpty) {
       conditionGroupGroups.add(
         buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
       );

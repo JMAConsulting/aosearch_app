@@ -180,6 +180,23 @@ class SearchAppLocalizations {
     );
   }
 
+  String get categoryTitle {
+    return Intl.message(
+      'Category',
+      name: 'categoryTitle',
+      desc: 'categoryTitle',
+      locale: localeName,
+    );
+  }
+
+  String get noResultText {
+    return Intl.message(
+      'No results found.',
+      name: 'noResultText',
+      desc: 'noResultText',
+      locale: localeName,
+    );
+  }
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

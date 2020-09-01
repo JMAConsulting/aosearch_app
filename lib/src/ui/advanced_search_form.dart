@@ -26,19 +26,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   DateTime _startDate;
   String _acceptingNewClients;
   String _catagories;
-  String _chapters;
 
   @override
   Widget build(BuildContext context) {
     const rowSpacer=TableRow(
-        children: [
-          SizedBox(
-            height: 18,
-          ),
-          SizedBox(
-            height: 18,
-          )
-        ]);
+      children: [
+        SizedBox(
+         height: 18,
+        ),
+        SizedBox(
+         height: 18,
+        )
+      ]);
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -62,7 +61,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     return null;
                   },
                   onSaved: (keyword) {
-                    _formResult.keyword = keyword;
+                    setState(() {
+                      _formResult.keyword = keyword;
+                    });
                   },
                 ),
                 SizedBox(height: 8.0),
@@ -71,67 +72,46 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
-                        DropDownFormField(
-                          value: _catagories,
-                          titleText: 'Catagories',
+                        MultiSelectFormField(
+                          titleText: Text(SearchAppLocalizations
+                              .of(context)
+                              .categoryTitle).data,
                           dataSource: catagories,
                           valueField: 'entityId',
                           textField: 'entityLabel',
-                          onChanged: (value) {
+                          onSaved: (values) {
                             setState(() {
-                              _catagories = value;
+                              _formResult.catagories = values;
                             });
                           },
-                          onSaved: (value) {
-                            _formResult.catagories = value;
-                          },
                         ),
-                        DropDownFormField(
-                          value: _chapters,
-                          titleText: 'Chapters',
-                          dataSource: chapters,
-                          valueField: 'entityId',
-                          textField: 'entityLabel',
-                          onChanged: (value) {
-                            setState(() {
-                              _chapters = value;
-                            });
-                          },
-                          onSaved: (value) {
-                            _formResult.chapters = value;
-                          },
-                        ),
-                         /**
-                         Query(
-                        options: QueryOptions(
-                          documentNode: gql(taxonomyTermJmaQuery),
-                        ),
-                        builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                          if (!result.hasException) {
-                            print(result);
-                            return Text(result.exception.toString());
-                          }
-                          if (result.loading) {
-                            return Text('Loading');
-                          }
-                          return DropDownFormField(
-                            value: _chapters,
-                            titleText: Text(SearchAppLocalizations
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(taxonomyTermJmaQuery),
+                            variables: {"language": Localizations.localeOf(context).languageCode.toUpperCase()}
+                          ),
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            return MultiSelectFormField(
+                              titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
-                            dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                            valueField: 'entityLabel',
-                            textField: 'entityLabel',
-                            onChanged: (value) {
-                              setState(() {
-                                _chapters = value;
-                              });
-                            },
-                            onSaved: (value) {
-                              _formResult.chapters = value;
-                            },
-                          );
-                        }),
+                              dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                              valueField: 'entityId',
+                              textField: 'entityLabel',
+                              onSaved: (values) {
+                                setState(() {
+                                  _formResult.chapters = values;
+                                });
+                              },
+                            );
+                          }
+                        ),
                         Query(
                           options: QueryOptions(
                             documentNode: gql(optionValueQuery),
@@ -167,7 +147,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               },
                             );
                           }
-                        ),*/
+                        ),
                         SizedBox(height: 8.0),
                         Query(
                           options: QueryOptions(
