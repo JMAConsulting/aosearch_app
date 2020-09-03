@@ -1,4 +1,3 @@
-import 'package:aoapp/src/resources/languages.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
@@ -12,23 +11,24 @@ class ResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("Building ResultsPage");
-    return Scaffold(
+    return GraphQLProvider(
+      client: client,
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
-        title: SafeArea(
-        child: Center(
-          child: Container(
-          height: 100,
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/AO_logo.png'),
-              fit: BoxFit.fitHeight)),
-             ),
-        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/AO_logo.png',
+              height: AppBar().preferredSize.height,
+              fit: BoxFit.cover,
+            )
+          ],
         ),
       ),
       body: new SearchResults(search: search),
+    ),
     );
   }
 }
@@ -44,7 +44,6 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   final SearchParameters search;
-  var appLanguage = 'en';
   var type = 'Service Listing';
   _SearchResultsState(this.search);
 
@@ -55,7 +54,7 @@ class _SearchResultsState extends State<SearchResults> {
       options: QueryOptions(
         documentNode: gql(query),
         variables: queryVariables(
-            appLanguage,
+            Localizations.localeOf(context).languageCode,
             type,
             search.ageGroupsServed,
             search.acceptingNewClients,

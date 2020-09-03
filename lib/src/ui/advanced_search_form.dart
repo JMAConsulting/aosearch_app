@@ -1,3 +1,4 @@
+import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import '../resources/languages.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'location.dart';
 import 'search_results.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import '../resources/api.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -25,7 +28,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    debugPrint(Localizations.localeOf(context).languageCode);
+    return GraphQLProvider(
+        client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
+        child: SafeArea(
       top: false,
       bottom: false,
       child: Form(
@@ -35,7 +41,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
           children: [
             TextFormField(
               decoration: InputDecoration(
-                hintText: 'Enter your search term here',
+                hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
                 labelText: 'Keyword',
               ),
               initialValue: _formResult.keyword,
@@ -51,44 +57,74 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
             ),
             SizedBox(height: 8.0),
             ExpansionTile(
-              title: Text('Advanced Search Options'),
+              title: Text(SearchAppLocalizations.of(context).advSearchTitle),
               children: [Column(
                 children: [
-                  DropDownFormField(
-                    value: _acceptingNewClients,
-                    titleText: 'Accepting new Clients?',
-                    dataSource: acceptingNewClients,
-                    valueField: 'value',
-                    textField: 'display',
-                    onChanged: (value) {
-                      setState(() {
-                        _acceptingNewClients = value;
-                      });
-                    },
-                    onSaved: (value) {
-                      _formResult.acceptingNewClients = value;
-                    },
-                  ),
+                  Query(
+                    options: QueryOptions(
+                      documentNode: gql(optionValueQuery),
+                      variables: {"value": "195"},
+                    ),
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      if (result.hasException) {
+                        return Text(result.exception.toString());
+                      }
+                      if (result.loading) {
+                        return Text('Loading');
+                      }
+                      return DropDownFormField(
+                        value: _acceptingNewClients,
+                        titleText: Text(SearchAppLocalizations
+                            .of(context)
+                            .acceptingNewClientsTitle).data,
+                        dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                        valueField: 'entityLabel',
+                        textField: 'entityLabel',
+                        onChanged: (value) {
+                          setState(() {
+                            _acceptingNewClients = value;
+                          });
+                        },
+                        onSaved: (value) {
+                          _formResult.acceptingNewClients = value;
+                        },
+                      );
+                    }),
+                  SizedBox(height: 8.0),
+                   Query(
+                     options: QueryOptions(
+                       documentNode: gql(optionValueQuery),
+                       variables: {"value": "languages"},
+                     ),
+                     builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                       if (result.hasException) {
+                         return Text(result.exception.toString());
+                       }
+                       if (result.loading) {
+                         return Text('Loading');
+                       }
+                       return MultiSelectFormField(
+                         titleText: Text(SearchAppLocalizations
+                             .of(context)
+                             .languagesTitle).data,
+                         dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                         valueField: 'entityLabel',
+                         textField: 'entityLabel',
+                         hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                         onSaved: (values) {
+                           setState(() {
+                             _formResult.languages = values;
+                           });
+                         },
+                       );
+                     }),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
-                    titleText: 'Languages',
-                    dataSource: language,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: 'Please choose one or more languages',
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.languages = values;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: 'Services are provided',
+                    titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
                     dataSource: services,
                     valueField: 'value',
                     textField: 'display',
-                    hintText: 'Please choose where you would like services to be provided',
+                    hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
                     onSaved: (values) {
                       setState(() {
                         _formResult.servicesAreProvided = values;
@@ -97,11 +133,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   ),
                   SizedBox(height: 8.0),
                   MultiSelectFormField(
-                    titleText: 'Age groups served',
+                    titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
                     dataSource: ageGroups,
                     valueField: 'value',
                     textField: 'display',
-                    hintText: 'Please choose any appropriate age groups',
+                    hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
                     onSaved: (values) {
                       setState(() {
                         _formResult.ageGroupsServed = values;
@@ -114,7 +150,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     children: [
                       Column(
                         children: [
-                          Text('Start Date'),
+                          Text(SearchAppLocalizations.of(context).startDate),
                           SizedBox(
                             width: 150,
                             height: 50,
@@ -140,7 +176,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                       ),
                       Column(
                           children: [
-                            Text('End Date'),
+                            Text(SearchAppLocalizations.of(context).endDate),
                             SizedBox(
                               height: 50,
                               width: 150,
@@ -160,7 +196,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 validator: (value) {
                                   if (value != null) {
                                     if (value.isBefore(_startDate)) {
-                                      return "End Date can't be before Start Date";
+                                      return Text(SearchAppLocalizations.of(context).dateErrorMessage).data;
                                     }
                                   }
                                   return null;
@@ -187,14 +223,39 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                       builder: (context) => new ResultsPage(search: _formResult)
                     )
                   );
-                  // TODO: @Monish please add your call here on _formResult
-                  print(_formResult);
                 }
               },
             )
           ],
         ),
       ),
+        ),
+    );
+  }
+
+  getOptions(String $optionGroupId, String $widgetType) {
+    Query(
+      options: QueryOptions(
+        documentNode: gql(optionValueQuery),
+        variables: {"value": $optionGroupId},
+      ),
+      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+        debugPrint(result.toString());
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+        if (result.loading) {
+          return Text('Loading');
+        }
+        // it can be either Map or List
+//        var repositories = result.data['civicrmOptionValueQuery']['entities'];
+//        var options = new Map();
+//        repositories.forEach((content, index) {
+//          options[content['entityLabel']] = content['entityLabel'];
+//        });
+//        return options;
+      }
     );
   }
 }
+
