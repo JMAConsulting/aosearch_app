@@ -15,12 +15,10 @@ final AuthLink _authLink = AuthLink(
   getToken: () async => '',
 );
 
-final Link _link = _authLink.concat(_httpLink);
-
 ValueNotifier<GraphQLClient> client = ValueNotifier(
   GraphQLClient(
     cache: InMemoryCache(),
-    link: _link,
+    link: _authLink.concat(_httpLink),
   ),
 );
 
@@ -33,7 +31,7 @@ ValueNotifier<GraphQLClient> frenchClient = ValueNotifier(
 
 final String optionValueQuery = """
 query getOptionValues(\$value: [String]!) {
-  civicrmOptionValueQuery(filter: {conditions: {field: "option_group_id", value: \$value, operator: EQUAL}}) {
+  civicrmOptionValueJmaQuery(filter: {conditions: [{field: "option_group_id", value: \$value, operator: EQUAL}, {field: "is_active", value: "1", operator: EQUAL}]}) {
     entities {
       entityLabel
       entityId
@@ -42,9 +40,37 @@ query getOptionValues(\$value: [String]!) {
 }
 """;
 
-final String query = """
+final String taxonomyTermJmaQuery = """
+query getTaxonomyOptions(\$language: LanguageId!) {
+  taxonomyTermJmaQuery(filter:{conditions: {field: "vid", value: "group", operator: EQUAL}}, limit:100) {
+    entities(language: \$language) {
+      entityLabel
+      entityId
+    }
+  }
+}
+""";
+
+final String facetsQuery = """
 query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput) {
   searchAPISearch(index_id: "default", language: \$languages, condition_group: \$conditionGroup, fulltext: \$fullText, facets: [{field: "type", min_count: 1, limit: 0, operator: "=", missing: false}, {field: "field_chapter_reference", min_count: 1, limit: 0, operator: "=", missing: false}]) {
+    facets {
+      name
+      values {
+        filter
+        count
+      }
+    }
+  }
+}
+""";
+
+final String query = """
+query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput) {
+  searchAPISearch(index_id: "default", language: \$languages, condition_group: \$conditionGroup, fulltext: \$fullText,
+   facets: [{field: "type", min_count: 1, limit: 0, operator: "=", missing: false}, {field: "field_chapter_reference", min_count: 1, limit: 0, operator: "=", missing: false}],
+   sort: [{field: "search_api_relevance", value: "desc"}, {field: "organization_name", value: "asc"}, {field: "start_date", value: "asc"}]
+ ) {
     documents {
       ... on DefaultDoc {
         type

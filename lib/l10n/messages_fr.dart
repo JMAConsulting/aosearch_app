@@ -21,9 +21,24 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepting new Clients?"),
+    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepte de nouveaux clients"),
     "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Advanced Search Options"),
-    "keywordHintText" : MessageLookupByLibrary.simpleMessage("Enter your search term here"),
-    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Languages")
+    "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
+    "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Groupes d\'âge desservis"),
+    "anyText" : MessageLookupByLibrary.simpleMessage("- Toutes -"),
+    "categoryTitle" : MessageLookupByLibrary.simpleMessage("Type de page"),
+    "chaptersTitle" : MessageLookupByLibrary.simpleMessage("Section locale"),
+    "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("La date de début doit être supérieure ou égale à la date d’achèvement"),
+    "endDate" : MessageLookupByLibrary.simpleMessage("A"),
+    "keywordHintText" : MessageLookupByLibrary.simpleMessage("Recherche par mot clé"),
+    "keywordText" : MessageLookupByLibrary.simpleMessage("Recherche par mot-clé"),
+    "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
+    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Langue(s)"),
+    "noResultText" : MessageLookupByLibrary.simpleMessage("Aucun résultat trouvé."),
+    "ownLocationText" : MessageLookupByLibrary.simpleMessage("Depuis mon emplacement actuel"),
+    "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
+    "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
+    "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
+    "startDate" : MessageLookupByLibrary.simpleMessage("de")
   };
 }

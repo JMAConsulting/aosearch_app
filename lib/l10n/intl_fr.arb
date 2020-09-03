@@ -1,6 +1,6 @@
 {
-  "@@last_modified": "2020-08-24T16:39:49.550666",
-  "keywordHintText": "Enter your search term here",
+  "@@last_modified": "2020-08-28T15:42:20.874641",
+  "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
     "type": "text",
@@ -12,15 +12,105 @@
     "type": "text",
     "placeholders": {}
   },
-  "acceptingNewClientsTitle": "Accepting new Clients?",
+  "acceptingNewClientsTitle": "Accepte de nouveaux clients",
   "@acceptingNewClientsTitle": {
     "description": "Accepting New Clients title",
     "type": "text",
     "placeholders": {}
   },
-  "languagesTitle": "Languages",
+  "chaptersTitle": "Section locale",
+  "@chaptersTitle": {
+    "description": "Chapters title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languagesTitle": "Langue(s)",
   "@languagesTitle": {
     "description": "LanguagesTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languagesHintText": "Please choose one or more language",
+  "@languagesHintText": {
+    "description": "LanguagesTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servicesAreProvidedTitle": "Fourniture des services",
+  "@servicesAreProvidedTitle": {
+    "description": "servicesAreProvidedTitleField",
+    "type": "text",
+    "placeholders": {}
+  },
+  "servicesAreProvidedHintText": "Please choose where you would like services to be provided",
+  "@servicesAreProvidedHintText": {
+    "description": "servicesAreProvidedHint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ageGroupsTitleText": "Groupes d'âge desservis",
+  "@ageGroupsTitleText": {
+    "description": "ageGroupsTitleText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ageGroupsHintText": "Please choose any appropriate age groups",
+  "@ageGroupsHintText": {
+    "description": "ageGroupsHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "startDate": "de",
+  "@startDate": {
+    "description": "startDate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "endDate": "A",
+  "@endDate": {
+    "description": "endDate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dateErrorMessage": "La date de début doit être supérieure ou égale à la date d’achèvement",
+  "@dateErrorMessage": {
+    "description": "dateErrorMessage",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchButtonText": "Recherche",
+  "@searchButtonText": {
+    "description": "searchButtonText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ownLocationText": "Depuis mon emplacement actuel",
+  "@ownLocationText": {
+    "description": "ownLocationText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "keywordText": "Recherche par mot-clé",
+  "@keywordText": {
+    "description": "keywordText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "anyText": "- Toutes -",
+  "@anyText": {
+    "description": "anyText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryTitle": "Type de page",
+  "@categoryTitle": {
+    "description": "categoryTitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noResultText": "Aucun résultat trouvé.",
+  "@noResultText": {
+    "description": "noResultText",
     "type": "text",
     "placeholders": {}
   }

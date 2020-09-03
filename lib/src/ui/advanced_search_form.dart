@@ -1,6 +1,5 @@
 import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
-import '../resources/languages.dart';
 import 'package:intl/intl.dart';
 import '../queries/search_parameters.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -10,6 +9,7 @@ import 'location.dart';
 import 'search_results.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../resources/api.dart';
+import '../resources/chapters.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -22,185 +22,373 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   SearchParameters _formResult = SearchParameters();
   final _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
+
   DateTime _startDate;
   String _acceptingNewClients;
-
+  String _catagories;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          children: [
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
-                labelText: 'Keyword',
-              ),
-              initialValue: _formResult.keyword,
-              validator: (keyword) {
-                if (keyword.length < 3) {
-                  return 'Keyword is too short';
-                }
-                return null;
-              },
-              onSaved: (keyword) {
-                _formResult.keyword = keyword;
-              },
-            ),
-            SizedBox(height: 8.0),
-            ExpansionTile(
-              title: Text(SearchAppLocalizations.of(context).advSearchTitle),
-              children: [Column(
-                children: [
-                  DropDownFormField(
-                    value: _acceptingNewClients,
-                    titleText: Text(SearchAppLocalizations.of(context).acceptingNewClientsTitle).data,
-//                    dataSource: getOptions({"optionGroupId": "195"}),
-                    dataSource: acceptingNewClients,
-                    valueField: 'value',
-                    textField: 'display',
-                    onChanged: (value) {
-                      setState(() {
-                        _acceptingNewClients = value;
-                      });
-                    },
-                    onSaved: (value) {
-                      _formResult.acceptingNewClients = value;
-                    },
+    const rowSpacer=TableRow(
+      children: [
+        SizedBox(
+         height: 18,
+        ),
+        SizedBox(
+         height: 18,
+        )
+      ]);
+    return GraphQLProvider(
+        client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
+                    labelText: Text(SearchAppLocalizations.of(context).keywordText).data,
                   ),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: Text(SearchAppLocalizations.of(context).languagesTitle).data,
-                    dataSource: language,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: 'Please choose one or more languages',
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.languages = values;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: 'Services are provided',
-                    dataSource: services,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: 'Please choose where you would like services to be provided',
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.servicesAreProvided = values;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  MultiSelectFormField(
-                    titleText: 'Age groups served',
-                    dataSource: ageGroups,
-                    valueField: 'value',
-                    textField: 'display',
-                    hintText: 'Please choose any appropriate age groups',
-                    onSaved: (values) {
-                      setState(() {
-                        _formResult.ageGroupsServed = values;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Text('Start Date'),
-                          SizedBox(
-                            width: 150,
-                            height: 50,
-                            child: DateTimeField(
-                              format: dateFormat,
-                              onShowPicker: (context, currentValue) {
-                                return showDatePicker(
-                                    context: context,
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year - 1),
-                                    lastDate: DateTime(DateTime.now().year + 3)
-                                );
+                  initialValue: _formResult.keyword,
+                  validator: (keyword) {
+                    if (keyword.length < 3) {
+                      return 'Keyword is too short';
+                    }
+                    return null;
+                  },
+                  onSaved: (keyword) {
+                    setState(() {
+                      _formResult.keyword = keyword;
+                    });
+                  },
+                ),
+                SizedBox(height: 8.0),
+                ExpansionTile(
+                  title: Text(SearchAppLocalizations.of(context).advSearchTitle),
+                  children: [
+                    Column(
+                      children: [
+                        MultiSelectFormField(
+                          titleText: Text(SearchAppLocalizations
+                              .of(context)
+                              .categoryTitle).data,
+                          dataSource: catagories,
+                          valueField: 'entityId',
+                          textField: 'entityLabel',
+                          onSaved: (values) {
+                            setState(() {
+                              _formResult.catagories = values;
+                            });
+                          },
+                        ),
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(taxonomyTermJmaQuery),
+                            variables: {"language": Localizations.localeOf(context).languageCode.toUpperCase()}
+                          ),
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            return MultiSelectFormField(
+                              titleText: Text(SearchAppLocalizations
+                                .of(context)
+                                .chaptersTitle).data,
+                              dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                              valueField: 'entityId',
+                              textField: 'entityLabel',
+                              onSaved: (values) {
+                                setState(() {
+                                  _formResult.chapters = values;
+                                });
                               },
+                            );
+                          }
+                        ),
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(optionValueQuery),
+                            variables: {"value": "195"},
+                          ),
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            var options = new List();
+                            options.add({"entityLabel": Text(SearchAppLocalizations.of(context).anyText).data});
+                            for (var item in result.data["civicrmOptionValueJmaQuery"]["entities"]) {
+                              options.add(item);
+                            }
+                            return DropDownFormField(
+                              value: _acceptingNewClients,
+                              titleText: Text(SearchAppLocalizations
+                                .of(context)
+                                .acceptingNewClientsTitle).data,
+                              dataSource: options,
+                              valueField: 'entityLabel',
+                              textField: 'entityLabel',
                               onChanged: (value) {
-                                _startDate = value;
+                                setState(() {
+                                  _acceptingNewClients = value;
+                                });
                               },
                               onSaved: (value) {
-                                _formResult.startDate = value;
+                                _formResult.acceptingNewClients = value;
                               },
-                            ),
+                            );
+                          }
+                        ),
+                        SizedBox(height: 8.0),
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(optionValueQuery),
+                            variables: {"value": "105"},
                           ),
-                        ]
-                      ),
-                      Column(
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            return MultiSelectFormField(
+                              titleText: Text(SearchAppLocalizations
+                                .of(context)
+                                .languagesTitle).data,
+                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                              valueField: 'entityLabel',
+                              textField: 'entityLabel',
+                              hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                              onSaved: (values) {
+                                setState(() {
+                                  _formResult.languages = values;
+                                });
+                              },
+                            );
+                          }
+                        ),
+                        SizedBox(height: 8.0),
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(optionValueQuery),
+                            variables: {"value": "232"},
+                          ),
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            return MultiSelectFormField(
+                              titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
+                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                              valueField: 'entityLabel',
+                              textField: 'entityLabel',
+                              hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
+                              onSaved: (values) {
+                                setState(() {
+                                  _formResult.servicesAreProvided = values;
+                                });
+                              },
+                            );
+                          }
+                        ),
+                        SizedBox(height: 8.0),
+                        Query(
+                          options: QueryOptions(
+                            documentNode: gql(optionValueQuery),
+                            variables: {"value": "233"},
+                          ),
+                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            if (result.hasException) {
+                              return Text(result.exception.toString());
+                            }
+                            if (result.loading) {
+                              return Text('Loading');
+                            }
+                            return MultiSelectFormField(
+                              titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
+                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                              valueField: 'entityLabel',
+                              textField: 'entityLabel',
+                              hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
+                              onSaved: (values) {
+                                setState(() {
+                                  _formResult.ageGroupsServed = values;
+                                });
+                              },
+                            );
+                          }
+                        ),
+                        SizedBox(height: 8.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('End Date'),
-                            SizedBox(
-                              height: 50,
-                              width: 150,
-                              child: DateTimeField(
-                                format: dateFormat,
-                                onShowPicker: (context, currentValue) {
-                                  return showDatePicker(
-                                      context: context,
-                                      initialDate: currentValue ?? DateTime.now(),
-                                      firstDate: DateTime(DateTime.now().year - 1),
-                                      lastDate: DateTime(DateTime.now().year + 3)
-                                  );
-                                },
-                                onSaved: (value) {
-                                  _formResult.endDate = value;
-                                },
-                                validator: (value) {
-                                  if (value != null) {
-                                    if (value.isBefore(_startDate)) {
-                                      return "End Date can't be before Start Date";
-                                    }
-                                  }
-                                  return null;
-                                },
-                              ),
+                            Column(
+                              children: [
+                                Text(SearchAppLocalizations.of(context).startDate),
+                                SizedBox(
+                                  width: 150,
+                                  height: 50,
+                                  child: DateTimeField(
+                                    format: dateFormat,
+                                    onShowPicker: (context, currentValue) {
+                                      return showDatePicker(
+                                        context: context,
+                                        initialDate: currentValue ?? DateTime.now(),
+                                        firstDate: DateTime(DateTime.now().year - 1),
+                                        lastDate: DateTime(DateTime.now().year + 3)
+                                      );
+                                    },
+                                    onChanged: (value) {
+                                     _startDate = value;
+                                     },
+                                    onSaved: (value) {
+                                      _formResult.startDate = value;
+                                    },
+                                  ),
+                                ),
+                              ]
                             ),
-                          ]
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  LocationWidget(),
-                ],
-              )],
-            ),
-            FlatButton(
-              child: Text('Submit'),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => new ResultsPage(search: _formResult)
+                            Column(
+                              children: [
+                                Text(SearchAppLocalizations.of(context).endDate),
+                                SizedBox(
+                                  height: 50,
+                                  width: 150,
+                                  child: DateTimeField(
+                                    format: dateFormat,
+                                    onShowPicker: (context, currentValue) {
+                                      return showDatePicker(
+                                        context: context,
+                                        initialDate: currentValue ?? DateTime.now(),
+                                        firstDate: DateTime(DateTime.now().year - 1),
+                                        lastDate: DateTime(DateTime.now().year + 3)
+                                      );
+                                    },
+                                    onSaved: (value) {
+                                     _formResult.endDate = value;
+                                    },
+                                     validator: (value) {
+                                      if (value != null) {
+                                        if (value.isBefore(_startDate)) {
+                                          return Text(SearchAppLocalizations.of(context).dateErrorMessage).data;
+                                        }
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ]
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8.0),
+                        LocationWidget(),
+                      ],
                     )
-                  );
-                }
-              },
-            )
-          ],
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('Service Listing Legend'),
+                  children: [
+                    SizedBox(height: 10.0),
+                    Table(
+                        children: [
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+                                    Text('Accepting new clients'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
+                                    Text('Not accepting new clients'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
+                                    Text('Online'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
+                                    Text('Travels to nearby areas'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                          TableRow(children: [
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'),
+                                    Text('Travels to remote areas'),
+                                  ],
+                                )
+                            ),
+                            TableCell(
+                                child: Column(
+                                  children: [
+                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_verified_16px.svg'),
+                                    Text('Verified Listing'),
+                                  ],
+                                )
+                            ),
+                          ]),
+                          rowSpacer,
+                        ]
+                    ),
+                  ],
+                ),
+                FlatButton(
+                  child: Text(SearchAppLocalizations.of(context).searchButtonText),
+                  onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => new ResultsPage(search: _formResult)
+                      )
+                    );
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  getOptions(String $optionGroupId) {
+  getOptions(String $optionGroupId, String $widgetType) {
     Query(
       options: QueryOptions(
         documentNode: gql(optionValueQuery),
@@ -225,4 +413,3 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 }
-

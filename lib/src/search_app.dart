@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'ui/advanced_search_form.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import '../l10n/messages_all.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import '../src/resources/api.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'queries/search_parameters.dart';
 
 class SearchAppLocalizations {
   SearchAppLocalizations(this.localeName);
@@ -51,11 +54,146 @@ class SearchAppLocalizations {
     );
   }
 
+  String get chaptersTitle {
+    return Intl.message(
+      'Chapters',
+      name: 'chaptersTitle',
+      desc: 'Chapters title',
+      locale: localeName,
+    );
+  }
+
   String get languagesTitle {
     return Intl.message(
       'Languages',
       name: 'languagesTitle',
       desc: 'LanguagesTitleField',
+      locale: localeName,
+    );
+  }
+
+   String get languagesHintText {
+    return Intl.message(
+      'Please choose one or more language',
+      name: 'languagesHintText',
+      desc: 'LanguagesTitleField',
+      locale: localeName,
+    );
+  }
+
+  String get servicesAreProvidedTitle {
+    return Intl.message(
+      'Services are provided',
+      name: 'servicesAreProvidedTitle',
+      desc: 'servicesAreProvidedTitleField',
+      locale: localeName,
+    );
+  }
+
+  String get servicesAreProvidedHintText {
+    return Intl.message(
+      'Please choose where you would like services to be provided',
+      name: 'servicesAreProvidedHintText',
+      desc: 'servicesAreProvidedHint',
+      locale: localeName,
+    );
+  }
+
+  String get ageGroupsTitleText {
+    return Intl.message(
+      'Age groups served',
+      name: 'ageGroupsTitleText',
+      desc: 'ageGroupsTitleText',
+      locale: localeName,
+    );
+  }
+
+  String get ageGroupsHintText {
+    return Intl.message(
+      'Please choose any appropriate age groups',
+      name: 'ageGroupsHintText',
+      desc: 'ageGroupsHintText',
+      locale: localeName,
+    );
+  }
+
+  String get startDate {
+    return Intl.message(
+      'Start Date',
+      name: 'startDate',
+      desc: 'startDate',
+      locale: localeName,
+    );
+  }
+
+  String get endDate {
+    return Intl.message(
+      'End Date',
+      name: 'endDate',
+      desc: 'endDate',
+      locale: localeName,
+    );
+  }
+
+  String get dateErrorMessage {
+    return Intl.message(
+      'End Date can\'t be before Start Date',
+      name: 'dateErrorMessage',
+      desc: 'dateErrorMessage',
+      locale: localeName,
+    );
+  }
+
+  String get searchButtonText {
+    return Intl.message(
+      'Search',
+      name: 'searchButtonText',
+      desc: 'searchButtonText',
+      locale: localeName,
+    );
+  }
+
+  String get ownLocationText {
+    return Intl.message(
+      'Use my location',
+      name: 'ownLocationText',
+      desc: 'ownLocationText',
+      locale: localeName,
+    );
+  }
+
+  String get keywordText {
+    return Intl.message(
+      'Fulltext Search',
+      name: 'keywordText',
+      desc: 'keywordText',
+      locale: localeName,
+    );
+  }
+
+  String get anyText {
+    return Intl.message(
+      '- Any -',
+      name: 'anyText',
+      desc: 'anyText',
+      locale: localeName,
+    );
+  }
+
+  String get categoryTitle {
+    return Intl.message(
+      'Category',
+      name: 'categoryTitle',
+      desc: 'categoryTitle',
+      locale: localeName,
+    );
+  }
+
+  String get noResultText {
+    return Intl.message(
+      'No results found.',
+      name: 'noResultText',
+      desc: 'noResultText',
       locale: localeName,
     );
   }
@@ -75,9 +213,10 @@ class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLoca
 }
 
 class SearchApp extends StatelessWidget {
+  SearchParameters _formResult = SearchParameters();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp (
       localizationsDelegates: [
         const SearchAppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -88,21 +227,21 @@ class SearchApp extends StatelessWidget {
         const Locale('fr', ''),
       ],
       home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white70,
-            title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                      'images/AO_logo.png',
-                      height: AppBar().preferredSize.height,
-                      fit: BoxFit.cover,
-                  )
-                ],
-            ),
+        appBar: AppBar(
+          backgroundColor: Colors.white70,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'images/AO_logo.png',
+                 height: AppBar().preferredSize.height,
+                 fit: BoxFit.cover,
+              )
+            ],
           ),
-          body: new AdvancedSearchForm(),
-      ),
+        ),
+        body: new AdvancedSearchForm(),
+      )
     );
   }
 }
