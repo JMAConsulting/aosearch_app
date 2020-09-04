@@ -4,6 +4,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
 import '../resources/api.dart';
 import 'package:html/parser.dart';
+import 'full_search_result.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class ResultsPage extends StatelessWidget {
   final SearchParameters search;
@@ -131,40 +133,96 @@ class Result extends StatelessWidget {
         itemCount: list["searchAPISearch"]["documents"].length,
         itemBuilder: (BuildContext context, int index) {
           final item = list["searchAPISearch"]["documents"][index];
-          return ListTile(
-            onTap: () {},
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 44,
-                minHeight: 44,
-                maxWidth: 64,
-                maxHeight: 64,
-              ),
-              child: Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+          SearchParameters items = SearchParameters();
+          //items.languages = [item['langcode']];
+          items.catagories = [item['type']];
+          items.keyword = item['title'];
+          return Card(
+              elevation: 5,
+              child: Padding(
+              padding: EdgeInsets.all(5),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => new FullResultsPage(search: items)
+                            )
+                        );
+                      },
+                      title: Container(
+                        padding: EdgeInsets.all(5.0),
+                        height: 35.0,
+                        child: Text(
+                          getTitle(item),
+                          style: TextStyle(
+                              color: Colors.grey[850],
+                              fontSize: 18.0
+                          ),
+                        ),
+                      ),
+                      trailing: Wrap(
+                        spacing: 5, // space between two icons
+                        children: <Widget>[
+                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
+                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
+                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
+                        ],
+                      ),
+                      //contentPadding: EdgeInsets.symmetric(vertical: 3.5),
+                    ),
+                    ListTile(
+                      trailing: Icon(Icons.arrow_right),
+                      subtitle: Text(
+                        getDescription(item),
+                        style: TextStyle(
+                            color: Colors.grey[850],
+                            fontSize: 15.0
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        RaisedButton(
+                          onPressed: () => MapsLauncher.launchCoordinates(
+                              43.6295972, -83.8680235, 'Google Headquarters are here'),
+                          child: Icon(Icons.map),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              )
+            );
+          });
+
+  }
+  
+  Widget titleText(text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 0.0),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.grey[850],
+              fontSize: 18.0
             ),
-            title: Container(
-              padding: EdgeInsets.all(5.0),
-              height: 35.0,
-              child: Text(
-                getTitle(item),
-                style: TextStyle(
-                  color: Colors.grey[850],
-                  fontSize: 18.0
-                ),
-              ),
-            ),
-            subtitle: Text(
-              getDescription(item),
-            ),
-            trailing: Icon(Icons.arrow_right),
-            contentPadding: EdgeInsets.symmetric(vertical: 3.5),
-          );
-        });
+          ),
+      )
+    );
   }
 
   getTitle(item) {
     var title = item['title'] ?? item["organization_name"] ?? '';
     title = title.replaceAll('Self-employed ', '');
+
     return title;
   }
 

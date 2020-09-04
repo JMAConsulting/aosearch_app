@@ -56,7 +56,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   initialValue: _formResult.keyword,
                   validator: (keyword) {
                     if (keyword.length < 3) {
-                      return 'Keyword is too short';
+                      //return 'Keyword is too short';
                     }
                     return null;
                   },
@@ -72,6 +72,25 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
+                        /**
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            RaisedButton(
+                              onPressed: () => MapsLauncher.launchQuery(
+                                '1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA'),
+                              child: Text('LAUNCH QUERY'),
+                            ),
+                            SizedBox(height: 32),
+                            RaisedButton(
+                              onPressed: () => MapsLauncher.launchCoordinates(
+                                37.4220041, -122.0862462, 'Google Headquarters are here'),
+                                child: Text('LAUNCH COORDINATES'),
+                              ),
+                            ],
+                        ),
+                            */
                         MultiSelectFormField(
                           titleText: Text(SearchAppLocalizations
                               .of(context)

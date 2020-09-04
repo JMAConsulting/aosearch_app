@@ -73,6 +73,7 @@ query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$cond
  ) {
     documents {
       ... on DefaultDoc {
+        langcode
         type
         title
         tm_x3b_und_title_1
