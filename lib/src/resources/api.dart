@@ -92,6 +92,8 @@ query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$cond
         custom_911
         custom_904
         field_chapter_reference
+        field_geolocation_2
+        field_geolocation
         body
       }
     }

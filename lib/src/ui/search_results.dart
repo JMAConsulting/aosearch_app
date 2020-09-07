@@ -187,13 +187,7 @@ class Result extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        RaisedButton(
-                          onPressed: () => MapsLauncher.launchCoordinates(
-                              43.6295972, -83.8680235, 'Google Headquarters are here'),
-                          child: Icon(Icons.map),
-                        ),
-                      ],
+                      children: geolocationButtons(item),
                     ),
                   ],
                 )
@@ -202,7 +196,32 @@ class Result extends StatelessWidget {
           });
 
   }
-  
+
+  List<Widget> geolocationButtons(result) {
+    var widgets = <Widget>[];
+    var resultCoordinates = result['field_geolocation'].length > 0 ?
+    result['field_geolocation'] : (
+        result['field_geolocation_2'].length > 0 ?
+        result['field_geolocation_2'] : []
+    );
+    if (resultCoordinates.length > 0) {
+      for (var key = 0; key<resultCoordinates.length; key++) {
+        var coordinates = resultCoordinates[key].split(', ');
+        widgets.add(RaisedButton(
+          onPressed: () =>
+              MapsLauncher.launchCoordinates(
+                  double.parse(coordinates[0]), double.parse(coordinates[1]),
+                  getTitle(result)),
+          child: Icon(Icons.map),
+        ));
+      }
+    }
+    else {
+      widgets.add(Text(''));
+    }
+    return widgets;
+  }
+
   Widget titleText(text) {
     return Padding(
       padding: const EdgeInsets.only(left: 0.0),
