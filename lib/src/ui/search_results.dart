@@ -118,8 +118,10 @@ class _SearchResultsState extends State<SearchResults> {
       "conditions": [],
       "languages": [appLanguage, "und"],
       'conditionGroup': conditionGroup,
-      'fullText': {"keys": keywords},
     };
+    if (keywords.length > 0) {
+      variables['fullText'] = {"keys": keywords};
+    }
     return variables;
   }
 }
@@ -203,6 +205,7 @@ class Result extends StatelessWidget {
       widgets.add(Text(''));
       return widgets;
     }
+
     if (result['custom_896'] == '1') {
       count++;
       widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'));
@@ -210,15 +213,15 @@ class Result extends StatelessWidget {
     else if (result['custom_896'] == '0') {
       widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'));
     }
-    if (result['custom_897'] == '2') {
+    if (result['custom_897'].indexOf('2') >= 0) {
       count++;
       widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'));
     }
-    if (result['custom_897'] == '3') {
+    if (result['custom_897'].indexOf('3') >= 0) {
       count++;
       widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'));
     }
-    if (result['custom_897'] == '4') {
+    if (result['custom_897'].indexOf('4') >= 0) {
       count++;
       widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'));
     }

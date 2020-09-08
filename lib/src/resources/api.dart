@@ -31,7 +31,7 @@ ValueNotifier<GraphQLClient> frenchClient = ValueNotifier(
 
 final String optionValueQuery = """
 query getOptionValues(\$value: [String]!) {
-  civicrmOptionValueJmaQuery(filter: {conditions: [{field: "option_group_id", value: \$value, operator: EQUAL}, {field: "is_active", value: "1", operator: EQUAL}]}) {
+  civicrmOptionValueJmaQuery(filter: {conditions: [{field: "option_group_id", value: \$value, operator: EQUAL}, {field: "is_active", value: "1", operator: EQUAL}]}, sort: {field: "label", direction: ASC}) {
     entities {
       entityLabel
       entityId
@@ -42,7 +42,7 @@ query getOptionValues(\$value: [String]!) {
 
 final String taxonomyTermJmaQuery = """
 query getTaxonomyOptions(\$language: LanguageId!) {
-  taxonomyTermJmaQuery(filter:{conditions: {field: "vid", value: "group", operator: EQUAL}}, limit:100) {
+  taxonomyTermJmaQuery(filter:{conditions: {field: "vid", value: "group", operator: EQUAL}}, limit:100, sort: {field: "name", direction: ASC}) {
     entities(language: \$language) {
       entityLabel
       entityId
