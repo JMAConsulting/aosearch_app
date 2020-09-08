@@ -201,7 +201,8 @@ class Result extends StatelessWidget {
     List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
     var count = 0;
-    if (result['custom_896'] == '' && result['custom_897'] == '') {
+    if ((result['custom_896'] == '' || result['custom_896'] == null) &&
+        (result['custom_897'] == '' || result['custom_897'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
