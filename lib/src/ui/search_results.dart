@@ -1,6 +1,7 @@
 import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:intl/intl.dart';
 import '../queries/search_parameters.dart';
 import '../resources/api.dart';
 import 'package:html/parser.dart';
@@ -163,14 +164,12 @@ class Result extends StatelessWidget {
                           ),
                         ),
                       ),
+                      subtitle: Text(getType(item['type']),
+                          style: TextStyle(
+                      )),
                       trailing: Wrap(
                         spacing: 5, // space between two icons
-                        children: <Widget>[
-                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
-                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
-                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
-                          Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
-                        ],
+                        children: getServicelistingButtons(item),
                       ),
                       //contentPadding: EdgeInsets.symmetric(vertical: 3.5),
                     ),
@@ -195,6 +194,37 @@ class Result extends StatelessWidget {
             );
           });
 
+  }
+
+    List <Widget> getServicelistingButtons(result) {
+    var widgets = <Widget>[];
+    var count = 0;
+    if (result['custom_896'] == '' && result['custom_897'] == '') {
+      widgets.add(Text(''));
+      return widgets;
+    }
+    if (result['custom_896'] == '1') {
+      count++;
+      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'));
+    }
+    else if (result['custom_896'] == '0') {
+      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'));
+    }
+    if (result['custom_897'] == '2') {
+      count++;
+      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'));
+    }
+    if (result['custom_897'] == '3') {
+      count++;
+      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'));
+    }
+    if (result['custom_897'] == '4') {
+      count++;
+      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'));
+    }
+
+    //widgets.add(Text(result['custom_896']));
+    return widgets;
   }
 
   List<Widget> geolocationButtons(result) {
@@ -236,6 +266,12 @@ class Result extends StatelessWidget {
           ),
       )
     );
+  }
+
+  getType(type) {
+    type = type ?? 'Service Listing';
+    type = type.replaceAll('_', ' ');
+    return toBeginningOfSentenceCase(type);
   }
 
   getTitle(item) {

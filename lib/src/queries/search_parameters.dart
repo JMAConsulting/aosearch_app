@@ -24,6 +24,7 @@ class SearchParameters {
 
   @override
   String toString() {
+    this.keyword = this.catagories != '' ? '' : this.keyword;
     return """keyword = $keyword 
         languages = $languages 
         acceptingNewClients = $acceptingNewClients 
@@ -32,7 +33,7 @@ class SearchParameters {
         servicesAreProvided = $servicesAreProvided
         ageGroupsServed = $ageGroupsServed
         chapters = $chapters
-        catagories = $catagories
+        type = $catagories
         """;
   }
 }
