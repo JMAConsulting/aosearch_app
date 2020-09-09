@@ -7,6 +7,7 @@ import '../resources/api.dart';
 import 'package:html/parser.dart';
 import 'full_search_result.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ResultsPage extends StatelessWidget {
   final SearchParameters search;
@@ -70,16 +71,104 @@ class _SearchResultsState extends State<SearchResults> {
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
         return SafeArea(
-          child: Center(
-            child: result.hasException
-                ? Text(result.exception.toString())
-                : result.loading
-                ? CircularProgressIndicator()
-                : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Result(list: result.data),
-          ),
+          child: Column(
+              children: <Widget>[
+                //Flexible(child: legendIconBlock()),
+                Flexible(
+                 child: Center(
+                  child: result.hasException
+                    ? Text(result.exception.toString())
+                    : result.loading
+                    ? CircularProgressIndicator()
+                    : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Flexible(child: Result(list: result.data)),
+              ))
+          ])
         );
       },
     );
+  }
+
+  Widget legendIconBlock() {
+    const rowSpacer=TableRow(
+        children: [
+          SizedBox(
+            height: 18,
+          ),
+          SizedBox(
+            height: 18,
+          )
+        ]);
+    return SingleChildScrollView(
+        child: Card(
+          child: ExpansionTile(
+            title: Text('Service Listing Legend'),
+            initiallyExpanded: false,
+            children: [
+              SizedBox(height: 10.0),
+              Table(
+                  children: [
+                    TableRow(children: [
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+                              Text('Accepting new clients'),
+                            ],
+                          )
+                      ),
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
+                              Text('Not accepting new clients'),
+                            ],
+                          )
+                      ),
+                    ]),
+                    rowSpacer,
+                    TableRow(children: [
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
+                              Text('Online'),
+                            ],
+                          )
+                      ),
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
+                              Text('Travels to nearby areas'),
+                            ],
+                          )
+                      ),
+                    ]),
+                    rowSpacer,
+                    TableRow(children: [
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'),
+                              Text('Travels to remote areas'),
+                            ],
+                          )
+                      ),
+                      TableCell(
+                          child: Column(
+                            children: [
+                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_verified_16px.svg'),
+                              Text('Verified Listing'),
+                            ],
+                          )
+                      ),
+                    ]),
+                    rowSpacer,
+                  ]
+              ),
+            ],
+          ))
+        );
   }
 
   queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
@@ -121,6 +210,7 @@ class _SearchResultsState extends State<SearchResults> {
     };
     if (keywords.length > 0) {
       variables['fullText'] = {"keys": keywords};
+      variables['conditionGroup'] = new List();
     }
     return variables;
   }
@@ -148,23 +238,32 @@ class Result extends StatelessWidget {
                   children: [
                     ListTile(
                       onTap: () {
+                        launch('https://jma.staging.autismontario.com/service-listing/564839');
+                        /*
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => new FullResultsPage(search: items)
+                                builder: (context) => new FullResultsPage(keyword: getTitle(item))
                             )
                         );
+                         */
                       },
                       title: Container(
                         padding: EdgeInsets.all(5.0),
-                        height: 35.0,
-                        child: Text(
+                        height: 50.0,
+                        child:  Wrap(
+                          spacing: getType(item['type']) == 'Service Listing' ? 2 : 0,
+                        children: <Widget>[
+                          getType(item['type']) == 'Service Listing' ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          Text(
                           getTitle(item),
                           style: TextStyle(
                               color: Colors.grey[850],
                               fontSize: 18.0
                           ),
                         ),
+
+                        ]),
                       ),
                       subtitle: Text(getType(item['type']),
                           style: TextStyle(
@@ -241,13 +340,40 @@ class Result extends StatelessWidget {
     if (resultCoordinates.length > 0) {
       for (var key = 0; key<resultCoordinates.length; key++) {
         var coordinates = resultCoordinates[key].split(', ');
-        widgets.add(RaisedButton(
+
+        widgets.add(
+            Material(
+                child: InkWell(
+                  onTap: () {
+                    MapsLauncher.launchCoordinates(
+                        double.parse(coordinates[0]), double.parse(coordinates[1]),
+                        getTitle(result));
+                  },
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Image.asset('images/map.png',
+                          width: 110.0, height: 60.0),
+                    ),),
+                )
+            )
+          /**
+           Container(
+          width: 110,
+            height: 50,
+            child: RaisedButton(
           onPressed: () =>
               MapsLauncher.launchCoordinates(
                   double.parse(coordinates[0]), double.parse(coordinates[1]),
                   getTitle(result)),
-          child: Icon(Icons.map),
-        ));
+          child: Image.asset(
+            'images/map.png',
+            //height: AppBar().preferredSize.height,
+            //fit: BoxFit.cover,
+          ),
+        ))
+              */
+              );
       }
     }
     else {

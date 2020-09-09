@@ -6,9 +6,9 @@ import '../resources/api.dart';
 import 'package:html/parser.dart';
 
 class FullResultsPage extends StatelessWidget {
-  final SearchParameters search;
+  final String keyword;
 
-  FullResultsPage({@required this.search});
+  FullResultsPage({@required this.keyword});
 
   @override
   Widget build(BuildContext context) {
@@ -29,25 +29,27 @@ class FullResultsPage extends StatelessWidget {
             ],
           ),
         ),
-        body: new FullSearchResults(search: search),
+        body: new FullSearchResults(keyword: keyword),
       ),
     );
   }
 }
 
 class FullSearchResults extends StatefulWidget {
-  final SearchParameters search;
-  FullSearchResults({Key key, @required this.search}): super(key:key);
+  final String keyword;
+  //FullSearchResults({Key key, @required this.keyword}): super(key:key);
+
+  FullSearchResults({@required this.keyword});
 
   @override
-  _FullSearchResultsState createState() => _FullSearchResultsState(search);
+  _FullSearchResultsState createState() => _FullSearchResultsState(keyword);
 }
 
 class _FullSearchResultsState extends State<FullSearchResults> {
-  final SearchParameters search;
+  final String keyword;
   var type = 'Service Listing';
 
-  _FullSearchResultsState(this.search);
+  _FullSearchResultsState(this.keyword);
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +61,11 @@ class _FullSearchResultsState extends State<FullSearchResults> {
           documentNode: gql(query),
           variables: queryVariables(
             Localizations.localeOf(context).languageCode,
-            search.ageGroupsServed,
-            search.acceptingNewClients,
-            search.servicesAreProvided,
-            search.keyword,
-            search.languages,
-            search.chapters,
-            search.catagories,
+            keyword
           ),
         ),
         builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-          return SafeArea(
+          return Container(
             child: Center(
               child: result.hasException
                   ? Text(result.exception.toString())
@@ -83,19 +79,14 @@ class _FullSearchResultsState extends State<FullSearchResults> {
     }
   }
 
-  queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
-      servicesProvided, keywords, languages, chapters, categories) {
+  queryVariables(appLanguage, keywords) {
     var conditionGroupGroups = new List();
 
-    var conditionGroup = {
-      "conjunction": "AND",
-      'groups': conditionGroupGroups,
-    };
     var variables = {
       "conditions": [],
       "languages": [appLanguage, "und"],
-      'conditionGroup': conditionGroup,
-      'fullText': {"keys": "aa"},
+      'conditionGroup': new List(),
+      'fullText': {"keys": "abc"},
     };
     return variables;
   }
