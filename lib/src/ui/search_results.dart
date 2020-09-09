@@ -73,7 +73,7 @@ class _SearchResultsState extends State<SearchResults> {
         return SafeArea(
           child: Column(
               children: <Widget>[
-                //Flexible(child: legendIconBlock()),
+                Flexible(child: legendIconBlock()),
                 Flexible(
                  child: Center(
                   child: result.hasException
@@ -102,7 +102,7 @@ class _SearchResultsState extends State<SearchResults> {
         child: Card(
           child: ExpansionTile(
             title: Text('Service Listing Legend'),
-            initiallyExpanded: false,
+            initiallyExpanded: true,
             children: [
               SizedBox(height: 10.0),
               Table(
@@ -356,24 +356,7 @@ class Result extends StatelessWidget {
                           width: 110.0, height: 60.0),
                     ),),
                 )
-            )
-          /**
-           Container(
-          width: 110,
-            height: 50,
-            child: RaisedButton(
-          onPressed: () =>
-              MapsLauncher.launchCoordinates(
-                  double.parse(coordinates[0]), double.parse(coordinates[1]),
-                  getTitle(result)),
-          child: Image.asset(
-            'images/map.png',
-            //height: AppBar().preferredSize.height,
-            //fit: BoxFit.cover,
-          ),
-        ))
-              */
-              );
+              ));
       }
     }
     else {
