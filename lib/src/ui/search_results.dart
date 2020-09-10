@@ -70,23 +70,23 @@ class _SearchResultsState extends State<SearchResults> {
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-        return SafeArea(
-          child: Column(
-              children: <Widget>[
-                Flexible(child: legendIconBlock()),
-                Flexible(
-                 child: Center(
-                  child: result.hasException
-                    ? Text(result.exception.toString())
-                    : result.loading
-                    ? CircularProgressIndicator()
-                    : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Flexible(child: Result(list: result.data)),
-              ))
-          ])
+
+        return Column(
+          children: [
+            legendIconBlock(),
+            Container(
+              child: result.hasException
+                  ? Text(result.exception.toString())
+                  : result.loading
+                    ? Center(child: CircularProgressIndicator())
+                    : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Expanded(child: Result(list: result.data)),
+            )
+          ],
         );
       },
     );
   }
+}
 
   Widget legendIconBlock() {
     const rowSpacer=TableRow(
@@ -111,7 +111,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
+                              Image.asset('images/icon_accepting_16px.png'),
                               Text('Accepting new clients'),
                             ],
                           )
@@ -119,7 +119,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
+                              Image.asset('images/icon_not_accepting_16px.png'),
                               Text('Not accepting new clients'),
                             ],
                           )
@@ -130,7 +130,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
+                              Image.asset('images/icon_videoconferencing_16px.png'),
                               Text('Online'),
                             ],
                           )
@@ -138,7 +138,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
+                              Image.asset('images/icon_local_travel_16px.png'),
                               Text('Travels to nearby areas'),
                             ],
                           )
@@ -149,7 +149,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'),
+                              Image.asset('images/icon_remote_travel_16px.png'),
                               Text('Travels to remote areas'),
                             ],
                           )
@@ -157,7 +157,7 @@ class _SearchResultsState extends State<SearchResults> {
                       TableCell(
                           child: Column(
                             children: [
-                              Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_verified_16px.svg'),
+                              Image.asset('images/icon_verified_16px.png'),
                               Text('Verified Listing'),
                             ],
                           )
@@ -214,7 +214,6 @@ class _SearchResultsState extends State<SearchResults> {
     }
     return variables;
   }
-}
 
 class Result extends StatelessWidget {
   Result({@required this.list});
@@ -238,19 +237,6 @@ class Result extends StatelessWidget {
                   children: [
                     ListTile(
                       onTap: () {
-                        var path = '';
-                        var type = getType(item['type']);
-                        if (type == 'Service Listing') {
-                          path = 'service-listing/';
-                        }
-                        else if (type == 'Event') {
-                          path = 'civicrm/event/info?id=';
-                        }
-                        else {
-                          path = 'node/';
-                        }
-                        var url = 'https://jma.staging.autismontario.com/' + path + getItemId(item).toString();
-                        launch(url);
                         /*
                         Navigator.push(
                             context,
@@ -284,10 +270,32 @@ class Result extends StatelessWidget {
                         spacing: 5, // space between two icons
                         children: getServicelistingButtons(item),
                       ),
-                      //contentPadding: EdgeInsets.symmetric(vertical: 3.5),
                     ),
                     ListTile(
-                      trailing: Icon(Icons.arrow_right),
+                      trailing: new IconButton(
+                        icon: new Icon(Icons.arrow_right),
+                        onPressed: () {
+                          var path = '';
+                          var type = getType(item['type']);
+                          if (type == 'Service Listing') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => new FullResultsPage(id: getItemId(item).toString())
+                                )
+                            );
+                            path = 'service-listing/';
+                          }
+                          else if (type == 'Event') {
+                            path = 'civicrm/event/info?id=';
+                          }
+                          else {
+                            path = 'node/';
+                          }
+                          var url = 'https://jma.staging.autismontario.com/' + path + getItemId(item).toString();
+                          //launch(url);
+                        },
+                      ),
                       subtitle: Text(
                         getDescription(item),
                         style: TextStyle(
@@ -320,22 +328,22 @@ class Result extends StatelessWidget {
 
     if (result['custom_896'] == '1') {
       count++;
-      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'));
+      widgets.add(Image.asset('images/icon_accepting_16px.png'));
     }
     else if (result['custom_896'] == '0') {
-      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'));
+      widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
     if (result['custom_897'].indexOf('2') >= 0) {
       count++;
-      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'));
+      widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
     if (result['custom_897'].indexOf('3') >= 0) {
       count++;
-      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'));
+      widgets.add(Image.asset('images/icon_local_travel_16px.png'));
     }
     if (result['custom_897'].indexOf('4') >= 0) {
       count++;
-      widgets.add(Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'));
+      widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
     }
 
     //widgets.add(Text(result['custom_896']));
