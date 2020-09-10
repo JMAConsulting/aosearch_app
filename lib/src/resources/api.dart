@@ -40,6 +40,54 @@ query getOptionValues(\$value: [String]!) {
 }
 """;
 
+final getServiceListingInformationQuery = """
+query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
+  civicrmContactById(id: \$contact_id) {
+    ... on CivicrmContact {
+      contactType
+      organizationName
+      custom896
+      custom897
+    }
+  }
+  civicrmAddressJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {
+    entities {
+      ... on CivicrmAddress {
+        streetAddress
+        city
+        stateProvinceId
+        geoCode1
+        geoCode2
+        countryId {
+          targetId
+        }
+      }
+    }
+  }
+  civicrmEmailJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {
+    entities {
+      ... on CivicrmEmail {
+        email
+      }
+    }
+  }
+  civicrmPhoneJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {
+    entities {
+      ... on CivicrmPhone {
+        phone
+      }
+    }
+  }
+  civicrmWebsiteJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {
+    entities {
+      ... on CivicrmWebsite {
+        url
+      }
+    }
+  }
+}
+""";
+
 final String taxonomyTermJmaQuery = """
 query getTaxonomyOptions(\$language: LanguageId!) {
   taxonomyTermJmaQuery(filter:{conditions: {field: "vid", value: "group", operator: EQUAL}}, limit:100, sort: {field: "name", direction: ASC}) {
@@ -75,6 +123,9 @@ query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$cond
       ... on DefaultDoc {
         langcode
         type
+        id
+        nid
+        event_id
         title
         tm_x3b_und_title_1
         description

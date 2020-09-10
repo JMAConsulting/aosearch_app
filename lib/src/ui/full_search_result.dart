@@ -58,11 +58,8 @@ class _FullSearchResultsState extends State<FullSearchResults> {
       print('Building SearchResults');
        return Query(
         options: QueryOptions(
-          documentNode: gql(query),
-          variables: queryVariables(
-            Localizations.localeOf(context).languageCode,
-            keyword
-          ),
+          documentNode: gql(getServiceListingInformationQuery),
+          variables: {"contact_id": keyword, "contactId": keyword},
         ),
         builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
           return Container(
@@ -77,18 +74,6 @@ class _FullSearchResultsState extends State<FullSearchResults> {
         },
       );
     }
-  }
-
-  queryVariables(appLanguage, keywords) {
-    var conditionGroupGroups = new List();
-
-    var variables = {
-      "conditions": [],
-      "languages": [appLanguage, "und"],
-      'conditionGroup': new List(),
-      'fullText': {"keys": "abc"},
-    };
-    return variables;
   }
 }
 

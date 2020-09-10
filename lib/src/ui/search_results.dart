@@ -238,7 +238,19 @@ class Result extends StatelessWidget {
                   children: [
                     ListTile(
                       onTap: () {
-                        launch('https://jma.staging.autismontario.com/service-listing/564839');
+                        var path = '';
+                        var type = getType(item['type']);
+                        if (type == 'Service Listing') {
+                          path = 'service-listing/';
+                        }
+                        else if (type == 'Event') {
+                          path = 'civicrm/event/info?id=';
+                        }
+                        else {
+                          path = 'node/';
+                        }
+                        var url = 'https://jma.staging.autismontario.com/' + path + getItemId(item).toString();
+                        launch(url);
                         /*
                         Navigator.push(
                             context,
@@ -404,4 +416,11 @@ class Result extends StatelessWidget {
         ? myString
         : '${myString.substring(0, cutoff)}...';
   }
+
+  getItemId(item) {
+    return item['nid'] == null ? (
+      item['event_id']  == null ? item['id'] : item['event_id']
+    ) : item['nid'];
+  }
+
 }
