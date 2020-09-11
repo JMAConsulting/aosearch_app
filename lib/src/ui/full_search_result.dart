@@ -4,6 +4,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../queries/search_parameters.dart';
 import '../resources/api.dart';
 import 'package:html/parser.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class FullResultsPage extends StatelessWidget {
   final String id;
@@ -63,23 +66,153 @@ class FullResultsPage extends StatelessWidget {
                                         getTitle(result.data['civicrmContactById']),
                                         style: TextStyle(
                                             color: Colors.grey[850],
-                                            fontSize: 18.0
+                                            fontSize: 15.0
                                         ),
                                       ),
+                                      Divider(
+                                        color: Color.fromRGBO(171, 173, 0, 100),
+                                        thickness: 3,
+                                        //indent: 20,
+                                        endIndent: 150,
+                                      ),
                                     ]),
-                              )
-                            )
-                          ],
+                              ),
+                              trailing: Wrap(
+                                spacing: 2,
+                                children:  getServicelistingButtons(result.data['civicrmContactById']),
+                              ),
+                              subtitle: Wrap(
+                                children: [
+                                  Text('SERVICE LISTING',
+                                    style: TextStyle(
+                                        color: Colors.grey[850],
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 11.0
+                                    ),
+                                ),
+                              ])
                         ),
+                        ListTile(
+                          title: Text('Description of services offered:', style: TextStyle(fontSize: 15),),
+                          subtitle: Text(truncateWithEllipsis(200, result.data['civicrmContactById']['custom893'])),
+                        ),
+                            SizedBox(height: 10),
+                            Row(
+                            children: [Linkify(
+                              onOpen: _onOpen,
+                              text: "Email: " + result.data['civicrmEmailJmaQuery']['entities'][0]['email'],
+                            )]),
+                            SizedBox(height: 10),
+                             Row(
+                              children: [
+                                Text('Phone: '),
+                              Material(
+                                child: InkWell(
+                                  onTap: () {
+                                    launch('tel:' + result.data['civicrmPhoneJmaQuery']['entities'][0]['phone']);
+                                  },
+                                  child: Container(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Text(result.data['civicrmPhoneJmaQuery']['entities'][0]['phone'], style: TextStyle(color: Colors.blueAccent, decoration: TextDecoration.underline),),
+                                    ),),
+                                )
+                              )
+                            ]),
+                            SizedBox(height: 10),
+                            Row(
+                                children: [
+                                  Linkify(
+                                  onOpen: _onOpen,
+                                  text: "Website: " + result.data['civicrmWebsiteJmaQuery']['entities'][0]['url'],
+                                )]),
+                                SizedBox(height: 20),
+                                ListTile(
+                                  title: Material(
+                                    child: InkWell(
+                                    onTap: () {
+                                      MapsLauncher.launchCoordinates(
+                                          double.parse(result.data['civicrmAddressJmaQuery']['entities'][0]['geoCode1'].toString()),
+                                          double.parse(result.data['civicrmAddressJmaQuery']['entities'][0]['geoCode2'].toString()),
+                                          getTitle(result.data['civicrmContactById'])
+                                      );
+                                    },
+                                    child: Container(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                        child: Image.asset('images/map.png',
+                                            width: 110.0, height: 60.0),
+                                      ),),
+                                  )
+                              ),
+                              trailing: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(result.data['civicrmAddressJmaQuery']['entities'][0]['streetAddress'], textAlign: TextAlign.left),
+                                  Text(result.data['civicrmAddressJmaQuery']['entities'][0]['city'] + ', ON', textAlign: TextAlign.left),
+                                  Text(result.data['civicrmAddressJmaQuery']['entities'][0]['postalCode'], textAlign: TextAlign.left),
+                                ],
+                              ),
+                            )
+                        ]
                       )
-                  );
+                  ));
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
     );
+  }
+
+  _launchCaller() async {
+    const url = "tel:1234567";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _onOpen(LinkableElement link) async {
+    if (await canLaunch(link.url)) {
+      await launch(link.url);
+    } else {
+      throw 'Could not launch $link';
+    }
+  }
+
+  List <Widget> getServicelistingButtons(result) {
+    var widgets = <Widget>[];
+    var count = 0;
+    //debugPrint(result.toString());
+    if ((result['custom896'] == '' || result['custom896'] == null) &&
+        (result['custom897'] == '' || result['custom897'] == null)) {
+      widgets.add(Text(''));
+      return widgets;
+    }
+
+    if (result['custom896'] == true) {
+      count++;
+      widgets.add(Image.asset('images/icon_accepting_16px.png'));
+    }
+    else if (result['custom896'] == false) {
+      widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
+    }
+    if (result['custom897'].indexOf('2') >= 0) {
+      count++;
+      widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
+    }
+    if (result['custom897'].indexOf('3') >= 0) {
+      count++;
+      widgets.add(Image.asset('images/icon_local_travel_16px.png'));
+    }
+    if (result['custom897'].indexOf('4') >= 0) {
+      count++;
+      widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
+    }
+    return widgets;
   }
 
   getTitle(item) {
@@ -87,6 +220,12 @@ class FullResultsPage extends StatelessWidget {
     title = title.replaceAll('Self-employed ', '');
 
     return title;
+  }
+
+  String truncateWithEllipsis(int cutoff, String myString) {
+    return (myString.length <= cutoff)
+        ? myString
+        : '${myString.substring(0, cutoff)}...';
   }
 
 }

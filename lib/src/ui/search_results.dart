@@ -236,16 +236,7 @@ class Result extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: () {
-                        /*
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => new FullResultsPage(keyword: getTitle(item))
-                            )
-                        );
-                         */
-                      },
+                      onTap: () {},
                       title: Container(
                         padding: EdgeInsets.all(5.0),
                         height: 50.0,

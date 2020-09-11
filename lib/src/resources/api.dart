@@ -48,6 +48,8 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
       organizationName
       custom896
       custom897
+      custom895
+      custom893
     }
   }
   civicrmAddressJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {
@@ -58,6 +60,7 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
         stateProvinceId
         geoCode1
         geoCode2
+        postalCode
         countryId {
           targetId
         }
@@ -85,6 +88,22 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
       }
     }
   }
+   civicrmRelationshipJmaQuery(filter: {conditions: [{field: "contact_id_b", value: "564839", operator: EQUAL},{field: "relationship_type_id", value: "74", operator: EQUAL}]}) {
+    entities { 
+      ... on CivicrmRelationship {
+        contactIdA {
+          ... on FieldCivicrmRelationshipContactIdA {
+							entity {
+                displayName
+                custom895
+                custom911
+                custom905
+              }
+            }
+          }
+        }
+    	}
+    }
 }
 """;
 
