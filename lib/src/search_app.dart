@@ -197,6 +197,60 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+  String get basicPageLabel {
+    return Intl.message(
+      'Basic page',
+      name: 'basicPageLabel',
+      desc: 'basicPageLabel',
+      locale: localeName,
+    );
+  }
+
+  String get chapterLabel {
+    return Intl.message(
+      'Chapter',
+      name: 'chapterLabel',
+      desc: 'chapterLabel',
+      locale: localeName,
+    );
+  }
+
+  String get eventLabel {
+    return Intl.message(
+      'Event',
+      name: 'eventLabel',
+      desc: 'eventLabel',
+      locale: localeName,
+    );
+  }
+
+  String get learningResourceLabel {
+    return Intl.message(
+      'Basic page',
+      name: 'learningResourceLabel',
+      desc: 'learningResourceLabel',
+      locale: localeName,
+    );
+  }
+
+  String get serviceListingLabel {
+    return Intl.message(
+      'Service Listing',
+      name: 'serviceListingLabel',
+      desc: 'serviceListingLabel',
+      locale: localeName,
+    );
+  }
+
+  String get newsLabel {
+    return Intl.message(
+      'News',
+      name: 'newsLabel',
+      desc: 'newsLabel',
+      locale: localeName,
+    );
+  }
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

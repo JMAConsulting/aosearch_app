@@ -113,5 +113,41 @@
     "description": "noResultText",
     "type": "text",
     "placeholders": {}
+  },
+  "basicPageLabel": "Basic page",
+  "@basicPageLabel": {
+    "description": "basicPageLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterLabel": "Chapter",
+  "@chapterLabel": {
+    "description": "chapterLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventLabel": "Event",
+  "@eventLabel": {
+    "description": "eventLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "learningResourceLabel": "Basic page",
+  "@learningResourceLabel": {
+    "description": "learningResourceLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceListingLabel": "Service Listing",
+  "@serviceListingLabel": {
+    "description": "serviceListingLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newsLabel": "News",
+  "@newsLabel": {
+    "description": "newsLabel",
+    "type": "text",
+    "placeholders": {}
   }
 }

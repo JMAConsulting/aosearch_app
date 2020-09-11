@@ -113,5 +113,41 @@
     "description": "noResultText",
     "type": "text",
     "placeholders": {}
+  },
+  "basicPageLabel": "Page de base",
+  "@basicPageLabel": {
+    "description": "basicPageLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterLabel": "Section Locale",
+  "@chapterLabel": {
+    "description": "chapterLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventLabel": "Event",
+  "@eventLabel": {
+    "description": "eventLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "learningResourceLabel": "Ressources d’apprentissage",
+  "@learningResourceLabel": {
+    "description": "learningResourceLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceListingLabel": "Répertoire des services",
+  "@serviceListingLabel": {
+    "description": "serviceListingLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newsLabel": "Nouvelles",
+  "@newsLabel": {
+    "description": "newsLabel",
+    "type": "text",
+    "placeholders": {}
   }
 }

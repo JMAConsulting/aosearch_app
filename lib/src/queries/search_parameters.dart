@@ -1,5 +1,6 @@
 
 class SearchParameters {
+  String locale;
   String keyword;
   List<dynamic> languages;
   String acceptingNewClients;
@@ -11,6 +12,7 @@ class SearchParameters {
   List<dynamic> ageGroupsServed;
 
   SearchParameters({
+      this.locale,
       this.keyword,
       this.languages,
       this.acceptingNewClients,

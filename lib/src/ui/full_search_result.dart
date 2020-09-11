@@ -44,6 +44,7 @@ class FullResultsPage extends StatelessWidget {
                   if (result.loading) {
                     return Text('Loading');
                   }
+                  debugPrint(result.data.toString());
                   return Card(
                       elevation: 5,
                       child: Padding(
@@ -59,7 +60,7 @@ class FullResultsPage extends StatelessWidget {
                                     children: <Widget>[
                                       Image.asset('images/icon_verified_16px.png'),
                                       Text(
-                                        result.data.civicrmContactById.organizationName,
+                                        getTitle(result.data['civicrmContactById']),
                                         style: TextStyle(
                                             color: Colors.grey[850],
                                             fontSize: 18.0
@@ -80,4 +81,12 @@ class FullResultsPage extends StatelessWidget {
       ),
     );
   }
+
+  getTitle(item) {
+    var title = item["organizationName"] ?? '';
+    title = title.replaceAll('Self-employed ', '');
+
+    return title;
+  }
+
 }

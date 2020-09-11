@@ -23,13 +23,17 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   SearchParameters _formResult = SearchParameters();
   final _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
-
   DateTime _startDate;
-  String _acceptingNewClients;
-  String _catagories;
 
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
+    if (_formResult.locale != Localizations.localeOf(context).languageCode) {
+      setState(() {
+        _formResult.acceptingNewClients = '';
+        _formResult.locale = Localizations.localeOf(context).languageCode;
+      });
+    }
     const rowSpacer=TableRow(
       children: [
         SizedBox(
@@ -71,7 +75,32 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           titleText: Text(SearchAppLocalizations
                               .of(context)
                               .categoryTitle).data,
-                          dataSource: catagories,
+                          dataSource: [
+                            {
+                              "entityLabel": translation.basicPageLabel.toString(),
+                              "entityId": "page"
+                            },
+                            {
+                              "entityLabel": translation.chapterLabel.toString(),
+                              "entityId": "chapter"
+                            },
+                            {
+                              "entityLabel": translation.eventLabel.toString(),
+                              "entityId": "Event"
+                            },
+                            {
+                              "entityLabel": translation.learningResourceLabel.toString(),
+                              "entityId": "learning_resource"
+                            },
+                            {
+                              "entityLabel": translation.newsLabel.toString(),
+                              "entityId": "article"
+                            },
+                            {
+                              "entityLabel": translation.serviceListingLabel.toString(),
+                              "entityId": "Service Listing"
+                            }
+                          ],
                           valueField: 'entityId',
                           textField: 'entityLabel',
                           onSaved: (values) {
@@ -125,7 +154,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               options.add(item);
                             }
                             return DropDownFormField(
-                              value: _acceptingNewClients,
+                              value: _formResult.acceptingNewClients,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .acceptingNewClientsTitle).data,
@@ -134,7 +163,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               onChanged: (value) {
                                 setState(() {
-                                  _acceptingNewClients = value;
+                                  _formResult.acceptingNewClients = value;
                                 });
                               },
                               onSaved: (value) {
