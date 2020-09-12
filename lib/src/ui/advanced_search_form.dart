@@ -71,48 +71,61 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
-                        MultiSelectFormField(
-                          titleText: Text(SearchAppLocalizations
-                              .of(context)
-                              .categoryTitle).data,
-                          dataSource: [
-                            {
-                              "entityLabel": translation.basicPageLabel.toString(),
-                              "entityId": "page"
-                            },
-                            {
-                              "entityLabel": translation.chapterLabel.toString(),
-                              "entityId": "chapter"
-                            },
-                            {
-                              "entityLabel": translation.eventLabel.toString(),
-                              "entityId": "Event"
-                            },
-                            {
-                              "entityLabel": translation.learningResourceLabel.toString(),
-                              "entityId": "learning_resource"
-                            },
-                            {
-                              "entityLabel": translation.newsLabel.toString(),
-                              "entityId": "article"
-                            },
-                            {
-                              "entityLabel": translation.serviceListingLabel.toString(),
-                              "entityId": "Service Listing"
+                        Query(
+                            options: QueryOptions(
+                            documentNode: gql(facetsQuery),
+                            variables: queryVariables(
+                            Localizations.localeOf(context).languageCode,
+                            _formResult.ageGroupsServed,
+                            _formResult.acceptingNewClients,
+                            _formResult.servicesAreProvided,
+                            _formResult.keyword,
+                            _formResult.languages,
+                            _formResult.chapters,
+                            _formResult.catagories,
+                            Localizations.localeOf(context).languageCode.toUpperCase()
+                            ),
+                            ),
+                            builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result.hasException) {
+                                return Text(result.exception.toString());
+                              }
+                              if (result.loading) {
+                                return Text('Loading');
+                              }
+                              return MultiSelectFormField(
+                                titleText: Text(SearchAppLocalizations
+                                    .of(context)
+                                    .categoryTitle).data,
+                                dataSource: getCatagories(translation, result.data["searchAPISearch"]["facets"]),
+                                valueField: 'entityId',
+                                textField: 'entityLabel',
+                                onSaved: (values) {
+                                  _formResult.catagories = values;
+                                  /*
+                                  setState(() {
+                                    _formResult.catagories = values;
+                                  });
+
+                                   */
+                                },
+                              );
                             }
-                          ],
-                          valueField: 'entityId',
-                          textField: 'entityLabel',
-                          onSaved: (values) {
-                            setState(() {
-                              _formResult.catagories = values;
-                            });
-                          },
                         ),
                         Query(
                           options: QueryOptions(
-                            documentNode: gql(taxonomyTermJmaQuery),
-                            variables: {"language": Localizations.localeOf(context).languageCode.toUpperCase()}
+                            documentNode: gql(facetsQuery),
+                            variables: queryVariables(
+                              Localizations.localeOf(context).languageCode,
+                                _formResult.ageGroupsServed,
+                                _formResult.acceptingNewClients,
+                                _formResult.servicesAreProvided,
+                                _formResult.keyword,
+                                _formResult.languages,
+                                _formResult.chapters,
+                                _formResult.catagories,
+                                Localizations.localeOf(context).languageCode.toUpperCase()
+                            ),
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                             if (result.hasException) {
@@ -125,13 +138,17 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
-                              dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                              dataSource: getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]),
                               valueField: 'entityId',
                               textField: 'entityLabel',
                               onSaved: (values) {
+                                _formResult.chapters = values;
+                                /*
                                 setState(() {
                                   _formResult.chapters = values;
                                 });
+
+                                 */
                               },
                             );
                           }
@@ -328,6 +345,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   child: Text(SearchAppLocalizations.of(context).searchButtonText),
                   onPressed: () {
                   if (_formKey.currentState.validate()) {
+                  setState(() {
                     _formKey.currentState.save();
                     Navigator.push(
                       context,
@@ -335,6 +353,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         builder: (context) => new ResultsPage(search: _formResult)
                       )
                     );
+                  });
                   }
                 },
               )
@@ -345,28 +364,121 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 
-  getOptions(String $optionGroupId, String $widgetType) {
-    Query(
-      options: QueryOptions(
-        documentNode: gql(optionValueQuery),
-        variables: {"value": $optionGroupId},
-      ),
-      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-        debugPrint(result.toString());
-        if (result.hasException) {
-          return Text(result.exception.toString());
-        }
-        if (result.loading) {
-          return Text('Loading');
-        }
-        // it can be either Map or List
-//        var repositories = result.data['civicrmOptionValueQuery']['entities'];
-//        var options = new Map();
-//        repositories.forEach((content, index) {
-//          options[content['entityLabel']] = content['entityLabel'];
-//        });
-//        return options;
+  getCatagories(translation, facets) {
+    var types = [
+      {
+        "entityLabel": translation.basicPageLabel.toString(),
+        "entityId": "page"
+      },
+      {
+        "entityLabel": translation.chapterLabel.toString(),
+        "entityId": "chapter"
+      },
+      {
+        "entityLabel": translation.eventLabel.toString(),
+        "entityId": "Event"
+      },
+      {
+        "entityLabel": translation.learningResourceLabel.toString(),
+        "entityId": "learning_resource"
+      },
+      {
+        "entityLabel": translation.newsLabel.toString(),
+        "entityId": "article"
+      },
+      {
+        "entityLabel": translation.serviceListingLabel.toString(),
+        "entityId": "Service Listing"
       }
-    );
+    ];
+    var typeCount = {};
+    List<Map<String, dynamic>> newtypes = [];
+    for (var facet in facets) {
+      if (facet["name"] == "type") {
+        for (var filter in facet["values"]) {
+          typeCount[filter["filter"]] = filter["count"];
+        }
+      }
+    }
+
+    for (var type in types) {
+      if (typeCount[type["entityId"]] != null) {
+        newtypes.add({
+          "entityLabel": type["entityLabel"] + " (" +
+              typeCount[type["entityId"]].toString() + ")",
+          "entityId": type["entityId"]
+        });
+      }
+    }
+
+    return newtypes;
+  }
+
+   getChapters(chapters, facets) {
+     var chapterCount = {};
+     List<Map<String, dynamic>> newChapters = [];
+     for (var facet in facets) {
+       if (facet["name"] == "field_chapter_reference") {
+         for (var filter in facet["values"]) {
+           chapterCount[filter["filter"]] = filter["count"];
+         }
+       }
+     }
+     for (var chapter in chapters) {
+       if (chapterCount[chapter["entityId"]] != null) {
+         newChapters.add({
+           "entityLabel": chapter["entityLabel"] + " (" +
+               chapterCount[chapter["entityId"]].toString() + ")",
+           "entityId": chapter["entityId"]
+         });
+       }
+     }
+     return newChapters;
+   }
+
+  queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
+      servicesProvided, keywords, languages, chapters, categories, lang) {
+    var conditionGroupGroups = new List();
+    acceptingNewClients = acceptingNewClients == null ? '- Any -' : acceptingNewClients;
+    if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
+      conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed.join(',')}, "OR", false));
+    }
+    if (categories != null && !categories.isEmpty) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"type": categories.join(',')}, "OR", false));
+    }
+    if (chapters != null && !chapters.isEmpty) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"field_chapter_reference": chapters.join(',')}, "OR", false));
+    }
+    if (acceptingNewClients != null && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
+      conditionGroupGroups.add(
+          buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
+              acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
+    }
+    if (servicesProvided != null && !servicesProvided.isEmpty) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"custom_897": servicesProvided.join(',')}, "OR", false));
+    }
+    if (languages != null && !languages.isEmpty) {
+      conditionGroupGroups.add(
+          buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
+      );
+    }
+    var conditionGroup = {
+      "conjunction": "AND",
+      'groups': conditionGroupGroups,
+    };
+    var variables = {
+      "conditions": [],
+      "languages": [appLanguage, "und"],
+      'conditionGroup': conditionGroup,
+      "language": lang,
+    };
+    if (keywords != null && keywords.length > 0) {
+      variables['fullText'] = {"keys": keywords};
+      variables['conditionGroup'] = new List();
+    }
+    return variables;
   }
 }

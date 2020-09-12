@@ -119,7 +119,7 @@ query getTaxonomyOptions(\$language: LanguageId!) {
 """;
 
 final String facetsQuery = """
-query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput) {
+query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$conditionGroup: ConditionGroupInput, \$language: LanguageId!) {
   searchAPISearch(index_id: "default", language: \$languages, condition_group: \$conditionGroup, fulltext: \$fullText, facets: [{field: "type", min_count: 1, limit: 0, operator: "=", missing: false}, {field: "field_chapter_reference", min_count: 1, limit: 0, operator: "=", missing: false}]) {
     facets {
       name
@@ -128,8 +128,14 @@ query getSearchResults(\$languages: [String]!, \$fullText: FulltextInput, \$cond
         count
       }
     }
-  }
-}
+   }
+    taxonomyTermJmaQuery(filter:{conditions: {field: "vid", value: "group", operator: EQUAL}}, limit:100, sort: {field: "name", direction: ASC}) {
+      entities(language: \$language) {
+      entityLabel
+      entityId
+      }
+    }
+ }
 """;
 
 final String query = """
