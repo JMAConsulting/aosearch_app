@@ -47,7 +47,6 @@ class FullResultsPage extends StatelessWidget {
                   if (result.loading) {
                     return Text('Loading');
                   }
-                  debugPrint(result.data.toString());
                   return Card(
                       elevation: 5,
                       child: Padding(
@@ -92,20 +91,38 @@ class FullResultsPage extends StatelessWidget {
                                 ),
                               ])
                         ),
+                        Query(
+                            options: QueryOptions(
+                              documentNode: gql(optionValueQuery),
+                              variables: {"value": "regulated_services_provided_20200226231106"},
+                            ),
+                            builder: (QueryResult result1, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result1.hasException) {
+                                return Text(result1.exception.toString());
+                              }
+                              if (result1.loading) {
+                                return Text('Loading');
+                              }
+                              return ListTile(
+                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities']))
+                              );
+                            }
+                        ),
                         ListTile(
                           title: Text('Description of services offered:', style: TextStyle(fontSize: 15),),
-                          subtitle: Text(truncateWithEllipsis(200, result.data['civicrmContactById']['custom893'])),
+                          subtitle: Text(result.data['civicrmContactById']['custom893']),
                         ),
-                            SizedBox(height: 10),
-                            Row(
-                            children: [Linkify(
+                        SizedBox(height: 10),
+                        Row(
+                            children: [
+                              Linkify(
                               onOpen: _onOpen,
-                              text: "Email: " + result.data['civicrmEmailJmaQuery']['entities'][0]['email'],
+                              text: "    Email: " + result.data['civicrmEmailJmaQuery']['entities'][0]['email'],
                             )]),
                             SizedBox(height: 10),
                              Row(
                               children: [
-                                Text('Phone: '),
+                                Text('    Phone: '),
                               Material(
                                 child: InkWell(
                                   onTap: () {
@@ -124,7 +141,7 @@ class FullResultsPage extends StatelessWidget {
                                 children: [
                                   Linkify(
                                   onOpen: _onOpen,
-                                  text: "Website: " + result.data['civicrmWebsiteJmaQuery']['entities'][0]['url'],
+                                  text: "    Website: " + result.data['civicrmWebsiteJmaQuery']['entities'][0]['url'],
                                 )]),
                                 SizedBox(height: 20),
                                 ListTile(
@@ -141,7 +158,7 @@ class FullResultsPage extends StatelessWidget {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(20.0),
                                         child: Image.asset('images/map.png',
-                                            width: 110.0, height: 60.0),
+                                            width: 80.0, height: 60.0),
                                       ),),
                                   )
                               ),
@@ -153,6 +170,22 @@ class FullResultsPage extends StatelessWidget {
                                   Text(result.data['civicrmAddressJmaQuery']['entities'][0]['postalCode'], textAlign: TextAlign.left),
                                 ],
                               ),
+                            ),
+                            SizedBox(height: 20),
+                            Query(
+                                options: QueryOptions(
+                                  documentNode: gql(optionValueQuery),
+                                  variables: {"value": "regulated_services_provided_20200226231106"},
+                                ),
+                                builder: (QueryResult result2, {VoidCallback refetch, FetchMore fetchMore}) {
+                                  if (result2.hasException) {
+                                    return Text(result2.exception.toString());
+                                  }
+                                  if (result2.loading) {
+                                    return Text('Loading');
+                                  }
+                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities']));
+                                }
                             )
                         ]
                       )
@@ -166,13 +199,63 @@ class FullResultsPage extends StatelessWidget {
     );
   }
 
-  _launchCaller() async {
-    const url = "tel:1234567";
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  buildRegulatorServiceProvided(regualtedServices, serviceProviders) {
+    var widgets = <Widget>[];
+    var count = 0;
+    for (var serviceProvider in serviceProviders) {
+      if (serviceProvider["contactIdA"]["entity"]["custom954"] != null && serviceProvider["contactIdA"]["entity"]["custom954"] != '') {
+        if (count == 0) {
+          widgets.add(Text('Regulated Services Provided: ', style: TextStyle(fontSize: 15)));
+        }
+        else {
+          widgets.add(Text(', '));
+        }
+        widgets.add(Text(serviceProvider["contactIdA"]["entity"]["custom954"]));
+        count++;
+      }
     }
+    if (count == 0) {
+      widgets = <Widget>[];
+      for (var serviceProvider in serviceProviders) {
+        if (serviceProvider["contactIdA"]["entity"]["custom953"] != null && serviceProvider["contactIdA"]["entity"]["custom953"] != '') {
+          if (count == 0) {
+            widgets.add(Text('Credential(s) held: ', style: TextStyle(fontSize: 15)));
+          }
+          else {
+            widgets.add(Text(', '));
+          }
+          widgets.add(Text(serviceProvider["contactIdA"]["entity"]["custom953"]));
+          count++;
+        }
+      }
+    }
+
+    return widgets;
+  }
+
+  buildRegulatorServices(regualtedServices, serviceProviders) {
+    var widgets = <Widget>[];
+    for (var serviceProvider in serviceProviders) {
+      widgets.add(
+        Row(
+          children: [
+            Row(
+              children: [
+                Image.asset('images/icon_verified_16px.png'),
+                Text(serviceProvider["contactIdA"]["entity"]["displayName"] + (
+                    serviceProvider["contactIdA"]["entity"]["custom954"] == '' ? (
+                        serviceProvider["contactIdA"]["entity"]["custom953"] == '' ?
+                          '' :  " (" +  serviceProvider["contactIdA"]["entity"]["custom953"] + ")")
+                          : " (" + serviceProvider["contactIdA"]["entity"]["custom954"] + ")")),
+              ],
+            ),
+            SizedBox(height: 10)
+          ],
+        ),
+      );
+    }
+
+    return widgets;
   }
 
   Future<void> _onOpen(LinkableElement link) async {
