@@ -275,16 +275,16 @@ class Result extends StatelessWidget {
                                     builder: (context) => new FullResultsPage(id: getItemId(item).toString())
                                 )
                             );
-                            path = 'service-listing/';
-                          }
-                          else if (type == 'Event') {
-                            path = 'civicrm/event/info?id=';
                           }
                           else {
-                            path = 'node/';
+                            if (type == 'Event') {
+                              path = 'civicrm/event/info?id=';
+                            }
+                              else {
+                              path = 'node/';
+                            }
+                            launch('https://jma.staging.autismontario.com/' + path + getItemId(item).toString());
                           }
-                          var url = 'https://jma.staging.autismontario.com/' + path + getItemId(item).toString();
-                          //launch(url);
                         },
                       ),
                       subtitle: Text(
