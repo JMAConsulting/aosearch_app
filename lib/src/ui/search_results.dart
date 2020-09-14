@@ -241,9 +241,9 @@ class Result extends StatelessWidget {
                         padding: EdgeInsets.all(5.0),
                         height: 50.0,
                         child:  Wrap(
-                          spacing: getType(item['type']) == 'Service Listing' ? 2 : 0,
+                          spacing: getType(item) == 'Service Listing' ? 2 : 0,
                         children: <Widget>[
-                          getType(item['type']) == 'Service Listing' ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          getType(item) == 'Service Listing' ? Image.asset('images/icon_verified_16px.png') : Text(''),
                           Text(
                           getTitle(item),
                           style: TextStyle(
@@ -254,7 +254,7 @@ class Result extends StatelessWidget {
 
                         ]),
                       ),
-                      subtitle: Text(getType(item['type']),
+                      subtitle: Text(getType(item),
                           style: TextStyle(
                       )),
                       trailing: Wrap(
@@ -267,7 +267,7 @@ class Result extends StatelessWidget {
                         icon: new Icon(Icons.arrow_right),
                         onPressed: () {
                           var path = '';
-                          var type = getType(item['type']);
+                          var type = getType(item);
                           if (type == 'Service Listing') {
                             Navigator.push(
                                 context,
@@ -392,14 +392,15 @@ class Result extends StatelessWidget {
     );
   }
 
-  getType(type) {
+  getType(item) {
+    var type = item['event_id'] != null ? 'Event' : item['type'];
     type = type ?? 'Service Listing';
     type = type.replaceAll('_', ' ');
     return toBeginningOfSentenceCase(type);
   }
 
   getTitle(item) {
-    var title = item['title'] ?? item["organization_name"] ?? '';
+    var title = item['title'] ?? item["organization_name"] ?? item['tm_x3b_und_title_1'] ?? '';
     title = title.replaceAll('Self-employed ', '');
 
     return title;
