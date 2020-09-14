@@ -47,6 +47,7 @@ class FullResultsPage extends StatelessWidget {
                   if (result.loading) {
                     return Text('Loading');
                   }
+                  debugPrint(result.data["civicrmContactById"].toString());
                   return Card(
                       elevation: 5,
                       child: Padding(
@@ -163,9 +164,9 @@ class FullResultsPage extends StatelessWidget {
                                           text: "Website: " + getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']),
                                         ),
                                         SizedBox(height: 10),
-                                        Text('Age Groups Served: ' + result.data['civicrmContactById']['custom898'], style: TextStyle(fontSize: 14)),
+                                        Text('Age Groups Served: ' + result.data['civicrmContactById']['custom898'].join(", "), style: TextStyle(fontSize: 14)),
                                         SizedBox(height: 5),
-                                        Text('Language(s): ' + result.data['civicrmContactById']['custom905'], style: TextStyle(fontSize: 14)),
+                                        Text('Language(s): ' + result.data['civicrmContactById']['custom899'].join(', '), style: TextStyle(fontSize: 14)),
                                       ]
                                   ),
                                 ),
@@ -296,7 +297,8 @@ class FullResultsPage extends StatelessWidget {
 
   buildRegulatorServiceProvided(regualtedServices, serviceProviders) {
     var widgets = <Widget>[];
-    var count, count1 = 0;
+    var count = 0, count1 = 0;
+    debugPrint(serviceProviders.toString());
     for (var serviceProvider in serviceProviders) {
       if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954"] != '') {
         if (count == 0) {
@@ -384,17 +386,19 @@ class FullResultsPage extends StatelessWidget {
     else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
-    if (result['custom897'].indexOf('2') >= 0) {
-      count++;
-      widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
-    }
-    if (result['custom897'].indexOf('3') >= 0) {
-      count++;
-      widgets.add(Image.asset('images/icon_local_travel_16px.png'));
-    }
-    if (result['custom897'].indexOf('4') >= 0) {
-      count++;
-      widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
+    for (var n in result['custom897']) {
+      if (n == "2") {
+        count++;
+        widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
+      }
+      else if (n == "3") {
+        count++;
+        widgets.add(Image.asset('images/icon_local_travel_16px.png'));
+      }
+      else if (n == "4") {
+        count++;
+        widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
+      }
     }
     return widgets;
   }
