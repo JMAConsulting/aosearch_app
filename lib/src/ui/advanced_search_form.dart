@@ -211,9 +211,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.languages = values;
-                                });
+                                _formResult.languages = values;
                               },
                             );
                           }
@@ -238,9 +236,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.servicesAreProvided = values;
-                                });
+                                _formResult.servicesAreProvided = values;
                               },
                             );
                           }
@@ -265,9 +261,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.ageGroupsServed = values;
-                                });
+                                _formResult.ageGroupsServed = values;
                               },
                             );
                           }
@@ -439,7 +433,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
       servicesProvided, keywords, languages, chapters, categories, lang) {
     var conditionGroupGroups = new List();
-    acceptingNewClients = acceptingNewClients == null ? '- Any -' : acceptingNewClients;
+    acceptingNewClients = (acceptingNewClients == null || acceptingNewClients == '') ? '- Any -' : acceptingNewClients;
     if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
       conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed.join(',')}, "OR", false));
     }
@@ -451,7 +445,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
       conditionGroupGroups.add(
           buildConditionGroup({"field_chapter_reference": chapters.join(',')}, "OR", false));
     }
-    if (acceptingNewClients != null && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
+    if (acceptingNewClients != null && acceptingNewClients != '' && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
+      debugPrint(acceptingNewClients);
       conditionGroupGroups.add(
           buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
               acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
