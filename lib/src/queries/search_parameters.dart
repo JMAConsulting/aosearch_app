@@ -2,6 +2,7 @@
 class SearchParameters {
   String locale;
   String keyword;
+  bool isVerified;
   List<dynamic> languages;
   String acceptingNewClients;
   List<dynamic> chapters;
@@ -14,6 +15,7 @@ class SearchParameters {
   SearchParameters({
       this.locale,
       this.keyword,
+      this.isVerified,
       this.languages,
       this.acceptingNewClients,
       this.startDate,

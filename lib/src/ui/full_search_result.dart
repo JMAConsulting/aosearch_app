@@ -57,7 +57,7 @@ class FullResultsPage extends StatelessWidget {
                             ListTile(
                               title: Container(
                                 padding: EdgeInsets.all(5.0),
-                                height: 50.0,
+                                height: getTitle(result.data['civicrmContactById']).length > 40 ? 80.0 : 50.0,
                                 child:  Wrap(
                                     spacing: 2,
                                     children: <Widget>[
@@ -138,13 +138,13 @@ class FullResultsPage extends StatelessWidget {
                                   }
                                   return Row(
                                       children: [
-                                        Column(
-                                          children: [
+                                        Expanded(
+                                          child:
                                             Linkify(
                                               onOpen: _onOpen,
                                               text: getPrimaryContactInfo(result5.data["civicrmEmailJmaQuery"]["entities"], result.data['civicrmRelationshipJmaQuery']['entities']),
                                             ),
-                                          ]
+
                                         )
                                       ]
                                   );
@@ -354,12 +354,59 @@ class FullResultsPage extends StatelessWidget {
         creds.add(serviceProvider["contactIdA"]["entity"]["custom953"]);
       }
     }
-    var v = <Row>[];
+    var v = <Column>[];
     if (regulators.length > 0) {
-      widgets.add(Expanded(child: Text('Regulated Services Provided: ' + LinkedHashSet<String>.from(regulators).toList().join(', ').replaceAll('&reg;', '®'), style: TextStyle(fontSize: 14))));
+      var newRegulators = <Row>[], count = 0;
+      for (var regulator in LinkedHashSet<String>.from(regulators).toList()) {
+        var text = regulator.replaceAll('&reg;', '®');
+        newRegulators.add(Row(
+          children: [
+            Image.asset('images/icon_verified_16px.png'),
+            Text(text,style: TextStyle(fontSize: 12)),
+          ],
+        ));
+        count++;
+      }
+      widgets.add(Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Regulated Services Provided: ', style: TextStyle(fontSize: 15)),
+          SizedBox(
+            height: 5,
+          ),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: newRegulators
+          ),
+        ],
+      ));
+      //widgets.add(Expanded(child: Text('Regulated Services Provided: ' + LinkedHashSet<String>.from(regulators).toList().join(', ').replaceAll('&reg;', '®'), style: TextStyle(fontSize: 14))));
     }
     if (creds.length > 0) {
-      widgets.add(Expanded(child: Text('Credential(s) held: ' + LinkedHashSet<String>.from(creds).toList().join(', ').replaceAll('&reg;', '®'), style: TextStyle(fontSize: 14))));
+      var newCreds = <Row>[], count = 1;
+      creds = LinkedHashSet<String>.from(creds).toList();
+      for (var cred in creds) {
+        var text = cred.replaceAll('&reg;', '®');
+        text = (count != creds.length) ? text + ', ' : text;
+        newCreds.add(Row(
+          children: [
+            Image.asset('images/icon_verified_16px.png'),
+            Text(text,style: TextStyle(fontSize: 12)),
+          ],
+        ));
+        count++;
+      }
+      widgets.add(Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          Text('Credential(s) held: ', style: TextStyle(fontSize: 15)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: newCreds
+            ),
+          ],
+      ));
+      //widgets.add(Expanded(child: Text('Credential(s) held: ' + LinkedHashSet<String>.from(creds).toList().join(', ').replaceAll('&reg;', '®'), style: TextStyle(fontSize: 14))));
     }
 
     return widgets;
@@ -425,15 +472,15 @@ class FullResultsPage extends StatelessWidget {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
     for (var n in result['custom897']) {
-      if (n == "2") {
+      if (n == "Online") {
         count++;
         widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
       }
-      else if (n == "3") {
+      else if (n == "Travels to nearby areas") {
         count++;
         widgets.add(Image.asset('images/icon_local_travel_16px.png'));
       }
-      else if (n == "4") {
+      else if (n == "Travels to remote areas") {
         count++;
         widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
       }

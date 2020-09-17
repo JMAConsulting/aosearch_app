@@ -66,6 +66,7 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
       custom893
       custom905
       custom899
+      custom911
     }
   }
   civicrmAddressJmaQuery(filter: {conditions: {field: "contact_id", value: \$contactId, operator: EQUAL}}) {

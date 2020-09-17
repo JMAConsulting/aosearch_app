@@ -67,6 +67,8 @@ class _SearchResultsState extends State<SearchResults> {
             search.languages,
             search.chapters,
             search.catagories,
+            Localizations.localeOf(context).languageCode.toUpperCase(),
+            search.isVerified
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -172,7 +174,7 @@ class _SearchResultsState extends State<SearchResults> {
   }
 
   queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
-      servicesProvided, keywords, languages, chapters, categories) {
+      servicesProvided, keywords, languages, chapters, categories, lang, isvVerified) {
     var conditionGroupGroups = new List();
     if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
       conditionGroupGroups.add(buildConditionGroup({"custom_898": ageGroupsServed.join(',')}, "OR", false));
@@ -199,6 +201,18 @@ class _SearchResultsState extends State<SearchResults> {
         buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
       );
     }
+    if (isvVerified == true || isvVerified == false) {
+      var op = isvVerified == true ? 'IS NOT NULL' : 'IS NULL';
+      conditionGroupGroups.add(
+          buildConditionGroup({"type": "Service Listing"}, "AND", false));
+      conditionGroupGroups.add(
+          {
+            "conjunction": "AND",
+            "conditions": [{"name": "custom_911", "value": '', "operator": op}],
+          }
+      );
+    }
+
     var conditionGroup = {
       "conjunction": "AND",
       'groups': conditionGroupGroups,
@@ -229,6 +243,9 @@ class Result extends StatelessWidget {
           //items.languages = [item['langcode']];
           items.catagories = [item['type']];
           items.keyword = item['title'];
+          List icons = getServicelistingButtons(item);
+          String title = getTitle(item);
+
           return Card(
               elevation: 5,
               child: Padding(
@@ -239,61 +256,103 @@ class Result extends StatelessWidget {
                       onTap: () {},
                       title: Container(
                         padding: EdgeInsets.all(5.0),
-                        height: 50.0,
+                        height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
                         child:  Wrap(
                           spacing: getType(item) == 'Service Listing' ? 2 : 0,
                         children: <Widget>[
-                          getType(item) == 'Service Listing' ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          (getType(item) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
                           Text(
                           getTitle(item),
                           style: TextStyle(
                               color: Colors.grey[850],
-                              fontSize: 18.0
+                              fontSize: 18.0,
                           ),
                         ),
-
+                          Divider(
+                            color: Color.fromRGBO(171, 173, 0, 100),
+                            thickness: 3,
+                            //indent: 20,
+                            endIndent: 240,
+                          ),
                         ]),
                       ),
-                      subtitle: Text(getType(item),
+                      subtitle: Wrap(
+                          children: [
+                            Row(
+                                children: [
+                                  Text(getType(item).toUpperCase(),
+                                    style: TextStyle(
+                                        color: Colors.grey[850],
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 12.0
+                                    ),
+                                  ),
+                                  Text(' '),
+                                  Wrap(
+                                    spacing: 2,
+                                    children: icons,
+                                  )
+                                ]
+                            )
+                          ]
+                      ),
+                      /*
+                      Text(getType(item),
                           style: TextStyle(
                       )),
                       trailing: Wrap(
                         spacing: 5, // space between two icons
-                        children: getServicelistingButtons(item),
+                        children: icons,
                       ),
+
+                       */
                     ),
                     ListTile(
-                      trailing: new IconButton(
-                        icon: new Icon(Icons.arrow_right),
-                        onPressed: () {
-                          var path = '';
-                          var type = getType(item);
-                          if (type == 'Service Listing') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => new FullResultsPage(id: getItemId(item).toString())
-                                )
-                            );
-                          }
-                          else {
-                            if (type == 'Event') {
-                              path = 'civicrm/event/info?id=';
-                            }
-                              else {
-                              path = 'node/';
-                            }
-                            launch('https://jma.staging.autismontario.com/' + path + getItemId(item).toString());
-                          }
+                      subtitle: Table(
+                        columnWidths: {
+                          0: FlexColumnWidth(5),
+                          1: FlexColumnWidth(0.5),
                         },
-                      ),
-                      subtitle: Text(
-                        getDescription(item),
-                        style: TextStyle(
-                            color: Colors.grey[850],
-                            fontSize: 15.0
-                        ),
-                      ),
+                        children: [
+                          TableRow(
+                            children: [
+                              TableCell(child: Text(
+                                getDescription(item),
+                                style: TextStyle(
+                                    color: Colors.grey[850],
+                                    fontSize: 15.0
+                                ),)
+                              ),
+                              TableCell(
+                                  child: new IconButton(
+                                    icon: new Icon(Icons.arrow_right),
+                                    onPressed: () {
+                                      var path = '';
+                                      var type = getType(item);
+                                      if (type == 'Service Listing') {
+                                        Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => new FullResultsPage(id: getItemId(item).toString())
+                                              )
+                                        );
+                                      }
+                                      else {
+                                        if (type == 'Event') {
+                                          path = 'civicrm/event/info?id=';
+                                        }
+                                        else {
+                                          path = 'node/';
+                                        }
+                                        launch('https://jma.staging.autismontario.com/' + path + getItemId(item).toString());
+                                      }
+                                    },
+                                  )
+                              )
+                            ]
+                          )
+                        ],
+                      )
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -317,27 +376,26 @@ class Result extends StatelessWidget {
       return widgets;
     }
 
-    if (result['custom_896'] == '1') {
+    if (result['custom_896'] == "Yes") {
       count++;
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
     }
-    else if (result['custom_896'] == '0') {
+    else if (result['custom_896'] == "No") {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
-    if (result['custom_897'].indexOf('2') >= 0) {
+    if (result['custom_897'].contains('Online')) {
       count++;
       widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
-    if (result['custom_897'].indexOf('3') >= 0) {
+    if (result['custom_897'].contains('Travels to nearby areas')) {
       count++;
       widgets.add(Image.asset('images/icon_local_travel_16px.png'));
     }
-    if (result['custom_897'].indexOf('4') >= 0) {
+    if (result['custom_897'].contains('Travels to remote areas')) {
       count++;
       widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
     }
 
-    //widgets.add(Text(result['custom_896']));
     return widgets;
   }
 

@@ -1,4 +1,5 @@
 import 'package:aoapp/src/search_app.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:universal_io/io.dart';
@@ -43,6 +44,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
          height: 18,
         )
       ]);
+    bool isVerified;
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -76,14 +78,15 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             documentNode: gql(facetsQuery),
                             variables: queryVariables(
                             Localizations.localeOf(context).languageCode,
-                            _formResult.ageGroupsServed,
-                            _formResult.acceptingNewClients,
-                            _formResult.servicesAreProvided,
-                            _formResult.keyword,
-                            _formResult.languages,
-                            _formResult.chapters,
-                            _formResult.catagories,
-                            Localizations.localeOf(context).languageCode.toUpperCase()
+                              _formResult.ageGroupsServed,
+                              _formResult.acceptingNewClients,
+                              _formResult.servicesAreProvided,
+                              _formResult.keyword,
+                              _formResult.languages,
+                              _formResult.chapters,
+                              _formResult.catagories,
+                              Localizations.localeOf(context).languageCode.toUpperCase(),
+                              _formResult.isVerified
                             ),
                             ),
                             builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -102,12 +105,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 textField: 'entityLabel',
                                 onSaved: (values) {
                                   _formResult.catagories = values;
-                                  /*
-                                  setState(() {
-                                    _formResult.catagories = values;
-                                  });
-
-                                   */
                                 },
                               );
                             }
@@ -124,7 +121,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 _formResult.languages,
                                 _formResult.chapters,
                                 _formResult.catagories,
-                                Localizations.localeOf(context).languageCode.toUpperCase()
+                                Localizations.localeOf(context).languageCode.toUpperCase(),
+                                _formResult.isVerified
                             ),
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
@@ -143,12 +141,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               onSaved: (values) {
                                 _formResult.chapters = values;
-                                /*
-                                setState(() {
-                                  _formResult.chapters = values;
-                                });
-
-                                 */
                               },
                             );
                           }
@@ -190,6 +182,25 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           }
                         ),
                         SizedBox(height: 8.0),
+                        DropDownFormField(
+                          value: _formResult.isVerified,
+                          titleText: 'Is Verified?',
+                          dataSource: [
+                            {'label': '- None -', "value": null},
+                            {'label': 'Yes', "value": true},
+                            {'label': 'No', "value": false},
+                          ],
+                          valueField: 'value',
+                          textField: 'label',
+                          onChanged: (value) {
+                            setState(() {
+                              _formResult.isVerified = value;
+                            });
+                          },
+                          onSaved: (value) {
+                            _formResult.isVerified = value;
+                          },
+                        ),
                         Query(
                           options: QueryOptions(
                             documentNode: gql(optionValueQuery),
@@ -372,8 +383,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         "entityLabel": translation.eventLabel.toString(),
         "entityId": "Event"
       },
+      //@TODO title name wrong in translation.learningResource.toString()
       {
-        "entityLabel": translation.learningResourceLabel.toString(),
+        "entityLabel": "Learning Resource",
         "entityId": "learning_resource"
       },
       {
@@ -431,7 +443,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
    }
 
   queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
-      servicesProvided, keywords, languages, chapters, categories, lang) {
+      servicesProvided, keywords, languages, chapters, categories, lang, isvVerified) {
     var conditionGroupGroups = new List();
     acceptingNewClients = (acceptingNewClients == null || acceptingNewClients == '') ? '- Any -' : acceptingNewClients;
     if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
@@ -440,13 +452,13 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     if (categories != null && !categories.isEmpty) {
       conditionGroupGroups.add(
           buildConditionGroup({"type": categories.join(',')}, "OR", false));
+      debugPrint(buildConditionGroup({"type": categories.join(',')}, "OR", false).toString());
     }
     if (chapters != null && !chapters.isEmpty) {
       conditionGroupGroups.add(
           buildConditionGroup({"field_chapter_reference": chapters.join(',')}, "OR", false));
     }
     if (acceptingNewClients != null && acceptingNewClients != '' && acceptingNewClients != '- Any -' && acceptingNewClients != '- Toutes -') {
-      debugPrint(acceptingNewClients);
       conditionGroupGroups.add(
           buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
               acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
@@ -460,6 +472,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
           buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
       );
     }
+    if (isvVerified == true || isvVerified == false) {
+      var op = isvVerified == true ? 'IS NOT NULL' : 'IS NULL';
+      conditionGroupGroups.add(
+          buildConditionGroup({"type": "Service Listing"}, "AND", false));
+      conditionGroupGroups.add(
+          {
+            "conjunction": "OR",
+            "conditions": [{"name": "custom_911", "value": '', "operator": op}],
+          }
+      );
+    }
+
     var conditionGroup = {
       "conjunction": "AND",
       'groups': conditionGroupGroups,
