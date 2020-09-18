@@ -59,13 +59,13 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
     ... on CivicrmContact {
       contactType
       organizationName
-      custom896
-      custom898
+      custom896Jma
+      custom898Jma
       custom897
       custom895
       custom893
       custom905
-      custom899
+      custom899Jma
       custom911
     }
   }
