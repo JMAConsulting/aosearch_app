@@ -155,10 +155,10 @@ class FullResultsPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 5),
-                                    Text('Age Groups Served: ' + result.data['civicrmContactById']['custom898'].join(", "), style: TextStyle(fontSize: 14)),
+                                    Text('Age Groups Served: ' + result.data['civicrmContactById']['custom898Jma'].join(", "), style: TextStyle(fontSize: 14)),
                                     SizedBox(height: 10),
                                     Text('Language(s): ' +
-                                        result.data['civicrmContactById']['custom899'].join(', ')
+                                        result.data['civicrmContactById']['custom899Jma'].join(', ')
                                           + (result.data['civicrmContactById']['custom905'] == '' ? '' : ', ' + result.data['civicrmContactById']['custom905']), style: TextStyle(fontSize: 14)),
                                   ]
                               ),
@@ -347,11 +347,11 @@ class FullResultsPage extends StatelessWidget {
     var count = 0, count1 = 0;
     var regulators = [], creds = [];
     for (var serviceProvider in serviceProviders) {
-      if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954"] != '') {
-        regulators.add(serviceProvider["contactIdA"]["entity"]["custom954"]);
+      if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ') != '') {
+        regulators.add(serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', '));
       }
-      else if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom953"] != '') {
-        creds.add(serviceProvider["contactIdA"]["entity"]["custom953"]);
+      else if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ') != '') {
+        creds.add(serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', '));
       }
     }
     var v = <Column>[];
@@ -426,13 +426,12 @@ class FullResultsPage extends StatelessWidget {
                       serviceProvider["contactIdA"]["entity"]["displayName"] + (
                           serviceProvider["contactIdA"]["entity"]["custom954"] ==
                               '' ? (
-                              serviceProvider["contactIdA"]["entity"]["custom953"] ==
-                                  '' ?
+                              serviceProvider["contactIdA"]["entity"]["custom953Jma"] == '' || serviceProvider["contactIdA"]["entity"]["custom953Jma"] == null ?
                               '' : " (" +
-                                  serviceProvider["contactIdA"]["entity"]["custom953"].replaceAll('&reg;', '®') +
+                                  serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ').replaceAll('&reg;', '®') +
                                   ")")
                               : " (" +
-                              serviceProvider["contactIdA"]["entity"]["custom954"].replaceAll('&reg;', '®') +
+                              serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ').replaceAll('&reg;', '®') +
                               ")")),
                 ],
               ),
@@ -458,7 +457,7 @@ class FullResultsPage extends StatelessWidget {
     var widgets = <Widget>[];
     var count = 0;
     if ((result['custom896'] == '' || result['custom896'] == null) &&
-        (result['custom897'] == '' || result['custom897'] == null)) {
+        (result['custom897Jma'] == '' || result['custom897Jma'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
@@ -471,7 +470,7 @@ class FullResultsPage extends StatelessWidget {
     else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
-    for (var n in result['custom897']) {
+    for (var n in result['custom897Jma']) {
       if (n == "Online") {
         count++;
         widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));

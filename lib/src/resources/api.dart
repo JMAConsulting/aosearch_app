@@ -60,12 +60,12 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
       contactType
       organizationName
       custom896
-      custom898
-      custom897
+      custom898Jma
+      custom897Jma
       custom895
       custom893
       custom905
-      custom899
+      custom899Jma
       custom911
     }
   }
@@ -116,8 +116,8 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
                 displayName
                 custom895
                 custom911
-                custom954
-                custom953
+                custom954Jma
+                custom953Jma
                 custom905
               }
             }

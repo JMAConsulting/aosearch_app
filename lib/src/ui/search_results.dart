@@ -243,8 +243,8 @@ class Result extends StatelessWidget {
           //items.languages = [item['langcode']];
           items.catagories = [item['type']];
           items.keyword = item['title'];
-          List icons = getServicelistingButtons(item);
           String title = getTitle(item);
+          String serviceListingID = item['type'] == null ? getItemId(item).toString() : "0";
 
           return Card(
               elevation: 5,
@@ -288,10 +288,27 @@ class Result extends StatelessWidget {
                                     ),
                                   ),
                                   Text(' '),
-                                  Wrap(
-                                    spacing: 2,
-                                    children: icons,
-                                  )
+                                  Query(
+                                      options: QueryOptions(
+                                          documentNode: gql(getServiceListingInformationQuery),
+                                          variables: {"contact_id": serviceListingID, "contactId": serviceListingID}
+                                      ),
+                                      builder: (QueryResult result1, {VoidCallback refetch, FetchMore fetchMore}) {
+                                        if (serviceListingID == "0") {
+                                          return Text('');
+                                        }
+                                        if (result1.hasException) {
+                                          return Text(
+                                              result1.exception.toString());
+                                        }
+                                        if (result1.loading) {
+                                          return Text('Loading');
+                                        }
+                                        return Wrap(
+                                          spacing: 2,
+                                          children: getServicelistingButtons(result1.data["civicrmContactById"]),
+                                        );
+                                      }),
                                 ]
                             )
                           ]
@@ -370,28 +387,27 @@ class Result extends StatelessWidget {
     List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
     var count = 0;
-    if ((result['custom_896'] == '' || result['custom_896'] == null) &&
-        (result['custom_897'] == '' || result['custom_897'] == null)) {
+    if ((result['custom896'] == '' || result['custom896'] == null) &&
+        (result['custom897Jma'] == '' || result['custom_897Jma'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
-
-    if (result['custom_896'] == "Yes") {
+    if (result['custom896'] == true) {
       count++;
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
     }
-    else if (result['custom_896'] == "No") {
+    else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
-    if (result['custom_897'].contains('Online')) {
+    if (result['custom897Jma'].toString().contains('Online')) {
       count++;
       widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
-    if (result['custom_897'].contains('Travels to nearby areas')) {
+    if (result['custom897Jma'].toString().contains('Travels to nearby areas')) {
       count++;
       widgets.add(Image.asset('images/icon_local_travel_16px.png'));
     }
-    if (result['custom_897'].contains('Travels to remote areas')) {
+    if (result['custom897Jma'].toString().contains('Travels to remote areas')) {
       count++;
       widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
     }
