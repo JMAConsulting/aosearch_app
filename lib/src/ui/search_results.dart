@@ -2,10 +2,10 @@ import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import '../queries/search_parameters.dart';
-import '../resources/api.dart';
+import 'package:aoapp/src/queries/search_parameters.dart';
+import 'package:aoapp/src/resources/api.dart';
 import 'package:html/parser.dart';
-import 'full_search_result.dart';
+import 'package:aoapp/src/ui/full_search_result.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -384,34 +384,29 @@ class Result extends StatelessWidget {
 
   }
 
-    List <Widget> getServicelistingButtons(result) {
+  List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
-    var count = 0;
     if ((result['custom896'] == '' || result['custom896'] == null) &&
         (result['custom897Jma'] == '' || result['custom_897Jma'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
-    if (result['custom896'] == true) {
-      count++;
+
+    if (result['custom_896'] == "Yes") {
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
     }
     else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Online')) {
-      count++;
       widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Travels to nearby areas')) {
-      count++;
       widgets.add(Image.asset('images/icon_local_travel_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Travels to remote areas')) {
-      count++;
       widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
     }
-
     return widgets;
   }
 
@@ -425,23 +420,22 @@ class Result extends StatelessWidget {
     if (resultCoordinates.length > 0) {
       for (var key = 0; key<resultCoordinates.length; key++) {
         var coordinates = resultCoordinates[key].split(', ');
-
         widgets.add(
-            Material(
-                child: InkWell(
-                  onTap: () {
-                    MapsLauncher.launchCoordinates(
-                        double.parse(coordinates[0]), double.parse(coordinates[1]),
-                        getTitle(result));
-                  },
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset('images/map.png',
-                          width: 110.0, height: 60.0),
-                    ),),
-                )
-              ));
+          Material(
+            child: InkWell(
+              onTap: () {
+                MapsLauncher.launchCoordinates(
+                  double.parse(coordinates[0]), double.parse(coordinates[1]),
+                 getTitle(result));
+              },
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset('images/map.png',
+                  width: 110.0, height: 60.0),
+                ),),
+            )
+          ));
       }
     }
     else {

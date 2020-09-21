@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'advanced_search_form.dart';
+import 'package:aoapp/src/ui/advanced_search_form.dart';
 
 class SearchPage extends StatelessWidget {
   @override

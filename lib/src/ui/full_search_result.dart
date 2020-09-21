@@ -1,9 +1,6 @@
-import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../queries/search_parameters.dart';
-import '../resources/api.dart';
-import 'package:html/parser.dart';
+import 'package:aoapp/src/resources/api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -344,7 +341,6 @@ class FullResultsPage extends StatelessWidget {
 
   buildRegulatorServiceProvided(regualtedServices, serviceProviders) {
     var widgets = <Widget>[];
-    var count = 0, count1 = 0;
     var regulators = [], creds = [];
     for (var serviceProvider in serviceProviders) {
       if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ') != '') {
@@ -354,9 +350,8 @@ class FullResultsPage extends StatelessWidget {
         creds.add(serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', '));
       }
     }
-    var v = <Column>[];
     if (regulators.length > 0) {
-      var newRegulators = <Row>[], count = 0;
+      var newRegulators = <Row>[];
       for (var regulator in LinkedHashSet<String>.from(regulators).toList()) {
         var text = regulator.replaceAll('&reg;', '®');
         newRegulators.add(Row(
@@ -365,7 +360,6 @@ class FullResultsPage extends StatelessWidget {
             Text(text,style: TextStyle(fontSize: 12)),
           ],
         ));
-        count++;
       }
       widgets.add(Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,7 +449,6 @@ class FullResultsPage extends StatelessWidget {
 
   List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
-    var count = 0;
     if ((result['custom896'] == '' || result['custom896'] == null) &&
         (result['custom897Jma'] == '' || result['custom897Jma'] == null)) {
       widgets.add(Text(''));
@@ -463,7 +456,6 @@ class FullResultsPage extends StatelessWidget {
     }
 
     if (result['custom896'] == true) {
-      count++;
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
       widgets.add(Text(' '));
     }
@@ -472,15 +464,12 @@ class FullResultsPage extends StatelessWidget {
     }
     for (var n in result['custom897Jma']) {
       if (n == "Online") {
-        count++;
         widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
       }
       else if (n == "Travels to nearby areas") {
-        count++;
         widgets.add(Image.asset('images/icon_local_travel_16px.png'));
       }
       else if (n == "Travels to remote areas") {
-        count++;
         widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
       }
     }
