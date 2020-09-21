@@ -222,7 +222,7 @@ class _SearchResultsState extends State<SearchResults> {
       "languages": [appLanguage, "und"],
       'conditionGroup': conditionGroup,
     };
-    if (keywords.length > 0) {
+    if (keywords != null && keywords.length > 0) {
       variables['fullText'] = {"keys": keywords};
       variables['conditionGroup'] = new List();
     }
@@ -235,6 +235,8 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
+    var baseURL = getbaseUrl(Localizations.localeOf(context).languageCode.toUpperCase());
     return ListView.builder(
         itemCount: list["searchAPISearch"]["documents"].length,
         itemBuilder: (BuildContext context, int index) {
@@ -258,9 +260,9 @@ class Result extends StatelessWidget {
                         padding: EdgeInsets.all(5.0),
                         height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
                         child:  Wrap(
-                          spacing: getType(item) == 'Service Listing' ? 2 : 0,
+                          spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
                         children: <Widget>[
-                          (getType(item) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          (getType(item, true) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
                           Text(
                           getTitle(item),
                           style: TextStyle(
@@ -280,7 +282,7 @@ class Result extends StatelessWidget {
                           children: [
                             Row(
                                 children: [
-                                  Text(getType(item).toUpperCase(),
+                                  Text(getTranslatedTitle(translation, getType(item, false)).toUpperCase(),
                                     style: TextStyle(
                                         color: Colors.grey[850],
                                         fontStyle: FontStyle.italic,
@@ -345,7 +347,7 @@ class Result extends StatelessWidget {
                                     icon: new Icon(Icons.arrow_right),
                                     onPressed: () {
                                       var path = '';
-                                      var type = getType(item);
+                                      var type = getType(item, true);
                                       if (type == 'Service Listing') {
                                         Navigator.push(
                                               context,
@@ -361,7 +363,7 @@ class Result extends StatelessWidget {
                                         else {
                                           path = 'node/';
                                         }
-                                        launch('https://jma.staging.autismontario.com/' + path + getItemId(item).toString());
+                                        launch(baseURL + path + getItemId(item).toString());
                                       }
                                     },
                                   )
@@ -386,6 +388,10 @@ class Result extends StatelessWidget {
 
   List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
+    if (result == null) {
+      widgets.add(Text(''));
+      return widgets;
+    }
     if ((result['custom896'] == '' || result['custom896'] == null) &&
         (result['custom897Jma'] == '' || result['custom_897Jma'] == null)) {
       widgets.add(Text(''));
@@ -460,11 +466,14 @@ class Result extends StatelessWidget {
     );
   }
 
-  getType(item) {
+  getType(item, formatCase) {
     var type = item['event_id'] != null ? 'Event' : item['type'];
     type = type ?? 'Service Listing';
-    type = type.replaceAll('_', ' ');
-    return toBeginningOfSentenceCase(type);
+    if (formatCase) {
+      type = type.replaceAll('_', ' ');
+      return toBeginningOfSentenceCase(type);
+    }
+    return type;
   }
 
   getTitle(item) {
@@ -489,6 +498,49 @@ class Result extends StatelessWidget {
     return item['nid'] == null ? (
       item['event_id']  == null ? item['id'] : item['event_id']
     ) : item['nid'];
+  }
+
+  getTranslatedTitle(translation, originalType) {
+    var types = [
+      {
+        "entityLabel": translation.basicPageLabel.toString(),
+        "entityId": "page"
+      },
+      {
+        "entityLabel": translation.chapterLabel.toString(),
+        "entityId": "chapter"
+      },
+      {
+        "entityLabel": translation.eventLabel.toString(),
+        "entityId": "Event"
+      },
+      //@TODO title name wrong in translation.learningResource.toString()
+      {
+        "entityLabel": "Learning Resource",
+        "entityId": "learning_resource"
+      },
+      {
+        "entityLabel": translation.newsLabel.toString(),
+        "entityId": "article"
+      },
+      {
+        "entityLabel": translation.serviceListingLabel.toString(),
+        "entityId": "Service Listing"
+      }
+    ];
+    for (var type in types) {
+      if (type['entityId'] == originalType) {
+        return type['entityLabel'];
+      }
+    }
+  }
+
+  String getbaseUrl(languageCode) {
+    var baseURL = 'https://jma.staging.autismontario.com/';
+    if (languageCode == 'FR') {
+      baseURL = baseURL + 'fr/';
+    }
+    return baseURL;
   }
 
 }

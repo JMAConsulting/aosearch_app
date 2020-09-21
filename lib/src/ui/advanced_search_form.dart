@@ -95,6 +95,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 return Text('Loading');
                               }
                               return MultiSelectFormField(
+                                initialValue: _formResult.catagories,
                                 titleText: Text(SearchAppLocalizations
                                     .of(context)
                                     .categoryTitle).data,
@@ -131,6 +132,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               return Text('Loading');
                             }
                             return MultiSelectFormField(
+                              initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
@@ -450,7 +452,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     if (categories != null && !categories.isEmpty) {
       conditionGroupGroups.add(
           buildConditionGroup({"type": categories.join(',')}, "OR", false));
-      debugPrint(buildConditionGroup({"type": categories.join(',')}, "OR", false).toString());
     }
     if (chapters != null && !chapters.isEmpty) {
       conditionGroupGroups.add(
