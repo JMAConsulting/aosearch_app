@@ -2,16 +2,14 @@ import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:universal_io/io.dart';
-import '../queries/search_parameters.dart';
+import 'package:aoapp/src/queries/search_parameters.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'location.dart';
-import 'search_results.dart';
+import 'package:aoapp/src/ui/location.dart';
+import 'package:aoapp/src/ui/search_results.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../resources/api.dart';
-import '../resources/chapters.dart';
+import 'package:aoapp/src/resources/api.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -97,6 +95,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 return Text('Loading');
                               }
                               return MultiSelectFormField(
+                                initialValue: _formResult.catagories,
                                 titleText: Text(SearchAppLocalizations
                                     .of(context)
                                     .categoryTitle).data,
@@ -133,6 +132,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               return Text('Loading');
                             }
                             return MultiSelectFormField(
+                              initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
@@ -452,7 +452,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     if (categories != null && !categories.isEmpty) {
       conditionGroupGroups.add(
           buildConditionGroup({"type": categories.join(',')}, "OR", false));
-      debugPrint(buildConditionGroup({"type": categories.join(',')}, "OR", false).toString());
     }
     if (chapters != null && !chapters.isEmpty) {
       conditionGroupGroups.add(

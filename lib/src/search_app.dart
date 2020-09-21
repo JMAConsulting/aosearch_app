@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ui/advanced_search_form.dart';
 import 'package:intl/intl.dart';
-import '../l10n/messages_all.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import '../src/resources/api.dart';
+import 'package:aoapp/l10n/messages_all.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'queries/search_parameters.dart';
 
 class SearchAppLocalizations {
   SearchAppLocalizations(this.localeName);
@@ -267,7 +264,6 @@ class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLoca
 }
 
 class SearchApp extends StatelessWidget {
-  SearchParameters _formResult = SearchParameters();
   @override
   Widget build(BuildContext context) {
     return MaterialApp (

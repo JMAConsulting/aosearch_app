@@ -2,10 +2,10 @@ import 'package:aoapp/src/search_app.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import '../queries/search_parameters.dart';
-import '../resources/api.dart';
+import 'package:aoapp/src/queries/search_parameters.dart';
+import 'package:aoapp/src/resources/api.dart';
 import 'package:html/parser.dart';
-import 'full_search_result.dart';
+import 'package:aoapp/src/ui/full_search_result.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -222,7 +222,7 @@ class _SearchResultsState extends State<SearchResults> {
       "languages": [appLanguage, "und"],
       'conditionGroup': conditionGroup,
     };
-    if (keywords.length > 0) {
+    if (keywords != null && keywords.length > 0) {
       variables['fullText'] = {"keys": keywords};
       variables['conditionGroup'] = new List();
     }
@@ -235,6 +235,8 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
+    var baseURL = getbaseUrl(Localizations.localeOf(context).languageCode.toUpperCase());
     return ListView.builder(
         itemCount: list["searchAPISearch"]["documents"].length,
         itemBuilder: (BuildContext context, int index) {
@@ -258,9 +260,9 @@ class Result extends StatelessWidget {
                         padding: EdgeInsets.all(5.0),
                         height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
                         child:  Wrap(
-                          spacing: getType(item) == 'Service Listing' ? 2 : 0,
+                          spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
                         children: <Widget>[
-                          (getType(item) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          (getType(item, true) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
                           Text(
                           getTitle(item),
                           style: TextStyle(
@@ -280,7 +282,7 @@ class Result extends StatelessWidget {
                           children: [
                             Row(
                                 children: [
-                                  Text(getType(item).toUpperCase(),
+                                  Text(getTranslatedTitle(translation, getType(item, false)).toUpperCase(),
                                     style: TextStyle(
                                         color: Colors.grey[850],
                                         fontStyle: FontStyle.italic,
@@ -345,7 +347,7 @@ class Result extends StatelessWidget {
                                     icon: new Icon(Icons.arrow_right),
                                     onPressed: () {
                                       var path = '';
-                                      var type = getType(item);
+                                      var type = getType(item, true);
                                       if (type == 'Service Listing') {
                                         Navigator.push(
                                               context,
@@ -361,7 +363,7 @@ class Result extends StatelessWidget {
                                         else {
                                           path = 'node/';
                                         }
-                                        launch('https://jma.staging.autismontario.com/' + path + getItemId(item).toString());
+                                        launch(baseURL + path + getItemId(item).toString());
                                       }
                                     },
                                   )
@@ -384,34 +386,33 @@ class Result extends StatelessWidget {
 
   }
 
-    List <Widget> getServicelistingButtons(result) {
+  List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
-    var count = 0;
+    if (result == null) {
+      widgets.add(Text(''));
+      return widgets;
+    }
     if ((result['custom896'] == '' || result['custom896'] == null) &&
         (result['custom897Jma'] == '' || result['custom_897Jma'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
-    if (result['custom896'] == true) {
-      count++;
+
+    if (result['custom_896'] == "Yes") {
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
     }
     else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Online')) {
-      count++;
       widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Travels to nearby areas')) {
-      count++;
       widgets.add(Image.asset('images/icon_local_travel_16px.png'));
     }
     if (result['custom897Jma'].toString().contains('Travels to remote areas')) {
-      count++;
       widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
     }
-
     return widgets;
   }
 
@@ -425,23 +426,22 @@ class Result extends StatelessWidget {
     if (resultCoordinates.length > 0) {
       for (var key = 0; key<resultCoordinates.length; key++) {
         var coordinates = resultCoordinates[key].split(', ');
-
         widgets.add(
-            Material(
-                child: InkWell(
-                  onTap: () {
-                    MapsLauncher.launchCoordinates(
-                        double.parse(coordinates[0]), double.parse(coordinates[1]),
-                        getTitle(result));
-                  },
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset('images/map.png',
-                          width: 110.0, height: 60.0),
-                    ),),
-                )
-              ));
+          Material(
+            child: InkWell(
+              onTap: () {
+                MapsLauncher.launchCoordinates(
+                  double.parse(coordinates[0]), double.parse(coordinates[1]),
+                 getTitle(result));
+              },
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset('images/map.png',
+                  width: 110.0, height: 60.0),
+                ),),
+            )
+          ));
       }
     }
     else {
@@ -466,11 +466,14 @@ class Result extends StatelessWidget {
     );
   }
 
-  getType(item) {
+  getType(item, formatCase) {
     var type = item['event_id'] != null ? 'Event' : item['type'];
     type = type ?? 'Service Listing';
-    type = type.replaceAll('_', ' ');
-    return toBeginningOfSentenceCase(type);
+    if (formatCase) {
+      type = type.replaceAll('_', ' ');
+      return toBeginningOfSentenceCase(type);
+    }
+    return type;
   }
 
   getTitle(item) {
@@ -495,6 +498,49 @@ class Result extends StatelessWidget {
     return item['nid'] == null ? (
       item['event_id']  == null ? item['id'] : item['event_id']
     ) : item['nid'];
+  }
+
+  getTranslatedTitle(translation, originalType) {
+    var types = [
+      {
+        "entityLabel": translation.basicPageLabel.toString(),
+        "entityId": "page"
+      },
+      {
+        "entityLabel": translation.chapterLabel.toString(),
+        "entityId": "chapter"
+      },
+      {
+        "entityLabel": translation.eventLabel.toString(),
+        "entityId": "Event"
+      },
+      //@TODO title name wrong in translation.learningResource.toString()
+      {
+        "entityLabel": "Learning Resource",
+        "entityId": "learning_resource"
+      },
+      {
+        "entityLabel": translation.newsLabel.toString(),
+        "entityId": "article"
+      },
+      {
+        "entityLabel": translation.serviceListingLabel.toString(),
+        "entityId": "Service Listing"
+      }
+    ];
+    for (var type in types) {
+      if (type['entityId'] == originalType) {
+        return type['entityLabel'];
+      }
+    }
+  }
+
+  String getbaseUrl(languageCode) {
+    var baseURL = 'https://jma.staging.autismontario.com/';
+    if (languageCode == 'FR') {
+      baseURL = baseURL + 'fr/';
+    }
+    return baseURL;
   }
 
 }
