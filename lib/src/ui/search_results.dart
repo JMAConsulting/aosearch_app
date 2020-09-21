@@ -398,12 +398,6 @@ class Result extends StatelessWidget {
       return widgets;
     }
 
-    if (result['custom_896'] == "Yes") {
-      widgets.add(Image.asset('images/icon_accepting_16px.png'));
-    }
-    else if (result['custom896'] == false) {
-      widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
-    }
     if (result['custom897Jma'].toString().contains('Online')) {
       widgets.add(Image.asset('images/icon_videoconferencing_16px.png'));
     }
@@ -412,6 +406,12 @@ class Result extends StatelessWidget {
     }
     if (result['custom897Jma'].toString().contains('Travels to remote areas')) {
       widgets.add(Image.asset('images/icon_remote_travel_16px.png'));
+    }
+    if (result['custom896'] == true) {
+      widgets.add(Image.asset('images/icon_accepting_16px.png'));
+    }
+    else if (result['custom896'] == false) {
+      widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
     }
     return widgets;
   }

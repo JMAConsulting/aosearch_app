@@ -342,11 +342,12 @@ class FullResultsPage extends StatelessWidget {
   buildRegulatorServiceProvided(regualtedServices, serviceProviders) {
     var widgets = <Widget>[];
     var regulators = [], creds = [];
+
     for (var serviceProvider in serviceProviders) {
-      if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ') != '') {
+      if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ') != "null" && serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', ') != "") {
         regulators.add(serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(', '));
       }
-      else if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ') != '') {
+      else if (serviceProvider["relationshipTypeId"] == 5 && serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ') != '' && serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ') != "null") {
         creds.add(serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', '));
       }
     }
@@ -418,9 +419,9 @@ class FullResultsPage extends StatelessWidget {
                   Image.asset('images/icon_verified_16px.png'),
                   Text(
                       serviceProvider["contactIdA"]["entity"]["displayName"] + (
-                          serviceProvider["contactIdA"]["entity"]["custom954"] ==
-                              '' ? (
-                              serviceProvider["contactIdA"]["entity"]["custom953Jma"] == '' || serviceProvider["contactIdA"]["entity"]["custom953Jma"] == null ?
+                          serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",") ==
+                              '' || serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",") == "null" ? (
+                              serviceProvider["contactIdA"]["entity"]["custom953Jma"] == '' || serviceProvider["contactIdA"]["entity"]["custom953Jma"] == "null" ?
                               '' : " (" +
                                   serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(', ').replaceAll('&reg;', '®') +
                                   ")")

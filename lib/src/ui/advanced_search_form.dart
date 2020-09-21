@@ -372,16 +372,17 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   getCatagories(translation, facets) {
     var types = [
       {
-        "entityLabel": translation.basicPageLabel.toString(),
-        "entityId": "page"
-      },
-      {
         "entityLabel": translation.chapterLabel.toString(),
         "entityId": "chapter"
       },
       {
         "entityLabel": translation.eventLabel.toString(),
         "entityId": "Event"
+      },
+      //@TODO title name wrong Basic Page, it should be General but then its a hardcoded fix made for now. Will add translated text later
+      {
+        "entityLabel": 'General',
+        "entityId": "page"
       },
       //@TODO title name wrong in translation.learningResource.toString()
       {
