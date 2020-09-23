@@ -1,15 +1,15 @@
 import 'package:aoapp/src/search_app.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../queries/search_parameters.dart';
+import 'package:aoapp/src/queries/search_parameters.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'location.dart';
-import 'search_results.dart';
+import 'package:aoapp/src/ui/location.dart';
+import 'package:aoapp/src/ui/search_results.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../resources/api.dart';
-import '../resources/chapters.dart';
+import 'package:aoapp/src/resources/api.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
   @override
@@ -22,13 +22,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   SearchParameters _formResult = SearchParameters();
   final _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
-
+  final TextEditingController _controller = new TextEditingController();
   DateTime _startDate;
-  String _acceptingNewClients;
-  String _catagories;
 
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
+    if (_formResult.locale != Localizations.localeOf(context).languageCode) {
+      setState(() {
+        _formResult.acceptingNewClients = '';
+        _formResult.locale = Localizations.localeOf(context).languageCode;
+      });
+    }
     const rowSpacer=TableRow(
       children: [
         SizedBox(
@@ -38,6 +43,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
          height: 18,
         )
       ]);
+    bool isVerified;
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -49,16 +55,19 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               children: [
                 TextFormField(
+                  controller: _controller,
                   decoration: InputDecoration(
                     hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
                     labelText: Text(SearchAppLocalizations.of(context).keywordText).data,
+                    suffixIcon: IconButton(
+                      onPressed: () => _controller.clear(),
+                      icon: Icon(Icons.clear),
+                    )
                   ),
-                  initialValue: _formResult.keyword,
-                  validator: (keyword) {
-                    if (keyword.length < 3) {
-                      return 'Keyword is too short';
-                    }
-                    return null;
+                  onChanged: (value) {
+                    setState(() {
+                      _formResult.keyword = value;
+                    });
                   },
                   onSaved: (keyword) {
                     setState(() {
@@ -72,23 +81,70 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
-                        MultiSelectFormField(
-                          titleText: Text(SearchAppLocalizations
-                              .of(context)
-                              .categoryTitle).data,
-                          dataSource: catagories,
-                          valueField: 'entityId',
-                          textField: 'entityLabel',
-                          onSaved: (values) {
-                            setState(() {
-                              _formResult.catagories = values;
-                            });
-                          },
+                        Query(
+                            options: QueryOptions(
+                            documentNode: gql(facetsQuery),
+                            variables: queryVariables(
+                            Localizations.localeOf(context).languageCode,
+                              _formResult.ageGroupsServed,
+                              _formResult.acceptingNewClients,
+                              _formResult.servicesAreProvided,
+                              _formResult.keyword,
+                              _formResult.languages,
+                              _formResult.chapters,
+                              _formResult.catagories,
+                              Localizations.localeOf(context).languageCode.toUpperCase(),
+                              _formResult.isVerified,
+                              _formResult.startDate,
+                              _formResult.endDate,
+                                true
+                            ),
+                            ),
+                            builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result.hasException) {
+                                return Text(result.exception.toString());
+                              }
+                              if (result.loading) {
+                                return Text('Loading');
+                              }
+                              var categories = getCatagories(translation, result.data["searchAPISearch"]["facets"]);
+                              if (categories.isEmpty) {
+                                _formResult.catagories = new List();
+                              }
+                              return MultiSelectFormField(
+                                initialValue: _formResult.catagories,
+                                titleText: Text(SearchAppLocalizations
+                                    .of(context)
+                                    .categoryTitle).data,
+                                dataSource: getCatagories(translation, result.data["searchAPISearch"]["facets"]),
+                                valueField: 'entityId',
+                                textField: 'entityLabel',
+                                onSaved: (values) {
+                                  setState(() {
+                                    _formResult.catagories = values;
+                                  });
+                                },
+                              );
+                            }
                         ),
                         Query(
                           options: QueryOptions(
-                            documentNode: gql(taxonomyTermJmaQuery),
-                            variables: {"language": Localizations.localeOf(context).languageCode.toUpperCase()}
+                            documentNode: gql(facetsQuery),
+                            variables: queryVariables(
+                              Localizations.localeOf(context).languageCode,
+                                _formResult.ageGroupsServed,
+                                _formResult.acceptingNewClients,
+                                _formResult.servicesAreProvided,
+                                _formResult.keyword,
+                                _formResult.languages,
+                                _formResult.chapters,
+                                _formResult.catagories,
+                                Localizations.localeOf(context).languageCode.toUpperCase(),
+                                _formResult.isVerified,
+                                _formResult.startDate,
+                                _formResult.endDate,
+                                true
+                            ),
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                             if (result.hasException) {
@@ -98,12 +154,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               return Text('Loading');
                             }
                             return MultiSelectFormField(
+                              initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
-                              dataSource: result.data["taxonomyTermJmaQuery"]["entities"],
+                              dataSource: getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]),
                               valueField: 'entityId',
                               textField: 'entityLabel',
+                              change: (value) {
+                                setState(() {
+                                  _formResult.chapters = value;
+                                });
+                              },
                               onSaved: (values) {
                                 setState(() {
                                   _formResult.chapters = values;
@@ -127,10 +189,12 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             var options = new List();
                             options.add({"entityLabel": Text(SearchAppLocalizations.of(context).anyText).data});
                             for (var item in result.data["civicrmOptionValueJmaQuery"]["entities"]) {
-                              options.add(item);
+                              if (item.containsKey('entityLabel')) {
+                                options.add(item);
+                              }
                             }
                             return DropDownFormField(
-                              value: _acceptingNewClients,
+                              value: _formResult.acceptingNewClients,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .acceptingNewClientsTitle).data,
@@ -139,7 +203,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               onChanged: (value) {
                                 setState(() {
-                                  _acceptingNewClients = value;
+                                  _formResult.acceptingNewClients = value;
                                 });
                               },
                               onSaved: (value) {
@@ -149,6 +213,25 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           }
                         ),
                         SizedBox(height: 8.0),
+                        DropDownFormField(
+                          value: _formResult.isVerified,
+                          titleText: 'Is Verified?',
+                          dataSource: [
+                            {'label': '- None -', "value": null},
+                            {'label': 'Yes', "value": true},
+                            {'label': 'No', "value": false},
+                          ],
+                          valueField: 'value',
+                          textField: 'label',
+                          onChanged: (value) {
+                            setState(() {
+                              _formResult.isVerified = value;
+                            });
+                          },
+                          onSaved: (value) {
+                            _formResult.isVerified = value;
+                          },
+                        ),
                         Query(
                           options: QueryOptions(
                             documentNode: gql(optionValueQuery),
@@ -170,9 +253,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.languages = values;
-                                });
+                                _formResult.languages = values;
                               },
                             );
                           }
@@ -197,9 +278,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.servicesAreProvided = values;
-                                });
+                                _formResult.servicesAreProvided = values;
                               },
                             );
                           }
@@ -224,9 +303,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
                               onSaved: (values) {
-                                setState(() {
-                                  _formResult.ageGroupsServed = values;
-                                });
+                                _formResult.ageGroupsServed = values;
                               },
                             );
                           }
@@ -281,7 +358,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                      _formResult.endDate = value;
                                     },
                                      validator: (value) {
-                                      if (value != null) {
+                                      if (value != null && _startDate != null) {
                                         if (value.isBefore(_startDate)) {
                                           return Text(SearchAppLocalizations.of(context).dateErrorMessage).data;
                                         }
@@ -300,77 +377,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     )
                   ],
                 ),
-                ExpansionTile(
-                  title: Text('Service Listing Legend'),
-                  children: [
-                    SizedBox(height: 10.0),
-                    Table(
-                        children: [
-                          TableRow(children: [
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_accepting_16px.png'),
-                                    Text('Accepting new clients'),
-                                  ],
-                                )
-                            ),
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_not_accepting_16px.png'),
-                                    Text('Not accepting new clients'),
-                                  ],
-                                )
-                            ),
-                          ]),
-                          rowSpacer,
-                          TableRow(children: [
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_videoconferencing_16px.png'),
-                                    Text('Online'),
-                                  ],
-                                )
-                            ),
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_local_travel_16px.png'),
-                                    Text('Travels to nearby areas'),
-                                  ],
-                                )
-                            ),
-                          ]),
-                          rowSpacer,
-                          TableRow(children: [
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_remote_travel_16px.png'),
-                                    Text('Travels to remote areas'),
-                                  ],
-                                )
-                            ),
-                            TableCell(
-                                child: Column(
-                                  children: [
-                                    Image.network('https://jma.staging.autismontario.com/modules/custom/jma_customizations/img/icon_verified_16px.svg'),
-                                    Text('Verified Listing'),
-                                  ],
-                                )
-                            ),
-                          ]),
-                          rowSpacer,
-                        ]
-                    ),
-                  ],
-                ),
                 FlatButton(
                   child: Text(SearchAppLocalizations.of(context).searchButtonText),
                   onPressed: () {
                   if (_formKey.currentState.validate()) {
+                  setState(() {
                     _formKey.currentState.save();
                     Navigator.push(
                       context,
@@ -378,6 +389,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         builder: (context) => new ResultsPage(search: _formResult)
                       )
                     );
+                  });
                   }
                 },
               )
@@ -388,28 +400,77 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 
-  getOptions(String $optionGroupId, String $widgetType) {
-    Query(
-      options: QueryOptions(
-        documentNode: gql(optionValueQuery),
-        variables: {"value": $optionGroupId},
-      ),
-      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-        debugPrint(result.toString());
-        if (result.hasException) {
-          return Text(result.exception.toString());
-        }
-        if (result.loading) {
-          return Text('Loading');
-        }
-        // it can be either Map or List
-//        var repositories = result.data['civicrmOptionValueQuery']['entities'];
-//        var options = new Map();
-//        repositories.forEach((content, index) {
-//          options[content['entityLabel']] = content['entityLabel'];
-//        });
-//        return options;
+  getCatagories(translation, facets) {
+    var types = [
+      {
+        "entityLabel": translation.chapterLabel.toString(),
+        "entityId": "chapter"
+      },
+      {
+        "entityLabel": translation.eventLabel.toString(),
+        "entityId": "Event"
+      },
+      //@TODO title name wrong Basic Page, it should be General but then its a hardcoded fix made for now. Will add translated text later
+      {
+        "entityLabel": 'General',
+        "entityId": "page"
+      },
+      //@TODO title name wrong in translation.learningResource.toString()
+      {
+        "entityLabel": "Learning Resource",
+        "entityId": "learning_resource"
+      },
+      {
+        "entityLabel": translation.newsLabel.toString(),
+        "entityId": "article"
+      },
+      {
+        "entityLabel": translation.serviceListingLabel.toString(),
+        "entityId": "Service Listing"
       }
-    );
+    ];
+    var typeCount = {};
+    List<Map<String, dynamic>> newtypes = [];
+    for (var facet in facets) {
+      if (facet["name"] == "type") {
+        for (var filter in facet["values"]) {
+          typeCount[filter["filter"]] = filter["count"];
+        }
+      }
+    }
+
+    for (var type in types) {
+      if (typeCount[type["entityId"]] != null) {
+        newtypes.add({
+          "entityLabel": type["entityLabel"] + " (" +
+              typeCount[type["entityId"]].toString() + ")",
+          "entityId": type["entityId"]
+        });
+      }
+    }
+
+    return newtypes;
   }
+
+   getChapters(chapters, facets) {
+     var chapterCount = {};
+     var newChapters = new List();
+     for (var facet in facets) {
+       if (facet["name"] == "field_chapter_reference") {
+         for (var filter in facet["values"]) {
+           chapterCount[filter["filter"]] = filter["count"];
+         }
+       }
+     }
+     for (var chapter in chapters) {
+       if (chapterCount[chapter["entityId"]] != null) {
+         newChapters.add({
+           "entityLabel": chapter["entityLabel"] + " (" +
+               chapterCount[chapter["entityId"]].toString() + ")",
+           "entityId": chapter["entityId"]
+         });
+       }
+     }
+     return newChapters;
+   }
 }

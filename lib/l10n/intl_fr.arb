@@ -1,12 +1,12 @@
 {
-  "@@last_modified": "2020-08-28T15:42:20.874641",
+  "@@last_modified": "2020-09-23T15:37:17.926002",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
     "type": "text",
     "placeholders": {}
   },
-  "advSearchTitle": "Advanced Search Options",
+  "advSearchTitle": "Recherche avancée",
   "@advSearchTitle": {
     "description": "Advanced Search Title text",
     "type": "text",
@@ -111,6 +111,78 @@
   "noResultText": "Aucun résultat trouvé.",
   "@noResultText": {
     "description": "noResultText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "basicPageLabel": "Page de base",
+  "@basicPageLabel": {
+    "description": "basicPageLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterLabel": "Section Locale",
+  "@chapterLabel": {
+    "description": "chapterLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventLabel": "Event",
+  "@eventLabel": {
+    "description": "eventLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "learningResourceLabel": "Ressources d’apprentissage",
+  "@learningResourceLabel": {
+    "description": "learningResourceLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceListingLabel": "Répertoire des services",
+  "@serviceListingLabel": {
+    "description": "serviceListingLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newsLabel": "Nouvelles",
+  "@newsLabel": {
+    "description": "newsLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "notAcceptingNewClients": "N’accepte pas de nouveaux clients",
+  "@notAcceptingNewClients": {
+    "description": "notAcceptingNewClients",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verifiedListing": "Agrément confirmé",
+  "@verifiedListing": {
+    "description": "verifiedListing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeAreaTravel": "Se déplace dans les secteurs éloignés",
+  "@removeAreaTravel": {
+    "description": "removeAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nearbyAreaTravel": "Se déplace dans les secteurs adjacents",
+  "@nearbyAreaTravel": {
+    "description": "nearbyAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "online": "Les services sont fournis en ligne",
+  "@online": {
+    "description": "online",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceLegendTitle": "Répertoire des services Légende",
+  "@serviceLegendTitle": {
+    "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
   }

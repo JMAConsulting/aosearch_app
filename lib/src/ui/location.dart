@@ -1,7 +1,6 @@
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
-import '../search_app.dart';
+import 'package:aoapp/src/search_app.dart';
 
 class LocationWidget extends StatefulWidget {
   @override

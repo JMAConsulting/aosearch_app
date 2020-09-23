@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-09-01T16:37:29.869680",
+  "@@last_modified": "2020-09-23T15:37:17.926002",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -111,6 +111,78 @@
   "noResultText": "No results found.",
   "@noResultText": {
     "description": "noResultText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "basicPageLabel": "Basic page",
+  "@basicPageLabel": {
+    "description": "basicPageLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterLabel": "Chapter",
+  "@chapterLabel": {
+    "description": "chapterLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventLabel": "Event",
+  "@eventLabel": {
+    "description": "eventLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "learningResourceLabel": "Basic page",
+  "@learningResourceLabel": {
+    "description": "learningResourceLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceListingLabel": "Service Listing",
+  "@serviceListingLabel": {
+    "description": "serviceListingLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newsLabel": "News",
+  "@newsLabel": {
+    "description": "newsLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "notAcceptingNewClients": "Not accepting new clients",
+  "@notAcceptingNewClients": {
+    "description": "notAcceptingNewClients",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verifiedListing": "Verified Listing",
+  "@verifiedListing": {
+    "description": "verifiedListing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeAreaTravel": "Travels to remote areas",
+  "@removeAreaTravel": {
+    "description": "removeAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nearbyAreaTravel": "Travels to nearby areas",
+  "@nearbyAreaTravel": {
+    "description": "nearbyAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "online": "Online",
+  "@online": {
+    "description": "online",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceLegendTitle": "Service Listing Legend",
+  "@serviceLegendTitle": {
+    "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
   }

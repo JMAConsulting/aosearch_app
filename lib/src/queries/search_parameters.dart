@@ -1,6 +1,8 @@
 
 class SearchParameters {
+  String locale;
   String keyword;
+  bool isVerified;
   List<dynamic> languages;
   String acceptingNewClients;
   List<dynamic> chapters;
@@ -11,7 +13,9 @@ class SearchParameters {
   List<dynamic> ageGroupsServed;
 
   SearchParameters({
+      this.locale,
       this.keyword,
+      this.isVerified,
       this.languages,
       this.acceptingNewClients,
       this.startDate,
@@ -24,6 +28,7 @@ class SearchParameters {
 
   @override
   String toString() {
+    this.keyword = this.catagories != '' ? '' : this.keyword;
     return """keyword = $keyword 
         languages = $languages 
         acceptingNewClients = $acceptingNewClients 
@@ -32,7 +37,7 @@ class SearchParameters {
         servicesAreProvided = $servicesAreProvided
         ageGroupsServed = $ageGroupsServed
         chapters = $chapters
-        catagories = $catagories
+        type = $catagories
         """;
   }
 }
