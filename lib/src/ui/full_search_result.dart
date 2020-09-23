@@ -47,6 +47,7 @@ class FullResultsPage extends StatelessWidget {
                   }
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
+                  var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
 
                   return Card(
                       elevation: 5,
@@ -110,7 +111,7 @@ class FullResultsPage extends StatelessWidget {
                                 return Text('Loading');
                               }
                               return ListTile(
-                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities']))
+                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase()))
                               );
                             }
                         ),
@@ -155,16 +156,16 @@ class FullResultsPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 5),
-                                    Text('Age Groups Served: ' + result.data['civicrmContactById']['custom898Jma'].join(", "), style: TextStyle(fontSize: 14)),
+                                    Text((langCode == 'FR' ? 'Groupes d\'âge desservis: ' : 'Age Groups Served: ') + result.data['civicrmContactById']['custom898Jma'].join(", "), style: TextStyle(fontSize: 14)),
                                     SizedBox(height: 10),
-                                    Text('Language(s): ' +
+                                    Text((langCode == 'FR' ? 'Langue(s): ' : 'Language(s): ') +
                                         result.data['civicrmContactById']['custom899Jma'].join(', ')
                                           + (result.data['civicrmContactById']['custom905'] == '' ? '' : ', ' + result.data['civicrmContactById']['custom905']), style: TextStyle(fontSize: 14)),
                                   ]
                               ),
                             ),
                             SizedBox(height: 10),
-                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities']),
+                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode),
                             SizedBox(height: 20),
                             Query(
                                 options: QueryOptions(
@@ -239,7 +240,7 @@ class FullResultsPage extends StatelessWidget {
     return phoneBlocks;
   }
 
-  getAddressBlock(addresses, contact, phone) {
+  getAddressBlock(addresses, contact, phone, langCode) {
     var addressBlocks = <TableRow>[];
     var count = 0;
     var addressTitle = '';
@@ -254,10 +255,10 @@ class FullResultsPage extends StatelessWidget {
         ]);
     for (var address in addresses) {
       if (count == 0) {
-        addressTitle = 'Primary Work Location';
+        addressTitle = langCode == 'FR' ? 'Lieu de travail principal' : 'Primary Work Location';
       }
       else {
-        addressTitle = 'Supplementary Work Location ' + count.toString();
+        addressTitle = (langCode == 'FR' ? 'Lieu de travail complémentaire' : 'Supplementary Work Location') + count.toString();
       }
       var phoneNumber =  phone[count]['phone'];
       addressBlocks.add(TableRow(
@@ -347,7 +348,7 @@ class FullResultsPage extends StatelessWidget {
         }
     }
 
-  buildRegulatorServiceProvided(regualtedServices, serviceProviders) {
+  buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode) {
     var widgets = <Widget>[];
     var regulators = [], creds = [];
 
@@ -373,7 +374,7 @@ class FullResultsPage extends StatelessWidget {
       widgets.add(Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Regulated Services Provided: ', style: TextStyle(fontSize: 15)),
+          Text((langCode == 'FR' ? 'Services réglementés fournis: ' : 'Regulated Services Provided: '), style: TextStyle(fontSize: 15)),
           SizedBox(
             height: 5,
           ),
@@ -385,7 +386,7 @@ class FullResultsPage extends StatelessWidget {
       ));
     }
     if (creds.length == 0 && regulators.length == 0) {
-      creds.add('None of the above');
+      creds.add(langCode == 'FR' ? 'Aucune de ces réponses' : 'None of the above');
     }
     if (creds.length > 0) {
       var newCreds = <Row>[], count = 1;
@@ -395,7 +396,7 @@ class FullResultsPage extends StatelessWidget {
         text = (count != creds.length) ? text + ', ' : text;
         newCreds.add(Row(
           children: [
-            text == 'None of the above' ? Text('') : Image.asset('images/icon_verified_16px.png'),
+            text == 'None of the above' || text == 'Aucune de ces réponses' ? Text('') : Image.asset('images/icon_verified_16px.png'),
             Text(text,style: TextStyle(fontSize: 12)),
           ],
         ));
@@ -404,7 +405,7 @@ class FullResultsPage extends StatelessWidget {
       widgets.add(Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          Text('Credential(s) held: ', style: TextStyle(fontSize: 15)),
+          Text(langCode == 'FR' ? 'Titre(s) de compétence détenu(s): ' : 'Credential(s) held: ', style: TextStyle(fontSize: 15)),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: newCreds
