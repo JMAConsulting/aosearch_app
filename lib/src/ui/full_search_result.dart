@@ -62,7 +62,7 @@ class FullResultsPage extends StatelessWidget {
                                 child:  Wrap(
                                     spacing: 2,
                                     children: <Widget>[
-                                      (serviceListingOrg["custom_911"] != null && serviceListingOrg["custom_911"] != 'None' && serviceListingOrg["custom_895"] != null) ? Image.asset('images/icon_verified_16px.png'): Text(''),
+                                      ((serviceListingOrg["custom_911"] == null || serviceListingOrg["custom_911"] == 'None') && serviceListingOrg["custom_895"] == null) ? Text('') : Image.asset('images/icon_verified_16px.png'),
                                       Text(
                                         getTitle(serviceListingOrg),
                                         style: TextStyle(
@@ -295,7 +295,7 @@ class FullResultsPage extends StatelessWidget {
                     MapsLauncher.launchCoordinates(
                         double.parse(address['geoCode1'].toString()),
                         double.parse(address['geoCode2'].toString()),
-                        getTitle(contact['civicrmContactById'])
+                        getTitle(contact)
                     );
                   },
                   child: Container(

@@ -153,7 +153,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             if (result.loading) {
                               return Text('Loading');
                             }
-                            debugPrint(result.data.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
@@ -455,7 +454,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
    getChapters(chapters, facets) {
      var chapterCount = {};
-     List<Map<String, dynamic>> newChapters = [];
+     var newChapters = new List();
      for (var facet in facets) {
        if (facet["name"] == "field_chapter_reference") {
          for (var filter in facet["values"]) {
