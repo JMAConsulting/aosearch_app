@@ -226,3 +226,97 @@ buildConditionGroup(Map $queryConditions, String $conjunction, bool $negative) {
   };
   return conditionGroup;
 }
+
+queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
+    servicesProvided, keywords, languages, chapters, categories, lang,
+    isvVerified, startDate, endDate, facets) {
+  var conditionGroupGroups = new List();
+  if (ageGroupsServed != null && !ageGroupsServed.isEmpty) {
+    conditionGroupGroups.add(buildConditionGroup(
+        {"custom_898": ageGroupsServed.join(',')}, "OR", false));
+  }
+  if (categories != null && !categories.isEmpty) {
+    conditionGroupGroups.add(
+        buildConditionGroup({"type": categories.join(',')}, "OR", false));
+  }
+  if (chapters != null && !chapters.isEmpty) {
+    conditionGroupGroups.add(
+        buildConditionGroup(
+            {"field_chapter_reference": chapters.join(',')}, "OR", false));
+  }
+  if (acceptingNewClients != null && acceptingNewClients != '- Any -'
+      && acceptingNewClients != '- Toutes -') {
+    conditionGroupGroups.add(
+        buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
+            acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
+  }
+  if (servicesProvided != null && !servicesProvided.isEmpty) {
+    conditionGroupGroups.add(
+        buildConditionGroup({"custom_897": servicesProvided.join(',')}, "OR", false));
+  }
+  if (languages != null && !languages.isEmpty) {
+    conditionGroupGroups.add(
+        buildConditionGroup({"custom_899": languages.join(',')}, "OR", false)
+    );
+  }
+  if (isvVerified == true || isvVerified == false) {
+    var op = isvVerified == true ? '<>' : '=';
+    conditionGroupGroups.add(
+        buildConditionGroup({"type": "Service Listing"}, "AND", false));
+    conditionGroupGroups.add(
+        {
+          "conjunction": "AND",
+          "conditions": [
+            {"name": "custom_911", "value": 'None', "operator": op}
+          ],
+        }
+    );
+    conditionGroupGroups.add(
+        {
+          "conjunction": "OR",
+          "conditions": [
+            {"name": "custom_895", "value": null, "operator": op},
+            {"name": "custom_911", "value": null, "operator": op}
+          ],
+        }
+    );
+  }
+
+  if (startDate != null) {
+    conditionGroupGroups.add(
+        {
+          "conjunction": "AND",
+          "conditions": [
+            {"name": "custom_891", "value": startDate.millisecondsSinceEpoch, "operator": ">="}
+          ]
+        }
+    );
+  }
+  if (endDate != null) {
+    conditionGroupGroups.add(
+        {
+          "conjunction": "AND",
+          "conditions": [
+            {"name": "custom_892", "value": endDate.millisecondsSinceEpoch, "operator": "<="}
+          ]
+        }
+    );
+  }
+  var conditionGroup = {
+    "conjunction": "AND",
+    'groups': conditionGroupGroups,
+  };
+  var variables = {
+    "conditions": [],
+    "languages": [appLanguage, "und"],
+    'conditionGroup': conditionGroup,
+  };
+  if (keywords != null && keywords.length > 0) {
+    variables['fullText'] = {"keys": keywords};
+    variables['conditionGroup'] = new List();
+  }
+  if (facets) {
+    variables['language'] = lang;
+  }
+  return variables;
+}
