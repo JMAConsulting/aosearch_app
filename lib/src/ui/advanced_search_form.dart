@@ -22,6 +22,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   SearchParameters _formResult = SearchParameters();
   final _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
+  final TextEditingController _controller = new TextEditingController();
   DateTime _startDate;
 
   @override
@@ -54,11 +55,20 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               children: [
                 TextFormField(
+                  controller: _controller,
                   decoration: InputDecoration(
                     hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
                     labelText: Text(SearchAppLocalizations.of(context).keywordText).data,
+                    suffixIcon: IconButton(
+                      onPressed: () => _controller.clear(),
+                      icon: Icon(Icons.clear),
+                    )
                   ),
-                  initialValue: _formResult.keyword,
+                  onChanged: (value) {
+                    setState(() {
+                      _formResult.keyword = value;
+                    });
+                  },
                   onSaved: (keyword) {
                     setState(() {
                       _formResult.keyword = keyword;
@@ -106,7 +116,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 valueField: 'entityId',
                                 textField: 'entityLabel',
                                 onSaved: (values) {
-                                  _formResult.catagories = values;
+                                  setState(() {
+                                    _formResult.catagories = values;
+                                  });
                                 },
                               );
                             }
@@ -145,8 +157,15 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               dataSource: getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]),
                               valueField: 'entityId',
                               textField: 'entityLabel',
+                              change: (value) {
+                                setState(() {
+                                  _formResult.chapters = value;
+                                });
+                              },
                               onSaved: (values) {
-                                _formResult.chapters = values;
+                                setState(() {
+                                  _formResult.chapters = values;
+                                });
                               },
                             );
                           }

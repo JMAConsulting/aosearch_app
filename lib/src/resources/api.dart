@@ -313,7 +313,6 @@ queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
   };
   if (keywords != null && keywords.length > 0) {
     variables['fullText'] = {"keys": keywords};
-    variables['conditionGroup'] = new List();
   }
   if (facets) {
     variables['language'] = lang;
