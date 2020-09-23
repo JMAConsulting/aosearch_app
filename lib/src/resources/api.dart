@@ -245,7 +245,7 @@ queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
             {"field_chapter_reference": chapters.join(',')}, "OR", false));
   }
   if (acceptingNewClients != null && acceptingNewClients != '- Any -'
-      && acceptingNewClients != '- Toutes -') {
+      && acceptingNewClients != '- Toutes -' && acceptingNewClients != '') {
     conditionGroupGroups.add(
         buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
             acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
@@ -317,5 +317,6 @@ queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
   if (facets) {
     variables['language'] = lang;
   }
+
   return variables;
 }

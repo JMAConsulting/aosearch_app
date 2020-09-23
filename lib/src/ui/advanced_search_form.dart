@@ -190,7 +190,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             var options = new List();
                             options.add({"entityLabel": Text(SearchAppLocalizations.of(context).anyText).data});
                             for (var item in result.data["civicrmOptionValueJmaQuery"]["entities"]) {
-                              options.add(item);
+                              if (item.containsKey('entityLabel')) {
+                                options.add(item);
+                              }
                             }
                             return DropDownFormField(
                               value: _formResult.acceptingNewClients,
