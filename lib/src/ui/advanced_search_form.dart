@@ -107,6 +107,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               if (result.loading) {
                                 return Text('Loading');
                               }
+                              var categories = getCatagories(translation, result.data["searchAPISearch"]["facets"]);
+                              if (categories.isEmpty) {
+                                _formResult.catagories = new List();
+                              }
                               return MultiSelectFormField(
                                 initialValue: _formResult.catagories,
                                 titleText: Text(SearchAppLocalizations
@@ -149,6 +153,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             if (result.loading) {
                               return Text('Loading');
                             }
+                            debugPrint(result.data.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
