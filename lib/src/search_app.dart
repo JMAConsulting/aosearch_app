@@ -293,6 +293,15 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+  String get serviceLegendTitle {
+    return Intl.message(
+      'Service Listing Legend',
+      name: 'serviceLegendTitle',
+      desc: 'serviceLegendTitle',
+      locale: localeName,
+    );
+  }
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

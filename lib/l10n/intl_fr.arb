@@ -1,12 +1,12 @@
 {
-  "@@last_modified": "2020-09-23T15:24:53.199848",
+  "@@last_modified": "2020-09-23T15:37:17.926002",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
     "type": "text",
     "placeholders": {}
   },
-  "advSearchTitle": "Advanced Search Options",
+  "advSearchTitle": "Recherche avancée",
   "@advSearchTitle": {
     "description": "Advanced Search Title text",
     "type": "text",
@@ -177,6 +177,12 @@
   "online": "Les services sont fournis en ligne",
   "@online": {
     "description": "online",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceLegendTitle": "Répertoire des services Légende",
+  "@serviceLegendTitle": {
+    "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
   }

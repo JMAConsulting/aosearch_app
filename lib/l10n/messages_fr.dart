@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepte de nouveaux clients"),
-    "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Advanced Search Options"),
+    "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Recherche avancée"),
     "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
     "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Groupes d\'âge desservis"),
     "anyText" : MessageLookupByLibrary.simpleMessage("- Toutes -"),
@@ -46,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ownLocationText" : MessageLookupByLibrary.simpleMessage("Depuis mon emplacement actuel"),
     "removeAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs éloignés"),
     "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
+    "serviceLegendTitle" : MessageLookupByLibrary.simpleMessage("Répertoire des services Légende"),
     "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Répertoire des services"),
     "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),

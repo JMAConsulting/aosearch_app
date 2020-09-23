@@ -103,7 +103,7 @@ class _SearchResultsState extends State<SearchResults> {
     return SingleChildScrollView(
         child: Card(
           child: ExpansionTile(
-            title: Text('Service Listing Legend'),
+            title: Text(translation.serviceLegendTitle),
             initiallyExpanded: true,
             children: [
               SizedBox(height: 10.0),

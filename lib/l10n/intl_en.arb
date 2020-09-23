@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-09-23T15:24:53.199848",
+  "@@last_modified": "2020-09-23T15:37:17.926002",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -177,6 +177,12 @@
   "online": "Online",
   "@online": {
     "description": "online",
+    "type": "text",
+    "placeholders": {}
+  },
+  "serviceLegendTitle": "Service Listing Legend",
+  "@serviceLegendTitle": {
+    "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
   }
