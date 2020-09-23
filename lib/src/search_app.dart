@@ -248,6 +248,51 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+  String get notAcceptingNewClients {
+    return Intl.message(
+      'Not accepting new clients',
+      name: 'notAcceptingNewClients',
+      desc: 'notAcceptingNewClients',
+      locale: localeName,
+    );
+  }
+
+  String get verifiedListing {
+    return Intl.message(
+      'Verified Listing',
+      name: 'verifiedListing',
+      desc: 'verifiedListing',
+      locale: localeName,
+    );
+  }
+
+  String get removeAreaTravel {
+    return Intl.message(
+      'Travels to remote areas',
+      name: 'removeAreaTravel',
+      desc: 'removeAreaTravel',
+      locale: localeName,
+    );
+  }
+
+  String get nearbyAreaTravel {
+    return Intl.message(
+      'Travels to nearby areas',
+      name: 'nearbyAreaTravel',
+      desc: 'nearbyAreaTravel',
+      locale: localeName,
+    );
+  }
+
+  String get online {
+    return Intl.message(
+      'Online',
+      name: 'online',
+      desc: 'online',
+      locale: localeName,
+    );
+  }
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

@@ -55,6 +55,7 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   Widget build(BuildContext context) {
     print('Building SearchResults');
+    final translation = SearchAppLocalizations.of(context);
     return Query(
       options: QueryOptions(
         documentNode: gql(query),
@@ -72,10 +73,9 @@ class _SearchResultsState extends State<SearchResults> {
         ),
       ),
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-
         return Column(
           children: [
-            legendIconBlock(),
+            legendIconBlock(translation),
             Container(
               child: result.hasException
                   ? Text(result.exception.toString())
@@ -90,7 +90,7 @@ class _SearchResultsState extends State<SearchResults> {
   }
 }
 
-  Widget legendIconBlock() {
+  Widget legendIconBlock(translation) {
     const rowSpacer=TableRow(
         children: [
           SizedBox(
@@ -114,7 +114,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_accepting_16px.png'),
-                              Text('Accepting new clients'),
+                              Text(translation.acceptingNewClientsTitle),
                             ],
                           )
                       ),
@@ -122,7 +122,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_not_accepting_16px.png'),
-                              Text('Not accepting new clients'),
+                              Text(translation.notAcceptingNewClients),
                             ],
                           )
                       ),
@@ -133,7 +133,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_videoconferencing_16px.png'),
-                              Text('Online'),
+                              Text(translation.online),
                             ],
                           )
                       ),
@@ -141,7 +141,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_local_travel_16px.png'),
-                              Text('Travels to nearby areas'),
+                              Text(translation.nearbyAreaTravel),
                             ],
                           )
                       ),
@@ -152,7 +152,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_remote_travel_16px.png'),
-                              Text('Travels to remote areas'),
+                              Text(translation.removeAreaTravel),
                             ],
                           )
                       ),
@@ -160,7 +160,7 @@ class _SearchResultsState extends State<SearchResults> {
                           child: Column(
                             children: [
                               Image.asset('images/icon_verified_16px.png'),
-                              Text('Verified Listing'),
+                              Text(translation.verifiedListing),
                             ],
                           )
                       ),

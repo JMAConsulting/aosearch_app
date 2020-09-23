@@ -38,13 +38,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
     "languagesTitle" : MessageLookupByLibrary.simpleMessage("Languages"),
     "learningResourceLabel" : MessageLookupByLibrary.simpleMessage("Basic page"),
+    "nearbyAreaTravel" : MessageLookupByLibrary.simpleMessage("Travels to nearby areas"),
     "newsLabel" : MessageLookupByLibrary.simpleMessage("News"),
     "noResultText" : MessageLookupByLibrary.simpleMessage("No results found."),
+    "notAcceptingNewClients" : MessageLookupByLibrary.simpleMessage("Not accepting new clients"),
+    "online" : MessageLookupByLibrary.simpleMessage("Online"),
     "ownLocationText" : MessageLookupByLibrary.simpleMessage("Use my location"),
+    "removeAreaTravel" : MessageLookupByLibrary.simpleMessage("Travels to remote areas"),
     "searchButtonText" : MessageLookupByLibrary.simpleMessage("Search"),
     "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Service Listing"),
     "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Services are provided"),
-    "startDate" : MessageLookupByLibrary.simpleMessage("Start Date")
+    "startDate" : MessageLookupByLibrary.simpleMessage("Start Date"),
+    "verifiedListing" : MessageLookupByLibrary.simpleMessage("Verified Listing")
   };
 }

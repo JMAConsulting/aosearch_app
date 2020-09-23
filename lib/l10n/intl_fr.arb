@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-28T15:42:20.874641",
+  "@@last_modified": "2020-09-23T15:24:53.199848",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -147,6 +147,36 @@
   "newsLabel": "Nouvelles",
   "@newsLabel": {
     "description": "newsLabel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "notAcceptingNewClients": "N’accepte pas de nouveaux clients",
+  "@notAcceptingNewClients": {
+    "description": "notAcceptingNewClients",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verifiedListing": "Agrément confirmé",
+  "@verifiedListing": {
+    "description": "verifiedListing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeAreaTravel": "Se déplace dans les secteurs éloignés",
+  "@removeAreaTravel": {
+    "description": "removeAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nearbyAreaTravel": "Se déplace dans les secteurs adjacents",
+  "@nearbyAreaTravel": {
+    "description": "nearbyAreaTravel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "online": "Les services sont fournis en ligne",
+  "@online": {
+    "description": "online",
     "type": "text",
     "placeholders": {}
   }

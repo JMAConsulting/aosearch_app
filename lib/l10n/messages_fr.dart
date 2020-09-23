@@ -38,13 +38,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
     "languagesTitle" : MessageLookupByLibrary.simpleMessage("Langue(s)"),
     "learningResourceLabel" : MessageLookupByLibrary.simpleMessage("Ressources d’apprentissage"),
+    "nearbyAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs adjacents"),
     "newsLabel" : MessageLookupByLibrary.simpleMessage("Nouvelles"),
     "noResultText" : MessageLookupByLibrary.simpleMessage("Aucun résultat trouvé."),
+    "notAcceptingNewClients" : MessageLookupByLibrary.simpleMessage("N’accepte pas de nouveaux clients"),
+    "online" : MessageLookupByLibrary.simpleMessage("Les services sont fournis en ligne"),
     "ownLocationText" : MessageLookupByLibrary.simpleMessage("Depuis mon emplacement actuel"),
+    "removeAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs éloignés"),
     "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
     "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Répertoire des services"),
     "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
-    "startDate" : MessageLookupByLibrary.simpleMessage("de")
+    "startDate" : MessageLookupByLibrary.simpleMessage("de"),
+    "verifiedListing" : MessageLookupByLibrary.simpleMessage("Agrément confirmé")
   };
 }
