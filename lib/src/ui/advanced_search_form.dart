@@ -473,13 +473,24 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
       );
     }
     if (isvVerified == true || isvVerified == false) {
-      var op = isvVerified == true ? 'IS NOT NULL' : 'IS NULL';
+      var op = isvVerified == true ? '<>' : '=';
       conditionGroupGroups.add(
           buildConditionGroup({"type": "Service Listing"}, "AND", false));
       conditionGroupGroups.add(
           {
+            "conjunction": "AND",
+            "conditions": [
+              {"name": "custom_911", "value": 'None', "operator": op}
+            ],
+          }
+      );
+      conditionGroupGroups.add(
+          {
             "conjunction": "OR",
-            "conditions": [{"name": "custom_911", "value": '', "operator": op}],
+            "conditions": [
+              {"name": "custom_895", "value": null, "operator": op},
+              {"name": "custom_911", "value": null, "operator": op}
+            ],
           }
       );
     }
@@ -498,6 +509,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
       variables['fullText'] = {"keys": keywords};
       variables['conditionGroup'] = new List();
     }
+
     return variables;
   }
 }

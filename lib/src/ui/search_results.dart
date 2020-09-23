@@ -202,13 +202,25 @@ class _SearchResultsState extends State<SearchResults> {
       );
     }
     if (isvVerified == true || isvVerified == false) {
-      var op = isvVerified == true ? 'IS NOT NULL' : 'IS NULL';
+      var op = isvVerified == true ? '<>' : '=';
+      var condition = isvVerified == true ? 'OR' : "AND";
       conditionGroupGroups.add(
           buildConditionGroup({"type": "Service Listing"}, "AND", false));
       conditionGroupGroups.add(
           {
             "conjunction": "AND",
-            "conditions": [{"name": "custom_911", "value": '', "operator": op}],
+            "conditions": [
+              {"name": "custom_911", "value": 'None', "operator": op}
+            ],
+          }
+      );
+      conditionGroupGroups.add(
+          {
+            "conjunction": "OR",
+            "conditions": [
+              {"name": "custom_895", "value": null, "operator": op},
+              {"name": "custom_911", "value": null, "operator": op}
+            ],
           }
       );
     }
@@ -237,6 +249,7 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) {
     final translation = SearchAppLocalizations.of(context);
     var baseURL = getbaseUrl(Localizations.localeOf(context).languageCode.toUpperCase());
+
     return ListView.builder(
         itemCount: list["searchAPISearch"]["documents"].length,
         itemBuilder: (BuildContext context, int index) {
@@ -247,7 +260,6 @@ class Result extends StatelessWidget {
           items.keyword = item['title'];
           String title = getTitle(item);
           String serviceListingID = item['type'] == null ? getItemId(item).toString() : "0";
-
           return Card(
               elevation: 5,
               child: Padding(
@@ -262,7 +274,7 @@ class Result extends StatelessWidget {
                         child:  Wrap(
                           spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
                         children: <Widget>[
-                          (getType(item, true) == 'Service Listing' && item["custom_911"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                          (getType(item, true) == 'Service Listing' && item["custom_911"] != null && item["custom_911"] != 'None' && item["custom_895"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
                           Text(
                           getTitle(item),
                           style: TextStyle(
