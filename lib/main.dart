@@ -8,6 +8,9 @@ void main() {
 class AOApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: new SearchApp());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: new SearchApp()
+    );
   }
 }

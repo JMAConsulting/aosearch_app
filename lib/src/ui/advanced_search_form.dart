@@ -81,6 +81,14 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
+                        FlatButton(
+                          child: Text('Reset'),
+                          onPressed: () {
+                            setState(() {
+                              _formResult = SearchParameters();
+                            });
+                          },
+                        ),
                         Query(
                             options: QueryOptions(
                             documentNode: gql(facetsQuery),
@@ -101,22 +109,27 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             ),
                             ),
                             builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                              if (result.hasException) {
-                                return Text(result.exception.toString());
-                              }
+                              var catagories = new List();
                               if (result.loading) {
                                 return Text('Loading');
                               }
-                              var categories = getCatagories(translation, result.data["searchAPISearch"]["facets"]);
-                              if (categories.isEmpty) {
+                              if (result.hasException || result.data["searchAPISearch"] == null) {
                                 _formResult.catagories = new List();
+                              }
+                              else {
+                                if (getCatagories(translation, result.data["searchAPISearch"]["facets"]).isEmpty) {
+                                  _formResult.catagories = new List();
+                                }
+                                else {
+                                  catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"]);
+                                }
                               }
                               return MultiSelectFormField(
                                 initialValue: _formResult.catagories,
                                 titleText: Text(SearchAppLocalizations
                                     .of(context)
                                     .categoryTitle).data,
-                                dataSource: getCatagories(translation, result.data["searchAPISearch"]["facets"]),
+                                dataSource: catagories,
                                 valueField: 'entityId',
                                 textField: 'entityLabel',
                                 onSaved: (values) {
@@ -147,18 +160,27 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             ),
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                            if (result.hasException) {
-                              return Text(result.exception.toString());
-                            }
+                            var chapters = new List();
                             if (result.loading) {
                               return Text('Loading');
+                            }
+                            if (result.hasException || result.data["searchAPISearch"] == null) {
+                              _formResult.chapters = new List();
+                            }
+                            else {
+                              if (getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]).isEmpty) {
+                                _formResult.chapters = new List();
+                              }
+                              else {
+                                chapters = getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]);
+                              }
                             }
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .chaptersTitle).data,
-                              dataSource: getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]),
+                              dataSource: chapters,
                               valueField: 'entityId',
                               textField: 'entityLabel',
                               change: (value) {
@@ -430,7 +452,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
       }
     ];
     var typeCount = {};
-    List<Map<String, dynamic>> newtypes = [];
+    var newtypes = new List();
     for (var facet in facets) {
       if (facet["name"] == "type") {
         for (var filter in facet["values"]) {
