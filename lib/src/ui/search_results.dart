@@ -220,8 +220,7 @@ class Result extends StatelessWidget {
                           Divider(
                             color: Color.fromRGBO(171, 173, 0, 100),
                             thickness: 3,
-                            //indent: 20,
-                            endIndent: 240,
+                            endIndent: MediaQuery.of(context).size.width * 0.70,
                           ),
                         ]),
                       ),
@@ -483,7 +482,7 @@ class Result extends StatelessWidget {
   }
 
   String getbaseUrl(languageCode) {
-    var baseURL = 'https://jma.staging.autismontario.com/';
+    var baseURL = 'https://www.autismontario.com/';
     if (languageCode == 'FR') {
       baseURL = baseURL + 'fr/';
     }

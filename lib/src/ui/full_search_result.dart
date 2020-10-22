@@ -73,8 +73,7 @@ class FullResultsPage extends StatelessWidget {
                                       Divider(
                                         color: Color.fromRGBO(171, 173, 0, 100),
                                         thickness: 3,
-                                        //indent: 20,
-                                        endIndent: 220,
+                                        endIndent: MediaQuery.of(context).size.width * 0.70,
                                       ),
                                     ]),
                               ),
