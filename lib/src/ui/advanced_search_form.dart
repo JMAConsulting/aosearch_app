@@ -34,16 +34,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         _formResult.locale = Localizations.localeOf(context).languageCode;
       });
     }
-    const rowSpacer=TableRow(
-      children: [
-        SizedBox(
-         height: 18,
-        ),
-        SizedBox(
-         height: 18,
-        )
-      ]);
-    bool isVerified;
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -55,6 +45,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               children: [
                 TextFormField(
+                  keyboardType: TextInputType.text,
                   controller: _controller,
                   decoration: InputDecoration(
                     hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
@@ -217,9 +208,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             }
                             return DropDownFormField(
                               value: _formResult.acceptingNewClients,
-                              titleText: Text(SearchAppLocalizations
-                                .of(context)
-                                .acceptingNewClientsTitle).data,
+                              decoration: InputDecoration(
+                                labelText: Text(SearchAppLocalizations
+                                    .of(context)
+                                    .acceptingNewClientsTitle).data,
+                              ),
                               dataSource: options,
                               valueField: 'entityLabel',
                               textField: 'entityLabel',
@@ -237,9 +230,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         SizedBox(height: 8.0),
                         DropDownFormField(
                           value: _formResult.isVerified,
-                          titleText: 'Is Verified?',
+                          decoration: InputDecoration(
+                            labelText: 'Is Verified?',
+                          ),
                           dataSource: [
-                            {'label': '- None -', "value": null},
+                            {'label': '- None -'},
                             {'label': 'Yes', "value": true},
                             {'label': 'No', "value": false},
                           ],

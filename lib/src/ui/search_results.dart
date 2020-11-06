@@ -8,6 +8,7 @@ import 'package:html/parser.dart';
 import 'package:aoapp/src/ui/full_search_result.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 class ResultsPage extends StatelessWidget {
   final SearchParameters search;
@@ -20,16 +21,14 @@ class ResultsPage extends StatelessWidget {
       client: client,
       child: Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white70,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/AO_logo.png',
-              height: AppBar().preferredSize.height,
-              fit: BoxFit.cover,
-            )
-          ],
+        elevation: 4.0,
+        brightness: Brightness.light, // this makes status bar text color black
+        title: Image.asset(
+          'images/AO_logo.png',
+          height: AppBar().preferredSize.height,
+          fit: BoxFit.cover,
         ),
       ),
       body: new SearchResults(search: search),
@@ -202,7 +201,6 @@ class Result extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: () {},
                       title: Container(
                         padding: EdgeInsets.all(5.0),
                         height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
@@ -261,16 +259,6 @@ class Result extends StatelessWidget {
                             )
                           ]
                       ),
-                      /*
-                      Text(getType(item),
-                          style: TextStyle(
-                      )),
-                      trailing: Wrap(
-                        spacing: 5, // space between two icons
-                        children: icons,
-                      ),
-
-                       */
                     ),
                     ListTile(
                       subtitle: Table(

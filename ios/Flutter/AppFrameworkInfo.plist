@@ -24,5 +24,9 @@
   <string>8.0</string>
   <key>NSLocationWhenInUseUsageDescription</key>
   <string>This app needs access to location when open.</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>This app needs access to location when open.</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>This app needs access to location when open.</string>
 </dict>
 </plist>

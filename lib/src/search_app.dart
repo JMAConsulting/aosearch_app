@@ -334,6 +334,8 @@ class SearchApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white70,
+          elevation: 4.0,
+          brightness: Brightness.light,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

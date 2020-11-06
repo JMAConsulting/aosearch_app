@@ -18,17 +18,15 @@ class FullResultsPage extends StatelessWidget {
       client: client,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white70,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'images/AO_logo.png',
-                height: AppBar().preferredSize.height,
-                fit: BoxFit.cover,
-              )
-            ],
-          ),
+            centerTitle: true,
+            backgroundColor: Colors.white70,
+          elevation: 4.0,
+          brightness: Brightness.light,
+          title: Image.asset(
+            'images/AO_logo.png',
+            height: AppBar().preferredSize.height,
+            fit: BoxFit.cover,
+          )
         ),
         body: ListView(
           children: [
@@ -48,6 +46,7 @@ class FullResultsPage extends StatelessWidget {
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
+                  var isVerified = (serviceListingOrg["custom911"] != null && serviceListingOrg["custom911"] != 'None' && serviceListingOrg["custom895"] != null);
 
                   return Card(
                       elevation: 5,
@@ -62,7 +61,7 @@ class FullResultsPage extends StatelessWidget {
                                 child:  Wrap(
                                     spacing: 2,
                                     children: <Widget>[
-                                      ((serviceListingOrg["custom_911"] == null || serviceListingOrg["custom_911"] == 'None') && serviceListingOrg["custom_895"] == null) ? Text('') : Image.asset('images/icon_verified_16px.png'),
+                                      isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
                                       Text(
                                         getTitle(serviceListingOrg),
                                         style: TextStyle(
@@ -110,7 +109,7 @@ class FullResultsPage extends StatelessWidget {
                                 return Text('Loading');
                               }
                               return ListTile(
-                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase()))
+                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase(), isVerified))
                               );
                             }
                         ),
@@ -178,7 +177,7 @@ class FullResultsPage extends StatelessWidget {
                                   if (result2.loading) {
                                     return Text('Loading');
                                   }
-                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities']));
+                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], isVerified));
                                 }
                             )
                         ]
@@ -347,7 +346,7 @@ class FullResultsPage extends StatelessWidget {
         }
     }
 
-  buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode) {
+  buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode, isVerified) {
     var widgets = <Widget>[];
     var regulators = [], creds = [];
 
@@ -365,7 +364,7 @@ class FullResultsPage extends StatelessWidget {
         var text = regulator.replaceAll('&reg;', '®');
         newRegulators.add(Row(
           children: [
-            Image.asset('images/icon_verified_16px.png'),
+            isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
             Text(text,style: TextStyle(fontSize: 12)),
           ],
         ));
@@ -416,7 +415,7 @@ class FullResultsPage extends StatelessWidget {
     return widgets;
   }
 
-  buildRegulatorServices(regualtedServices, serviceProviders) {
+  buildRegulatorServices(regualtedServices, serviceProviders, isVerified) {
     var widgets = <Widget>[];
     for (var serviceProvider in serviceProviders) {
       if (serviceProvider["relationshipTypeId"] == 5) {
@@ -429,7 +428,7 @@ class FullResultsPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('images/icon_verified_16px.png'),
+                  isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
                   Text(
                       serviceProvider["contactIdA"]["entity"]["displayName"]  + creds),
                 ],

@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="3"
+    android:versionName="3.0"
     package="com.jma.aoapp">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -9,8 +11,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="aoapp"
-        android:icon="@mipmap/ic_launcher">
+        android:label="AutismOntario CommunityConnect"
+        android:icon="@mipmap/ic_launcher"
+        android:extractNativeLibs="false">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
