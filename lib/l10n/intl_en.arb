@@ -12,9 +12,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "acceptingNewClientsTitle": "Accepting new Clients?",
+  "acceptingNewClientsTitle": "Accepting new clients?",
   "@acceptingNewClientsTitle": {
-    "description": "Accepting New Clients title",
+    "description": "Accepting New clients title",
     "type": "text",
     "placeholders": {}
   },

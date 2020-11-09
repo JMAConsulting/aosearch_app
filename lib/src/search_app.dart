@@ -44,7 +44,7 @@ class SearchAppLocalizations {
 
   String get acceptingNewClientsTitle {
     return Intl.message(
-      'Accepting new Clients?',
+      'Accepting new clients?',
       name: 'acceptingNewClientsTitle',
       desc: 'Accepting New Clients title',
       locale: localeName,

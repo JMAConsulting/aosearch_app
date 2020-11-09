@@ -24,7 +24,10 @@ class ResultsPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white70,
         elevation: 4.0,
-        brightness: Brightness.light, // this makes status bar text color black
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Image.asset(
           'images/AO_logo.png',
           height: AppBar().preferredSize.height,
@@ -189,7 +192,6 @@ class Result extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final item = list["searchAPISearch"]["documents"][index];
           SearchParameters items = SearchParameters();
-          //items.languages = [item['langcode']];
           items.catagories = [item['type']];
           items.keyword = item['title'];
           String title = getTitle(item);

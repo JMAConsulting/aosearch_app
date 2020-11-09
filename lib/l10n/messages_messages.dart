@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepting new Clients?"),
+    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepting new clients?"),
     "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Advanced Search Options"),
     "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
     "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Age groups served"),

@@ -11,6 +11,13 @@ class FullResultsPage extends StatelessWidget {
 
   FullResultsPage({@required this.id});
 
+
+  goBack(BuildContext context){
+
+    Navigator.pop(context);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     print("Building ResultsPage");
@@ -18,15 +25,18 @@ class FullResultsPage extends StatelessWidget {
       client: client,
       child: Scaffold(
         appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.white70,
+          centerTitle: true,
+          backgroundColor: Colors.white70,
           elevation: 4.0,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           brightness: Brightness.light,
           title: Image.asset(
             'images/AO_logo.png',
             height: AppBar().preferredSize.height,
             fit: BoxFit.cover,
-          )
+          ),
         ),
         body: ListView(
           children: [

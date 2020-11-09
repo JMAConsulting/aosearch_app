@@ -234,7 +234,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             labelText: 'Is Verified?',
                           ),
                           dataSource: [
-                            {'label': '- None -'},
+                            {'label': '- Any -'},
                             {'label': 'Yes', "value": true},
                             {'label': 'No', "value": false},
                           ],
@@ -265,10 +265,15 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               titleText: Text(SearchAppLocalizations
                                 .of(context)
                                 .languagesTitle).data,
-                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                              valueField: 'entityLabel',
+                              dataSource: getLanguages(result.data["civicrmOptionValueJmaQuery"]["entities"]),
+                              valueField: 'entityId',
                               textField: 'entityLabel',
                               hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                              change: (value) {
+                                setState(() {
+                                  _formResult.languages = value;
+                                });
+                              },
                               onSaved: (values) {
                                 _formResult.languages = values;
                               },
@@ -313,6 +318,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             if (result.loading) {
                               return Text('Loading');
                             }
+
                             return MultiSelectFormField(
                               titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
                               dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
@@ -398,6 +404,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   child: Text(SearchAppLocalizations.of(context).searchButtonText),
                   onPressed: () {
                   if (_formKey.currentState.validate()) {
+                    debugPrint(_formResult.toString());
                   setState(() {
                     _formKey.currentState.save();
                     Navigator.push(
@@ -489,5 +496,16 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
        }
      }
      return newChapters;
+   }
+
+   getLanguages(languages) {
+     var newLanguages = new List();
+     for (var language in languages) {
+       newLanguages.add({
+         "entityLabel": language["entityLabel"],
+         "entityId": language["entityLabel"].split("-")[0]
+       });
+     }
+     return newLanguages;
    }
 }
