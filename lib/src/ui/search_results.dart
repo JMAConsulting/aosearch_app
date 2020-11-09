@@ -203,6 +203,26 @@ class Result extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
+                      onTap: () {
+                        var path = '';
+                        var type = getType(item, true);
+                        if (type == 'Service Listing') {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => new FullResultsPage(id: getItemId(item).toString())
+                          ));
+                        }
+                        else {
+                          if (type == 'Event') {
+                            path = 'civicrm/event/info?id=';
+                          }
+                          else {
+                            path = 'node/';
+                          }
+                          launch(baseURL + path + getItemId(item).toString());
+                        }
+                      },
                       title: Container(
                         padding: EdgeInsets.all(5.0),
                         height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
