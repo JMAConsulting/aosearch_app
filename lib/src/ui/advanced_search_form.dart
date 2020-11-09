@@ -209,9 +209,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             return DropDownFormField(
                               value: _formResult.acceptingNewClients,
                               decoration: InputDecoration(
+                                contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                                 labelText: Text(SearchAppLocalizations
                                     .of(context)
                                     .acceptingNewClientsTitle).data,
+                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
                               ),
                               dataSource: options,
                               valueField: 'entityLabel',
@@ -224,6 +226,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               onSaved: (value) {
                                 _formResult.acceptingNewClients = value;
                               },
+                              optionStyle: TextStyle(color: Colors.grey.shade500),
+                              iconColor: Colors.black87,
                             );
                           }
                         ),
@@ -232,9 +236,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           value: _formResult.isVerified,
                           decoration: InputDecoration(
                             labelText: 'Is Verified?',
+                            labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                           ),
                           dataSource: [
-                            {'label': '- Any -'},
+                            {'label': Text(SearchAppLocalizations.of(context).anyText).data},
                             {'label': 'Yes', "value": true},
                             {'label': 'No', "value": false},
                           ],
@@ -248,6 +254,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           onSaved: (value) {
                             _formResult.isVerified = value;
                           },
+                          optionStyle: TextStyle(color: Colors.grey.shade500),
+                          iconColor: Colors.black87,
                         ),
                         Query(
                           options: QueryOptions(
