@@ -209,7 +209,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             return DropDownFormField(
                               value: _formResult.acceptingNewClients,
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                                contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
                                 labelText: Text(SearchAppLocalizations
                                     .of(context)
                                     .acceptingNewClientsTitle).data,
@@ -237,7 +237,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           decoration: InputDecoration(
                             labelText: 'Is Verified?',
                             labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
-                            contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
                           ),
                           dataSource: [
                             {'label': Text(SearchAppLocalizations.of(context).anyText).data},
