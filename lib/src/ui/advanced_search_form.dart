@@ -165,6 +165,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 chapters = getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]);
                               }
                             }
+                            debugPrint(_formResult.catagories.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               titleText: Text(SearchAppLocalizations
@@ -186,14 +187,45 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             );
                           }
                         ),
-                        DropDownFormField(
-                            value: _formResult.acceptingNewClients,
+                        Visibility(
+                            visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                            child: DropDownFormField(
+                              value: _formResult.acceptingNewClients,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
+                                labelText: Text(SearchAppLocalizations
+                                    .of(context)
+                                    .acceptingNewClientsTitle).data,
+                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                              ),
+                              dataSource: [
+                                {'label': Text(SearchAppLocalizations.of(context).anyText).data},
+                                {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
+                                {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
+                              ],
+                              valueField: 'value',
+                              textField: 'label',
+                              onChanged: (value) {
+                                setState(() {
+                                  _formResult.acceptingNewClients = value;
+                                });
+                              },
+                              onSaved: (value) {
+                                _formResult.acceptingNewClients = value;
+                              },
+                              optionStyle: TextStyle(color: Colors.grey.shade500),
+                              iconColor: Colors.black87,
+                          )
+                        ),
+                        SizedBox(height: 8.0),
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                          child: DropDownFormField(
+                            value: _formResult.isVerified,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
-                              labelText: Text(SearchAppLocalizations
-                                  .of(context)
-                                  .acceptingNewClientsTitle).data,
+                              labelText: 'Is Verified?',
                               labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
                             ),
                             dataSource: [
                               {'label': Text(SearchAppLocalizations.of(context).anyText).data},
@@ -204,40 +236,15 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             textField: 'label',
                             onChanged: (value) {
                               setState(() {
-                                _formResult.acceptingNewClients = value;
+                                _formResult.isVerified = value;
                               });
                             },
                             onSaved: (value) {
-                              _formResult.acceptingNewClients = value;
+                              _formResult.isVerified = value;
                             },
                             optionStyle: TextStyle(color: Colors.grey.shade500),
                             iconColor: Colors.black87,
-                        ),
-                        SizedBox(height: 8.0),
-                        DropDownFormField(
-                          value: _formResult.isVerified,
-                          decoration: InputDecoration(
-                            labelText: 'Is Verified?',
-                            labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
-                            contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
-                          ),
-                          dataSource: [
-                            {'label': Text(SearchAppLocalizations.of(context).anyText).data},
-                            {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
-                            {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
-                          ],
-                          valueField: 'value',
-                          textField: 'label',
-                          onChanged: (value) {
-                            setState(() {
-                              _formResult.isVerified = value;
-                            });
-                          },
-                          onSaved: (value) {
-                            _formResult.isVerified = value;
-                          },
-                          optionStyle: TextStyle(color: Colors.grey.shade500),
-                          iconColor: Colors.black87,
+                          )
                         ),
                         Query(
                           options: QueryOptions(
@@ -271,29 +278,32 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           }
                         ),
                         SizedBox(height: 8.0),
-                        Query(
-                          options: QueryOptions(
-                            documentNode: gql(optionValueQuery),
-                            variables: {"value": "232"},
-                          ),
-                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                            if (result.hasException) {
-                              return Text(result.exception.toString());
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                          child: Query(
+                            options: QueryOptions(
+                              documentNode: gql(optionValueQuery),
+                              variables: {"value": "232"},
+                            ),
+                            builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result.hasException) {
+                                return Text(result.exception.toString());
+                              }
+                              if (result.loading) {
+                                return Text('Loading');
+                              }
+                              return MultiSelectFormField(
+                                titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
+                                dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                                valueField: 'entityLabel',
+                                textField: 'entityLabel',
+                                hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
+                                onSaved: (values) {
+                                  _formResult.servicesAreProvided = values;
+                                },
+                              );
                             }
-                            if (result.loading) {
-                              return Text('Loading');
-                            }
-                            return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
-                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                              valueField: 'entityLabel',
-                              textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
-                              onSaved: (values) {
-                                _formResult.servicesAreProvided = values;
-                              },
-                            );
-                          }
+                          )
                         ),
                         SizedBox(height: 8.0),
                         Query(
