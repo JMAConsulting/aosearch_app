@@ -58,7 +58,6 @@ class FullResultsPage extends StatelessWidget {
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
                   var isVerified = (serviceListingOrg["custom911"] != null
                       && serviceListingOrg["custom911"] != ''
-                      && serviceListingOrg["custom911"] != ''
                       && serviceListingOrg["custom911"] != 'None'
                       && serviceListingOrg["custom895"] != null
                       && serviceListingOrg["custom895"] != '');

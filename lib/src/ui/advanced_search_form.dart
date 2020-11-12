@@ -197,8 +197,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             ),
                             dataSource: [
                               {'label': Text(SearchAppLocalizations.of(context).anyText).data},
-                              {'label': 'Yes', "value": true},
-                              {'label': 'No', "value": false},
+                              {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
+                              {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
                             ],
                             valueField: 'value',
                             textField: 'label',
@@ -223,8 +223,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           ),
                           dataSource: [
                             {'label': Text(SearchAppLocalizations.of(context).anyText).data},
-                            {'label': 'Yes', "value": true},
-                            {'label': 'No', "value": false},
+                            {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
+                            {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
                           ],
                           valueField: 'value',
                           textField: 'label',

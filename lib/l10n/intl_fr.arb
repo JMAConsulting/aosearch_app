@@ -185,5 +185,17 @@
     "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
+  },
+  "yesText": "Vrai",
+  "@yesText": {
+    "description": "yesText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noText": "Faux",
+  "@noText": {
+    "description": "noText",
+    "type": "text",
+    "placeholders": {}
   }
 }

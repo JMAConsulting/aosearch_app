@@ -185,5 +185,17 @@
     "description": "serviceLegendTitle",
     "type": "text",
     "placeholders": {}
+  },
+  "yesText": "Yes",
+  "@yesText": {
+    "description": "yesText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noText": "No",
+  "@noText": {
+    "description": "noText",
+    "type": "text",
+    "placeholders": {}
   }
 }

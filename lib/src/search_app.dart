@@ -302,6 +302,24 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+  String get yesText {
+    return Intl.message(
+      'Yes',
+      name: 'yesText',
+      desc: 'yesText',
+      locale: localeName,
+    );
+  }
+
+  String get noText {
+    return Intl.message(
+      'No',
+      name: 'NoText',
+      desc: 'NoText',
+      locale: localeName,
+    );
+  }
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

@@ -21,36 +21,6 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepte de nouveaux clients"),
-    "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Recherche avancée"),
-    "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
-    "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Groupes d\'âge desservis"),
-    "anyText" : MessageLookupByLibrary.simpleMessage("- Toutes -"),
-    "basicPageLabel" : MessageLookupByLibrary.simpleMessage("Page de base"),
-    "categoryTitle" : MessageLookupByLibrary.simpleMessage("Type de page"),
-    "chapterLabel" : MessageLookupByLibrary.simpleMessage("Section Locale"),
-    "chaptersTitle" : MessageLookupByLibrary.simpleMessage("Section locale"),
-    "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("La date de début doit être supérieure ou égale à la date d’achèvement"),
-    "endDate" : MessageLookupByLibrary.simpleMessage("A"),
-    "eventLabel" : MessageLookupByLibrary.simpleMessage("Event"),
-    "keywordHintText" : MessageLookupByLibrary.simpleMessage("Recherche par mot clé"),
-    "keywordText" : MessageLookupByLibrary.simpleMessage("Recherche par mot-clé"),
-    "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
-    "languagesTitle" : MessageLookupByLibrary.simpleMessage("Langue(s)"),
-    "learningResourceLabel" : MessageLookupByLibrary.simpleMessage("Ressources d’apprentissage"),
-    "nearbyAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs adjacents"),
-    "newsLabel" : MessageLookupByLibrary.simpleMessage("Nouvelles"),
-    "noResultText" : MessageLookupByLibrary.simpleMessage("Aucun résultat trouvé."),
-    "notAcceptingNewClients" : MessageLookupByLibrary.simpleMessage("N’accepte pas de nouveaux clients"),
-    "online" : MessageLookupByLibrary.simpleMessage("Les services sont fournis en ligne"),
-    "ownLocationText" : MessageLookupByLibrary.simpleMessage("Depuis mon emplacement actuel"),
-    "removeAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs éloignés"),
-    "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
-    "serviceLegendTitle" : MessageLookupByLibrary.simpleMessage("Répertoire des services Légende"),
-    "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Répertoire des services"),
-    "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
-    "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
-    "startDate" : MessageLookupByLibrary.simpleMessage("de"),
-    "verifiedListing" : MessageLookupByLibrary.simpleMessage("Agrément confirmé")
+
   };
 }
