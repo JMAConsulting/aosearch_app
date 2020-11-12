@@ -30,7 +30,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     final translation = SearchAppLocalizations.of(context);
     if (_formResult.locale != Localizations.localeOf(context).languageCode) {
       setState(() {
-        _formResult.acceptingNewClients = '';
         _formResult.locale = Localizations.localeOf(context).languageCode;
       });
     }
@@ -187,49 +186,32 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             );
                           }
                         ),
-                        Query(
-                          options: QueryOptions(
-                            documentNode: gql(optionValueQuery),
-                            variables: {"value": "195"},
-                          ),
-                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                            if (result.hasException) {
-                              return Text(result.exception.toString());
-                            }
-                            if (result.loading) {
-                              return Text('Loading');
-                            }
-                            var options = new List();
-                            options.add({"entityLabel": Text(SearchAppLocalizations.of(context).anyText).data});
-                            for (var item in result.data["civicrmOptionValueJmaQuery"]["entities"]) {
-                              if (item.containsKey('entityLabel') && item['entityLabel'] != 'Specific Situations Only*') {
-                                options.add(item);
-                              }
-                            }
-                            return DropDownFormField(
-                              value: _formResult.acceptingNewClients,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
-                                labelText: Text(SearchAppLocalizations
-                                    .of(context)
-                                    .acceptingNewClientsTitle).data,
-                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
-                              ),
-                              dataSource: options,
-                              valueField: 'entityLabel',
-                              textField: 'entityLabel',
-                              onChanged: (value) {
-                                setState(() {
-                                  _formResult.acceptingNewClients = value;
-                                });
-                              },
-                              onSaved: (value) {
+                        DropDownFormField(
+                            value: _formResult.acceptingNewClients,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
+                              labelText: Text(SearchAppLocalizations
+                                  .of(context)
+                                  .acceptingNewClientsTitle).data,
+                              labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                            ),
+                            dataSource: [
+                              {'label': Text(SearchAppLocalizations.of(context).anyText).data},
+                              {'label': 'Yes', "value": true},
+                              {'label': 'No', "value": false},
+                            ],
+                            valueField: 'value',
+                            textField: 'label',
+                            onChanged: (value) {
+                              setState(() {
                                 _formResult.acceptingNewClients = value;
-                              },
-                              optionStyle: TextStyle(color: Colors.grey.shade500),
-                              iconColor: Colors.black87,
-                            );
-                          }
+                              });
+                            },
+                            onSaved: (value) {
+                              _formResult.acceptingNewClients = value;
+                            },
+                            optionStyle: TextStyle(color: Colors.grey.shade500),
+                            iconColor: Colors.black87,
                         ),
                         SizedBox(height: 8.0),
                         DropDownFormField(
