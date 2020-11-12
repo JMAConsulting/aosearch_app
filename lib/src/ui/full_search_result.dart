@@ -56,8 +56,12 @@ class FullResultsPage extends StatelessWidget {
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
-                  var isVerified = (serviceListingOrg["custom911"] != null && serviceListingOrg["custom911"] != 'None' && serviceListingOrg["custom895"] != null);
-
+                  var isVerified = (serviceListingOrg["custom911"] != null
+                      && serviceListingOrg["custom911"] != ''
+                      && serviceListingOrg["custom911"] != ''
+                      && serviceListingOrg["custom911"] != 'None'
+                      && serviceListingOrg["custom895"] != null
+                      && serviceListingOrg["custom895"] != '');
                   return Card(
                       elevation: 5,
                       child: Padding(
