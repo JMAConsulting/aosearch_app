@@ -315,11 +315,30 @@ class SearchAppLocalizations {
   String get noText {
     return Intl.message(
       'No',
-      name: 'NoText',
-      desc: 'NoText',
+      name: 'noText',
+      desc: 'noText',
       locale: localeName,
     );
   }
+
+  String get categoryHintText {
+    return Intl.message(
+      'Please choose one or more categories',
+      name: 'categoryHintText',
+      desc: 'categoryHintText',
+      locale: localeName,
+    );
+  }
+
+  String get chapterHintText {
+    return Intl.message(
+      'Please choose one or more chapters',
+      name: 'chapterHintText',
+      desc: 'chapterHintText',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

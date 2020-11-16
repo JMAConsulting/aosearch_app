@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-09-23T15:37:17.926002",
+  "@@last_modified": "2020-11-16T15:33:09.880835",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -186,15 +186,27 @@
     "type": "text",
     "placeholders": {}
   },
-  "yesText": "Vrai",
+  "yesText": "Oui",
   "@yesText": {
     "description": "yesText",
     "type": "text",
     "placeholders": {}
   },
-  "noText": "Faux",
+  "noText": "Non",
   "@noText": {
     "description": "noText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryHintText": "Veuillez en choisir un ou plusieurs type de page",
+  "@categoryHintText": {
+    "description": "categoryHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterHintText": "Veuillez en choisir un ou plusieurs section locale",
+  "@chapterHintText": {
+    "description": "chapterHintText",
     "type": "text",
     "placeholders": {}
   }

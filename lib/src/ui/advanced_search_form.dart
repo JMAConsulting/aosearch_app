@@ -116,9 +116,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               }
                               return MultiSelectFormField(
                                 initialValue: _formResult.catagories,
-                                titleText: Text(SearchAppLocalizations
+                                title: Text(SearchAppLocalizations
                                     .of(context)
-                                    .categoryTitle).data,
+                                    .categoryTitle),
                                 dataSource: catagories,
                                 valueField: 'entityId',
                                 textField: 'entityLabel',
@@ -127,6 +127,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                     _formResult.catagories = values;
                                   });
                                 },
+                                hintWidget: Text(SearchAppLocalizations
+                                    .of(context).categoryHintText),
                               );
                             }
                         ),
@@ -168,9 +170,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             debugPrint(_formResult.catagories.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
-                              titleText: Text(SearchAppLocalizations
+                              title: Text(SearchAppLocalizations
                                 .of(context)
-                                .chaptersTitle).data,
+                                .chaptersTitle),
                               dataSource: chapters,
                               valueField: 'entityId',
                               textField: 'entityLabel',
@@ -184,6 +186,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                   _formResult.chapters = values;
                                 });
                               },
+                              hintWidget: Text(SearchAppLocalizations
+                                  .of(context).chapterHintText),
                             );
                           }
                         ),
@@ -196,7 +200,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 labelText: Text(SearchAppLocalizations
                                     .of(context)
                                     .acceptingNewClientsTitle).data,
-                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black87),
                               ),
                               dataSource: [
                                 {'label': Text(SearchAppLocalizations.of(context).anyText).data},
@@ -213,7 +217,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               onSaved: (value) {
                                 _formResult.acceptingNewClients = value;
                               },
-                              optionStyle: TextStyle(color: Colors.grey.shade500),
                               iconColor: Colors.black87,
                           )
                         ),
@@ -224,7 +227,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             value: _formResult.isVerified,
                             decoration: InputDecoration(
                               labelText: 'Is Verified?',
-                              labelStyle: TextStyle(fontSize: 17.0, color: Colors.black54),
+                              labelStyle: TextStyle(fontSize: 17.0, color: Colors.black87),
                               contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
                             ),
                             dataSource: [
@@ -242,7 +245,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             onSaved: (value) {
                               _formResult.isVerified = value;
                             },
-                            optionStyle: TextStyle(color: Colors.grey.shade500),
                             iconColor: Colors.black87,
                           )
                         ),
@@ -259,13 +261,13 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               return Text('Loading');
                             }
                             return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations
+                              title: Text(SearchAppLocalizations
                                 .of(context)
-                                .languagesTitle).data,
+                                .languagesTitle),
                               dataSource: getLanguages(result.data["civicrmOptionValueJmaQuery"]["entities"]),
                               valueField: 'entityId',
                               textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                              hintWidget: Text(SearchAppLocalizations.of(context).languagesHintText),
                               change: (value) {
                                 setState(() {
                                   _formResult.languages = value;
@@ -293,11 +295,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 return Text('Loading');
                               }
                               return MultiSelectFormField(
-                                titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
+                                title: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle),
                                 dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                                 valueField: 'entityLabel',
                                 textField: 'entityLabel',
-                                hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
+                                hintWidget: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText),
                                 onSaved: (values) {
                                   _formResult.servicesAreProvided = values;
                                 },
@@ -320,11 +322,11 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             }
 
                             return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
+                              title: Text(SearchAppLocalizations.of(context).ageGroupsTitleText),
                               dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                               valueField: 'entityLabel',
                               textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
+                              hintWidget: Text(SearchAppLocalizations.of(context).ageGroupsHintText),
                               onSaved: (values) {
                                 _formResult.ageGroupsServed = values;
                               },

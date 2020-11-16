@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-09-23T15:37:17.926002",
+  "@@last_modified": "2020-11-16T15:33:09.880835",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -195,6 +195,18 @@
   "noText": "No",
   "@noText": {
     "description": "noText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryHintText": "Please choose one or more categories",
+  "@categoryHintText": {
+    "description": "categoryHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterHintText": "Please choose one or more chapters",
+  "@chapterHintText": {
+    "description": "chapterHintText",
     "type": "text",
     "placeholders": {}
   }
