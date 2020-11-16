@@ -357,6 +357,15 @@ class SearchAppLocalizations {
     );
   }
 
+  String get resetText {
+    return Intl.message(
+      'Reset',
+      name: 'resetText',
+      desc: 'resetText',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

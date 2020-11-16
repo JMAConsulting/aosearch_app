@@ -49,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "online" : MessageLookupByLibrary.simpleMessage("Online"),
     "ownLocationText" : MessageLookupByLibrary.simpleMessage("Use my location"),
     "removeAreaTravel" : MessageLookupByLibrary.simpleMessage("Travels to remote areas"),
+    "resetText" : MessageLookupByLibrary.simpleMessage("Reset"),
     "searchButtonText" : MessageLookupByLibrary.simpleMessage("Search"),
     "serviceLegendTitle" : MessageLookupByLibrary.simpleMessage("Service Listing Legend"),
     "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Service Listing"),

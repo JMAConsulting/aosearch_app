@@ -33,6 +33,14 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         _formResult.locale = Localizations.localeOf(context).languageCode;
       });
     }
+    // If we have categories set and service Listing is not one let us rest these values
+    if (_formResult.catagories != null && _formResult.catagories.isNotEmpty && !_formResult.catagories.contains('Service Listing')) {
+      setState(() {
+        _formResult.servicesAreProvided = [];
+        _formResult.acceptingNewClients = null;
+        _formResult.isVerified = null;
+      });
+    }
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -72,7 +80,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     Column(
                       children: [
                         FlatButton(
-                          child: Text('Reset'),
+                          child: Text(SearchAppLocalizations.of(context).resetText),
                           onPressed: () {
                             setState(() {
                               _formResult = SearchParameters();
@@ -192,7 +200,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           }
                         ),
                         Visibility(
-                            visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                            visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
                             child: DropDownFormField(
                               value: _formResult.acceptingNewClients,
                               decoration: InputDecoration(
@@ -222,7 +230,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         ),
                         SizedBox(height: 8.0),
                         Visibility(
-                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
                           child: DropDownFormField(
                             value: _formResult.isVerified,
                             decoration: InputDecoration(
@@ -281,7 +289,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         ),
                         SizedBox(height: 8.0),
                         Visibility(
-                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null),
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
                           child: Query(
                             options: QueryOptions(
                               documentNode: gql(optionValueQuery),
