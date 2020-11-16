@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import "dart:collection";
+import 'package:aoapp/src/search_app.dart';
 
 class FullResultsPage extends StatelessWidget {
   final String id;
@@ -20,6 +21,7 @@ class FullResultsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
     print("Building ResultsPage");
     return GraphQLProvider(
       client: client,
@@ -176,7 +178,7 @@ class FullResultsPage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 10),
-                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode),
+                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode, translation),
                             SizedBox(height: 20),
                             Query(
                                 options: QueryOptions(
@@ -251,7 +253,7 @@ class FullResultsPage extends StatelessWidget {
     return phoneBlocks;
   }
 
-  getAddressBlock(addresses, contact, phone, langCode) {
+  getAddressBlock(addresses, contact, phone, langCode, translation) {
     var addressBlocks = <TableRow>[];
     var count = 0;
     var addressTitle = '';
@@ -310,11 +312,10 @@ class FullResultsPage extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset('images/map.png',
-                          width: 80.0, height: 60.0),
-                    ),),
+                    child: Text(
+                       translation.viewMapText
+                    ),
+                  ),
                 )
             ),
             Column(

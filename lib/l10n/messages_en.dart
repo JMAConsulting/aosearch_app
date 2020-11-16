@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("End Date can\'t be before Start Date"),
     "endDate" : MessageLookupByLibrary.simpleMessage("End Date"),
     "eventLabel" : MessageLookupByLibrary.simpleMessage("Event"),
+    "eventMapText" : MessageLookupByLibrary.simpleMessage("View event location on map"),
     "keywordHintText" : MessageLookupByLibrary.simpleMessage("Enter your search term here"),
     "keywordText" : MessageLookupByLibrary.simpleMessage("Fulltext Search"),
     "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
@@ -55,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Services are provided"),
     "startDate" : MessageLookupByLibrary.simpleMessage("Start Date"),
     "verifiedListing" : MessageLookupByLibrary.simpleMessage("Verified Listing"),
+    "viewMapText" : MessageLookupByLibrary.simpleMessage("View on map"),
     "yesText" : MessageLookupByLibrary.simpleMessage("Yes")
   };
 }

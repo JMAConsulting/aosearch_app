@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("La date de début doit être supérieure ou égale à la date d’achèvement"),
     "endDate" : MessageLookupByLibrary.simpleMessage("A"),
     "eventLabel" : MessageLookupByLibrary.simpleMessage("Event"),
+    "eventMapText" : MessageLookupByLibrary.simpleMessage("View event location on map"),
     "keywordHintText" : MessageLookupByLibrary.simpleMessage("Recherche par mot clé"),
     "keywordText" : MessageLookupByLibrary.simpleMessage("Recherche par mot-clé"),
     "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
@@ -55,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
     "startDate" : MessageLookupByLibrary.simpleMessage("de"),
     "verifiedListing" : MessageLookupByLibrary.simpleMessage("Agrément confirmé"),
+    "viewMapText" : MessageLookupByLibrary.simpleMessage("View on map"),
     "yesText" : MessageLookupByLibrary.simpleMessage("Oui")
   };
 }

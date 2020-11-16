@@ -339,6 +339,24 @@ class SearchAppLocalizations {
     );
   }
 
+  String get eventMapText {
+    return Intl.message(
+      'View event location on map',
+      name: 'eventMapText',
+      desc: 'eventMapText',
+      locale: localeName,
+    );
+  }
+
+  String get viewMapText {
+    return Intl.message(
+      'View on map',
+      name: 'viewMapText',
+      desc: 'viewMapText',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {

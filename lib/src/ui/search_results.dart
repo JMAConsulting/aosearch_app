@@ -332,7 +332,7 @@ class Result extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: geolocationButtons(item),
+                      children: geolocationButtons(item, translation),
                     ),
                   ],
                 )
@@ -372,7 +372,7 @@ class Result extends StatelessWidget {
     return widgets;
   }
 
-  List<Widget> geolocationButtons(result) {
+  List<Widget> geolocationButtons(result, translation) {
     var widgets = <Widget>[];
     var resultCoordinates = result['field_geolocation'].length > 0 ?
     result['field_geolocation'] : (
@@ -391,11 +391,11 @@ class Result extends StatelessWidget {
                  getTitle(result));
               },
               child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset('images/map.png',
-                  width: 110.0, height: 60.0),
-                ),),
+                child: Text(
+                   getType(result, true) == 'Event' ? translation.eventMapText :
+                     translation.viewMapText
+                ),
+              ),
             )
           ));
       }
