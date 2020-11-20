@@ -44,7 +44,7 @@ class SearchAppLocalizations {
 
   String get acceptingNewClientsTitle {
     return Intl.message(
-      'Accepting new Clients?',
+      'Accepting new clients?',
       name: 'acceptingNewClientsTitle',
       desc: 'Accepting New Clients title',
       locale: localeName,
@@ -302,6 +302,70 @@ class SearchAppLocalizations {
       locale: localeName,
     );
   }
+
+  String get yesText {
+    return Intl.message(
+      'Yes',
+      name: 'yesText',
+      desc: 'yesText',
+      locale: localeName,
+    );
+  }
+
+  String get noText {
+    return Intl.message(
+      'No',
+      name: 'noText',
+      desc: 'noText',
+      locale: localeName,
+    );
+  }
+
+  String get categoryHintText {
+    return Intl.message(
+      'Please choose one or more categories',
+      name: 'categoryHintText',
+      desc: 'categoryHintText',
+      locale: localeName,
+    );
+  }
+
+  String get chapterHintText {
+    return Intl.message(
+      'Please choose one or more chapters',
+      name: 'chapterHintText',
+      desc: 'chapterHintText',
+      locale: localeName,
+    );
+  }
+
+  String get eventMapText {
+    return Intl.message(
+      'View event location on map',
+      name: 'eventMapText',
+      desc: 'eventMapText',
+      locale: localeName,
+    );
+  }
+
+  String get viewMapText {
+    return Intl.message(
+      'View on map',
+      name: 'viewMapText',
+      desc: 'viewMapText',
+      locale: localeName,
+    );
+  }
+
+  String get resetText {
+    return Intl.message(
+      'Reset',
+      name: 'resetText',
+      desc: 'resetText',
+      locale: localeName,
+    );
+  }
+
 }
 
 class SearchAppLocalizationsDelegate extends LocalizationsDelegate<SearchAppLocalizations> {
@@ -334,6 +398,8 @@ class SearchApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white70,
+          elevation: 4.0,
+          brightness: Brightness.light,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

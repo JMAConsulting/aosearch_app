@@ -4,7 +4,7 @@ class SearchParameters {
   String keyword;
   bool isVerified;
   List<dynamic> languages;
-  String acceptingNewClients;
+  bool acceptingNewClients;
   List<dynamic> chapters;
   List<dynamic> catagories;
   DateTime startDate;

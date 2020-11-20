@@ -8,6 +8,7 @@ import 'package:html/parser.dart';
 import 'package:aoapp/src/ui/full_search_result.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 class ResultsPage extends StatelessWidget {
   final SearchParameters search;
@@ -20,16 +21,17 @@ class ResultsPage extends StatelessWidget {
       client: client,
       child: Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white70,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/AO_logo.png',
-              height: AppBar().preferredSize.height,
-              fit: BoxFit.cover,
-            )
-          ],
+        elevation: 4.0,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        title: Image.asset(
+          'images/AO_logo.png',
+          height: AppBar().preferredSize.height,
+          fit: BoxFit.cover,
         ),
       ),
       body: new SearchResults(search: search),
@@ -190,7 +192,6 @@ class Result extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final item = list["searchAPISearch"]["documents"][index];
           SearchParameters items = SearchParameters();
-          //items.languages = [item['langcode']];
           items.catagories = [item['type']];
           items.keyword = item['title'];
           String title = getTitle(item);
@@ -202,7 +203,26 @@ class Result extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        var path = '';
+                        var type = getType(item, true);
+                        if (type == 'Service Listing') {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => new FullResultsPage(id: getItemId(item).toString())
+                          ));
+                        }
+                        else {
+                          if (type == 'Event') {
+                            path = 'civicrm/event/info?id=';
+                          }
+                          else {
+                            path = 'node/';
+                          }
+                          launch(baseURL + path + getItemId(item).toString());
+                        }
+                      },
                       title: Container(
                         padding: EdgeInsets.all(5.0),
                         height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
@@ -261,16 +281,6 @@ class Result extends StatelessWidget {
                             )
                           ]
                       ),
-                      /*
-                      Text(getType(item),
-                          style: TextStyle(
-                      )),
-                      trailing: Wrap(
-                        spacing: 5, // space between two icons
-                        children: icons,
-                      ),
-
-                       */
                     ),
                     ListTile(
                       subtitle: Table(
@@ -322,7 +332,7 @@ class Result extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: geolocationButtons(item),
+                      children: geolocationButtons(item, translation),
                     ),
                   ],
                 )
@@ -362,7 +372,7 @@ class Result extends StatelessWidget {
     return widgets;
   }
 
-  List<Widget> geolocationButtons(result) {
+  List<Widget> geolocationButtons(result, translation) {
     var widgets = <Widget>[];
     var resultCoordinates = result['field_geolocation'].length > 0 ?
     result['field_geolocation'] : (
@@ -381,11 +391,11 @@ class Result extends StatelessWidget {
                  getTitle(result));
               },
               child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.asset('images/map.png',
-                  width: 110.0, height: 60.0),
-                ),),
+                child: Text(
+                   getType(result, true) == 'Event' ? translation.eventMapText :
+                     translation.viewMapText
+                ),
+              ),
             )
           ));
       }

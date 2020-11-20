@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-09-23T15:37:17.926002",
+  "@@last_modified": "2020-11-16T16:54:50.190113",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -183,6 +183,48 @@
   "serviceLegendTitle": "Répertoire des services Légende",
   "@serviceLegendTitle": {
     "description": "serviceLegendTitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yesText": "Oui",
+  "@yesText": {
+    "description": "yesText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noText": "Non",
+  "@noText": {
+    "description": "noText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "categoryHintText": "Veuillez en choisir un ou plusieurs type de page",
+  "@categoryHintText": {
+    "description": "categoryHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chapterHintText": "Veuillez en choisir un ou plusieurs section locale",
+  "@chapterHintText": {
+    "description": "chapterHintText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventMapText": "View event location on map",
+  "@eventMapText": {
+    "description": "eventMapText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "viewMapText": "View on map",
+  "@viewMapText": {
+    "description": "viewMapText",
+    "type": "text",
+    "placeholders": {}
+  },
+  "resetText": "Réinitialiser",
+  "@resetText": {
+    "description": "resetText",
     "type": "text",
     "placeholders": {}
   }

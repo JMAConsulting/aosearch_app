@@ -30,20 +30,17 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     final translation = SearchAppLocalizations.of(context);
     if (_formResult.locale != Localizations.localeOf(context).languageCode) {
       setState(() {
-        _formResult.acceptingNewClients = '';
         _formResult.locale = Localizations.localeOf(context).languageCode;
       });
     }
-    const rowSpacer=TableRow(
-      children: [
-        SizedBox(
-         height: 18,
-        ),
-        SizedBox(
-         height: 18,
-        )
-      ]);
-    bool isVerified;
+    // If we have categories set and service Listing is not one let us rest these values
+    if (_formResult.catagories != null && _formResult.catagories.isNotEmpty && !_formResult.catagories.contains('Service Listing')) {
+      setState(() {
+        _formResult.servicesAreProvided = [];
+        _formResult.acceptingNewClients = null;
+        _formResult.isVerified = null;
+      });
+    }
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -55,6 +52,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               children: [
                 TextFormField(
+                  keyboardType: TextInputType.text,
                   controller: _controller,
                   decoration: InputDecoration(
                     hintText: Text(SearchAppLocalizations.of(context).keywordHintText).data,
@@ -82,7 +80,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                     Column(
                       children: [
                         FlatButton(
-                          child: Text('Reset'),
+                          child: Text(SearchAppLocalizations.of(context).resetText),
                           onPressed: () {
                             setState(() {
                               _formResult = SearchParameters();
@@ -126,9 +124,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               }
                               return MultiSelectFormField(
                                 initialValue: _formResult.catagories,
-                                titleText: Text(SearchAppLocalizations
+                                title: Text(SearchAppLocalizations
                                     .of(context)
-                                    .categoryTitle).data,
+                                    .categoryTitle),
                                 dataSource: catagories,
                                 valueField: 'entityId',
                                 textField: 'entityLabel',
@@ -137,6 +135,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                     _formResult.catagories = values;
                                   });
                                 },
+                                hintWidget: Text(SearchAppLocalizations
+                                    .of(context).categoryHintText),
                               );
                             }
                         ),
@@ -175,11 +175,12 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 chapters = getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]);
                               }
                             }
+                            debugPrint(_formResult.catagories.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
-                              titleText: Text(SearchAppLocalizations
+                              title: Text(SearchAppLocalizations
                                 .of(context)
-                                .chaptersTitle).data,
+                                .chaptersTitle),
                               dataSource: chapters,
                               valueField: 'entityId',
                               textField: 'entityLabel',
@@ -193,36 +194,29 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                   _formResult.chapters = values;
                                 });
                               },
+                              hintWidget: Text(SearchAppLocalizations
+                                  .of(context).chapterHintText),
                             );
                           }
                         ),
-                        Query(
-                          options: QueryOptions(
-                            documentNode: gql(optionValueQuery),
-                            variables: {"value": "195"},
-                          ),
-                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                            if (result.hasException) {
-                              return Text(result.exception.toString());
-                            }
-                            if (result.loading) {
-                              return Text('Loading');
-                            }
-                            var options = new List();
-                            options.add({"entityLabel": Text(SearchAppLocalizations.of(context).anyText).data});
-                            for (var item in result.data["civicrmOptionValueJmaQuery"]["entities"]) {
-                              if (item.containsKey('entityLabel')) {
-                                options.add(item);
-                              }
-                            }
-                            return DropDownFormField(
+                        Visibility(
+                            visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                            child: DropDownFormField(
                               value: _formResult.acceptingNewClients,
-                              titleText: Text(SearchAppLocalizations
-                                .of(context)
-                                .acceptingNewClientsTitle).data,
-                              dataSource: options,
-                              valueField: 'entityLabel',
-                              textField: 'entityLabel',
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
+                                labelText: Text(SearchAppLocalizations
+                                    .of(context)
+                                    .acceptingNewClientsTitle).data,
+                                labelStyle: TextStyle(fontSize: 17.0, color: Colors.black87),
+                              ),
+                              dataSource: [
+                                {'label': Text(SearchAppLocalizations.of(context).anyText).data},
+                                {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
+                                {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
+                              ],
+                              valueField: 'value',
+                              textField: 'label',
                               onChanged: (value) {
                                 setState(() {
                                   _formResult.acceptingNewClients = value;
@@ -231,28 +225,36 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               onSaved: (value) {
                                 _formResult.acceptingNewClients = value;
                               },
-                            );
-                          }
+                              iconColor: Colors.black87,
+                          )
                         ),
                         SizedBox(height: 8.0),
-                        DropDownFormField(
-                          value: _formResult.isVerified,
-                          titleText: 'Is Verified?',
-                          dataSource: [
-                            {'label': '- None -', "value": null},
-                            {'label': 'Yes', "value": true},
-                            {'label': 'No', "value": false},
-                          ],
-                          valueField: 'value',
-                          textField: 'label',
-                          onChanged: (value) {
-                            setState(() {
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                          child: DropDownFormField(
+                            value: _formResult.isVerified,
+                            decoration: InputDecoration(
+                              labelText: 'Is Verified?',
+                              labelStyle: TextStyle(fontSize: 17.0, color: Colors.black87),
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 14, 0),
+                            ),
+                            dataSource: [
+                              {'label': Text(SearchAppLocalizations.of(context).anyText).data},
+                              {'label': Text(SearchAppLocalizations.of(context).yesText).data, "value": true},
+                              {'label': Text(SearchAppLocalizations.of(context).noText).data, "value": false},
+                            ],
+                            valueField: 'value',
+                            textField: 'label',
+                            onChanged: (value) {
+                              setState(() {
+                                _formResult.isVerified = value;
+                              });
+                            },
+                            onSaved: (value) {
                               _formResult.isVerified = value;
-                            });
-                          },
-                          onSaved: (value) {
-                            _formResult.isVerified = value;
-                          },
+                            },
+                            iconColor: Colors.black87,
+                          )
                         ),
                         Query(
                           options: QueryOptions(
@@ -267,13 +269,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               return Text('Loading');
                             }
                             return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations
+                              title: Text(SearchAppLocalizations
                                 .of(context)
-                                .languagesTitle).data,
-                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                              valueField: 'entityLabel',
+                                .languagesTitle),
+                              dataSource: getLanguages(result.data["civicrmOptionValueJmaQuery"]["entities"]),
+                              valueField: 'entityId',
                               textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).languagesHintText).data,
+                              hintWidget: Text(SearchAppLocalizations.of(context).languagesHintText),
+                              change: (value) {
+                                setState(() {
+                                  _formResult.languages = value;
+                                });
+                              },
                               onSaved: (values) {
                                 _formResult.languages = values;
                               },
@@ -281,29 +288,32 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           }
                         ),
                         SizedBox(height: 8.0),
-                        Query(
-                          options: QueryOptions(
-                            documentNode: gql(optionValueQuery),
-                            variables: {"value": "232"},
-                          ),
-                          builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                            if (result.hasException) {
-                              return Text(result.exception.toString());
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                          child: Query(
+                            options: QueryOptions(
+                              documentNode: gql(optionValueQuery),
+                              variables: {"value": "232"},
+                            ),
+                            builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result.hasException) {
+                                return Text(result.exception.toString());
+                              }
+                              if (result.loading) {
+                                return Text('Loading');
+                              }
+                              return MultiSelectFormField(
+                                title: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle),
+                                dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                                valueField: 'entityLabel',
+                                textField: 'entityLabel',
+                                hintWidget: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText),
+                                onSaved: (values) {
+                                  _formResult.servicesAreProvided = values;
+                                },
+                              );
                             }
-                            if (result.loading) {
-                              return Text('Loading');
-                            }
-                            return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle).data,
-                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
-                              valueField: 'entityLabel',
-                              textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText).data,
-                              onSaved: (values) {
-                                _formResult.servicesAreProvided = values;
-                              },
-                            );
-                          }
+                          )
                         ),
                         SizedBox(height: 8.0),
                         Query(
@@ -318,12 +328,13 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             if (result.loading) {
                               return Text('Loading');
                             }
+
                             return MultiSelectFormField(
-                              titleText: Text(SearchAppLocalizations.of(context).ageGroupsTitleText).data,
+                              title: Text(SearchAppLocalizations.of(context).ageGroupsTitleText),
                               dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
                               valueField: 'entityLabel',
                               textField: 'entityLabel',
-                              hintText: Text(SearchAppLocalizations.of(context).ageGroupsHintText).data,
+                              hintWidget: Text(SearchAppLocalizations.of(context).ageGroupsHintText),
                               onSaved: (values) {
                                 _formResult.ageGroupsServed = values;
                               },
@@ -403,6 +414,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   child: Text(SearchAppLocalizations.of(context).searchButtonText),
                   onPressed: () {
                   if (_formKey.currentState.validate()) {
+                    debugPrint(_formResult.toString());
                   setState(() {
                     _formKey.currentState.save();
                     Navigator.push(
@@ -494,5 +506,16 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
        }
      }
      return newChapters;
+   }
+
+   getLanguages(languages) {
+     var newLanguages = new List();
+     for (var language in languages) {
+       newLanguages.add({
+         "entityLabel": language["entityLabel"],
+         "entityId": language["entityLabel"].split("-")[0]
+       });
+     }
+     return newLanguages;
    }
 }

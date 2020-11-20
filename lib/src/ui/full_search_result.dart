@@ -5,29 +5,39 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import "dart:collection";
+import 'package:aoapp/src/search_app.dart';
 
 class FullResultsPage extends StatelessWidget {
   final String id;
 
   FullResultsPage({@required this.id});
 
+
+  goBack(BuildContext context){
+
+    Navigator.pop(context);
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    final translation = SearchAppLocalizations.of(context);
     print("Building ResultsPage");
     return GraphQLProvider(
       client: client,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: Colors.white70,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'images/AO_logo.png',
-                height: AppBar().preferredSize.height,
-                fit: BoxFit.cover,
-              )
-            ],
+          elevation: 4.0,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          brightness: Brightness.light,
+          title: Image.asset(
+            'images/AO_logo.png',
+            height: AppBar().preferredSize.height,
+            fit: BoxFit.cover,
           ),
         ),
         body: ListView(
@@ -48,7 +58,11 @@ class FullResultsPage extends StatelessWidget {
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
-
+                  var isVerified = (serviceListingOrg["custom911"] != null
+                      && serviceListingOrg["custom911"] != ''
+                      && serviceListingOrg["custom911"] != 'None'
+                      && serviceListingOrg["custom895"] != null
+                      && serviceListingOrg["custom895"] != '');
                   return Card(
                       elevation: 5,
                       child: Padding(
@@ -62,7 +76,7 @@ class FullResultsPage extends StatelessWidget {
                                 child:  Wrap(
                                     spacing: 2,
                                     children: <Widget>[
-                                      ((serviceListingOrg["custom_911"] == null || serviceListingOrg["custom_911"] == 'None') && serviceListingOrg["custom_895"] == null) ? Text('') : Image.asset('images/icon_verified_16px.png'),
+                                      isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
                                       Text(
                                         getTitle(serviceListingOrg),
                                         style: TextStyle(
@@ -110,7 +124,7 @@ class FullResultsPage extends StatelessWidget {
                                 return Text('Loading');
                               }
                               return ListTile(
-                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase()))
+                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase(), isVerified))
                               );
                             }
                         ),
@@ -164,7 +178,7 @@ class FullResultsPage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 10),
-                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode),
+                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode, translation),
                             SizedBox(height: 20),
                             Query(
                                 options: QueryOptions(
@@ -178,7 +192,7 @@ class FullResultsPage extends StatelessWidget {
                                   if (result2.loading) {
                                     return Text('Loading');
                                   }
-                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities']));
+                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], isVerified));
                                 }
                             )
                         ]
@@ -239,7 +253,7 @@ class FullResultsPage extends StatelessWidget {
     return phoneBlocks;
   }
 
-  getAddressBlock(addresses, contact, phone, langCode) {
+  getAddressBlock(addresses, contact, phone, langCode, translation) {
     var addressBlocks = <TableRow>[];
     var count = 0;
     var addressTitle = '';
@@ -298,11 +312,10 @@ class FullResultsPage extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset('images/map.png',
-                          width: 80.0, height: 60.0),
-                    ),),
+                    child: Text(
+                       translation.viewMapText
+                    ),
+                  ),
                 )
             ),
             Column(
@@ -347,7 +360,7 @@ class FullResultsPage extends StatelessWidget {
         }
     }
 
-  buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode) {
+  buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode, isVerified) {
     var widgets = <Widget>[];
     var regulators = [], creds = [];
 
@@ -365,7 +378,7 @@ class FullResultsPage extends StatelessWidget {
         var text = regulator.replaceAll('&reg;', '®');
         newRegulators.add(Row(
           children: [
-            Image.asset('images/icon_verified_16px.png'),
+            isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
             Text(text,style: TextStyle(fontSize: 12)),
           ],
         ));
@@ -416,7 +429,7 @@ class FullResultsPage extends StatelessWidget {
     return widgets;
   }
 
-  buildRegulatorServices(regualtedServices, serviceProviders) {
+  buildRegulatorServices(regualtedServices, serviceProviders, isVerified) {
     var widgets = <Widget>[];
     for (var serviceProvider in serviceProviders) {
       if (serviceProvider["relationshipTypeId"] == 5) {
@@ -429,7 +442,7 @@ class FullResultsPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Image.asset('images/icon_verified_16px.png'),
+                  isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
                   Text(
                       serviceProvider["contactIdA"]["entity"]["displayName"]  + creds),
                 ],

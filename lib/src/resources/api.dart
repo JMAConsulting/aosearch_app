@@ -246,9 +246,13 @@ queryVariables(appLanguage, ageGroupsServed, acceptingNewClients,
   }
   if (acceptingNewClients != null && acceptingNewClients != '- Any -'
       && acceptingNewClients != '- Toutes -' && acceptingNewClients != '') {
+    if (acceptingNewClients == false && (categories == null || categories.isEmpty)) {
+      conditionGroupGroups.add(
+            buildConditionGroup({"type": 'Service Listing'}, "OR", false));
+    }
     conditionGroupGroups.add(
         buildConditionGroup({"custom_896": "Accepting new clients"}, "OR",
-            acceptingNewClients == "Yes" || acceptingNewClients == "Oui" ? false : true));
+            !acceptingNewClients));
   }
   if (servicesProvided != null && !servicesProvided.isEmpty) {
     conditionGroupGroups.add(
