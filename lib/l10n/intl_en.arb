@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-16T16:54:50.190113",
+  "@@last_modified": "2020-11-24T15:45:42.511035",
   "keywordHintText": "Enter your search term here",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -114,7 +114,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "basicPageLabel": "Basic page",
+  "basicPageLabel": "General",
   "@basicPageLabel": {
     "description": "basicPageLabel",
     "type": "text",
@@ -132,7 +132,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "learningResourceLabel": "Basic page",
+  "learningResourceLabel": "Learning Resource",
   "@learningResourceLabel": {
     "description": "learningResourceLabel",
     "type": "text",

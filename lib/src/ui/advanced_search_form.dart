@@ -89,37 +89,37 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         ),
                         Query(
                             options: QueryOptions(
-                            documentNode: gql(facetsQuery),
-                            variables: queryVariables(
-                            Localizations.localeOf(context).languageCode,
-                              _formResult.ageGroupsServed,
-                              _formResult.acceptingNewClients,
-                              _formResult.servicesAreProvided,
-                              _formResult.keyword,
-                              _formResult.languages,
-                              _formResult.chapters,
-                              _formResult.catagories,
-                              Localizations.localeOf(context).languageCode.toUpperCase(),
-                              _formResult.isVerified,
-                              _formResult.startDate,
-                              _formResult.endDate,
+                              documentNode: gql(facetsQuery),
+                              variables: queryVariables(
+                                Localizations.localeOf(context).languageCode,
+                                _formResult.ageGroupsServed,
+                                _formResult.acceptingNewClients,
+                                _formResult.servicesAreProvided,
+                                _formResult.keyword,
+                                _formResult.languages,
+                                _formResult.chapters,
+                                _formResult.catagories,
+                                Localizations.localeOf(context).languageCode.toUpperCase(),
+                                _formResult.isVerified,
+                                _formResult.startDate,
+                                _formResult.endDate,
                                 true
-                            ),
+                              ),
                             ),
                             builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                               var catagories = new List();
                               if (result.loading) {
-                                return Text('Loading');
+                                catagories = getCatagories(translation, catagories, true);
                               }
-                              if (result.hasException || result.data["searchAPISearch"] == null) {
+                              else if (result.hasException || result.data["searchAPISearch"] == null) {
                                 _formResult.catagories = new List();
                               }
                               else {
-                                if (getCatagories(translation, result.data["searchAPISearch"]["facets"]).isEmpty) {
+                                if (getCatagories(translation, result.data["searchAPISearch"]["facets"], false).isEmpty) {
                                   _formResult.catagories = new List();
                                 }
                                 else {
-                                  catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"]);
+                                  catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"], false);
                                 }
                               }
                               return MultiSelectFormField(
@@ -162,9 +162,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                             var chapters = new List();
                             if (result.loading) {
-                              return Text('Loading');
+                              chapters = getDefaultChapters(translation);
                             }
-                            if (result.hasException || result.data["searchAPISearch"] == null) {
+                            else if (result.hasException || result.data["searchAPISearch"] == null) {
                               _formResult.chapters = new List();
                             }
                             else {
@@ -175,7 +175,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                                 chapters = getChapters(result.data["taxonomyTermJmaQuery"]["entities"], result.data["searchAPISearch"]["facets"]);
                               }
                             }
-                            debugPrint(_formResult.catagories.toString());
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               title: Text(SearchAppLocalizations
@@ -262,17 +261,18 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             variables: {"value": "105"},
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            var languages = new List();
                             if (result.hasException) {
                               return Text(result.exception.toString());
                             }
-                            if (result.loading) {
-                              return Text('Loading');
+                            if (!result.loading) {
+                              languages = getLanguages(result.data["civicrmOptionValueJmaQuery"]["entities"]);
                             }
                             return MultiSelectFormField(
                               title: Text(SearchAppLocalizations
                                 .of(context)
                                 .languagesTitle),
-                              dataSource: getLanguages(result.data["civicrmOptionValueJmaQuery"]["entities"]),
+                              dataSource: languages,
                               valueField: 'entityId',
                               textField: 'entityLabel',
                               hintWidget: Text(SearchAppLocalizations.of(context).languagesHintText),
@@ -296,15 +296,16 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               variables: {"value": "232"},
                             ),
                             builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                              var services = new List();
                               if (result.hasException) {
                                 return Text(result.exception.toString());
                               }
-                              if (result.loading) {
-                                return Text('Loading');
+                              if (!result.loading) {
+                                services = result.data["civicrmOptionValueJmaQuery"]["entities"];
                               }
                               return MultiSelectFormField(
                                 title: Text(SearchAppLocalizations.of(context).servicesAreProvidedTitle),
-                                dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                                dataSource: services,
                                 valueField: 'entityLabel',
                                 textField: 'entityLabel',
                                 hintWidget: Text(SearchAppLocalizations.of(context).servicesAreProvidedHintText),
@@ -322,16 +323,16 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             variables: {"value": "233"},
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                            var ageGroups = new List();
                             if (result.hasException) {
                               return Text(result.exception.toString());
                             }
-                            if (result.loading) {
-                              return Text('Loading');
+                            if (!result.loading) {
+                              ageGroups = result.data["civicrmOptionValueJmaQuery"]["entities"];
                             }
-
                             return MultiSelectFormField(
                               title: Text(SearchAppLocalizations.of(context).ageGroupsTitleText),
-                              dataSource: result.data["civicrmOptionValueJmaQuery"]["entities"],
+                              dataSource: ageGroups,
                               valueField: 'entityLabel',
                               textField: 'entityLabel',
                               hintWidget: Text(SearchAppLocalizations.of(context).ageGroupsHintText),
@@ -434,7 +435,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
     );
   }
 
-  getCatagories(translation, facets) {
+  getCatagories(translation, facets, pending) {
     var types = [
       {
         "entityLabel": translation.chapterLabel.toString(),
@@ -444,14 +445,12 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         "entityLabel": translation.eventLabel.toString(),
         "entityId": "Event"
       },
-      //@TODO title name wrong Basic Page, it should be General but then its a hardcoded fix made for now. Will add translated text later
       {
-        "entityLabel": 'General',
+        "entityLabel": translation.basicPageLabel.toString(),
         "entityId": "page"
       },
-      //@TODO title name wrong in translation.learningResource.toString()
       {
-        "entityLabel": "Learning Resource",
+        "entityLabel": translation.learningResourceLabel.toString(),
         "entityId": "learning_resource"
       },
       {
@@ -463,6 +462,10 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         "entityId": "Service Listing"
       }
     ];
+    // Return all categories without a count if we haven't gotten any results from upstream yet.
+    if (pending) {
+      return types;
+    }
     var typeCount = {};
     var newtypes = new List();
     for (var facet in facets) {
@@ -517,5 +520,114 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
        });
      }
      return newLanguages;
+   }
+
+   getDefaultChapters(translation) {
+     return [
+       {
+         "entityLabel": "Chatham Kent",
+         "entityId": "28"
+       },
+       {
+         "entityLabel": "Durham Region",
+         "entityId": "29"
+       },
+       {
+         "entityLabel": "Hamilton Wentworth",
+         "entityId": "30"
+       },
+       {
+         "entityLabel": "Halton",
+         "entityId": "31"
+       },
+       {
+         "entityLabel": "Kingston",
+         "entityId": "33"
+       },
+       {
+         "entityLabel": "London",
+         "entityId": "34"
+       },
+       {
+         "entityLabel": "Niagara Region",
+         "entityId": "35"
+       },
+       {
+         "entityLabel": "North East",
+         "entityId": "36"
+       },
+       {
+         "entityLabel": "Ottawa",
+         "entityId": "38"
+       },
+       {
+         "entityLabel": "Peel Region",
+         "entityId": "39"
+       },
+       {
+         "entityLabel": "Sarnia Lambton",
+         "entityId": "40"
+       },
+       {
+         "entityLabel": "Sault Ste Marie",
+         "entityId": "41"
+       },
+       {
+         "entityLabel": "Simcoe County",
+         "entityId": "42"
+       },
+       {
+         "entityLabel": "Sudbury and District",
+         "entityId": "43"
+       },
+       {
+         "entityLabel": "Peterborough",
+         "entityId": "44"
+       },
+       {
+         "entityLabel": "Thunder Bay and District",
+         "entityId": "45"
+       },
+       {
+         "entityLabel": "Toronto",
+         "entityId": "46"
+       },
+       {
+         "entityLabel": "Upper Canada",
+         "entityId": "47"
+       },
+       {
+         "entityLabel": "Waterloo Region",
+         "entityId": "48"
+       },
+       {
+         "entityLabel": "Wellington County",
+         "entityId": "49"
+       },
+       {
+         "entityLabel": "Windsor Essex",
+         "entityId": "51"
+       },
+       {
+         "entityLabel": "York Region",
+         "entityId": "52"
+       },
+       {
+         "entityLabel": "Grey Bruce",
+         "entityId": "53"
+       },
+       {
+         "entityLabel": "Huron Perth",
+         "entityId": "54"
+       },
+       {
+         "entityLabel": "Central West",
+         "entityId": "55"
+       },
+       {
+         "entityLabel": "North Halton",
+         "entityId": "56"
+       }
+     ];
    }
 }

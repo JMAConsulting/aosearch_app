@@ -197,7 +197,7 @@ class SearchAppLocalizations {
 
   String get basicPageLabel {
     return Intl.message(
-      'Basic page',
+      'General',
       name: 'basicPageLabel',
       desc: 'basicPageLabel',
       locale: localeName,
@@ -224,7 +224,7 @@ class SearchAppLocalizations {
 
   String get learningResourceLabel {
     return Intl.message(
-      'Basic page',
+      'Learning Resource',
       name: 'learningResourceLabel',
       desc: 'learningResourceLabel',
       locale: localeName,
