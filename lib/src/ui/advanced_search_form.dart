@@ -110,6 +110,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               var catagories = new List();
                               if (result.loading) {
                                 catagories = getCatagories(translation, catagories, true);
+                                catagories = catagories.isEmpty ? new List() : catagories;
                               }
                               else if (result.hasException || result.data["searchAPISearch"] == null) {
                                 _formResult.catagories = new List();
@@ -289,7 +290,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                         ),
                         SizedBox(height: 8.0),
                         Visibility(
-                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                          visible: ((_formResult.catagories != null && _formResult.catagories.contains('Service Listing')) || _formResult.catagories == null || _formResult.catagories.isEmpty),
                           child: Query(
                             options: QueryOptions(
                               documentNode: gql(optionValueQuery),
@@ -317,7 +318,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           )
                         ),
                         SizedBox(height: 8.0),
-                        Query(
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                          child: Query(
                           options: QueryOptions(
                             documentNode: gql(optionValueQuery),
                             variables: {"value": "233"},
@@ -341,11 +344,14 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               },
                             );
                           }
+                          )
                         ),
                         SizedBox(height: 8.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                        Visibility(
+                          visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
                             Column(
                               children: [
                                 Text(SearchAppLocalizations.of(context).startDate),
@@ -404,6 +410,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               ]
                             ),
                           ],
+                          )
                         ),
                         SizedBox(height: 8.0),
                         LocationWidget(),
@@ -415,7 +422,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   child: Text(SearchAppLocalizations.of(context).searchButtonText),
                   onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    debugPrint(_formResult.toString());
                   setState(() {
                     _formKey.currentState.save();
                     Navigator.push(
