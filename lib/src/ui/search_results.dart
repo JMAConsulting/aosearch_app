@@ -393,7 +393,10 @@ class Result extends StatelessWidget {
               child: Container(
                 child: Text(
                    getType(result, true) == 'Event' ? translation.eventMapText :
-                     translation.viewMapText
+                     translation.viewMapText,
+                    style: TextStyle(color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14)
                 ),
               ),
             )

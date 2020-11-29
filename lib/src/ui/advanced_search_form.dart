@@ -12,6 +12,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:aoapp/src/resources/api.dart';
 
 class AdvancedSearchForm extends StatefulWidget {
+  final SearchParameters search;
+  const AdvancedSearchForm(this.search);
+
   @override
   _AdvancedSearchFormState createState() {
     return _AdvancedSearchFormState();
@@ -27,6 +30,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
 
   @override
   Widget build(BuildContext context) {
+    SearchParameters _loadedResult = widget.search;
+
     final translation = SearchAppLocalizations.of(context);
     if (_formResult.locale != Localizations.localeOf(context).languageCode) {
       setState(() {
@@ -41,6 +46,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
         _formResult.isVerified = null;
       });
     }
+
     return GraphQLProvider(
         client: Localizations.localeOf(context).languageCode == 'en' ? client : frenchClient,
         child: SafeArea(
@@ -109,8 +115,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                               var catagories = new List();
                               if (result.loading) {
-                                catagories = getCatagories(translation, catagories, true);
-                                catagories = catagories.isEmpty ? new List() : catagories;
+                                catagories = _loadedResult.catagories;
                               }
                               else if (result.hasException || result.data["searchAPISearch"] == null) {
                                 _formResult.catagories = new List();
@@ -146,24 +151,24 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             documentNode: gql(facetsQuery),
                             variables: queryVariables(
                               Localizations.localeOf(context).languageCode,
-                                _formResult.ageGroupsServed,
-                                _formResult.acceptingNewClients,
-                                _formResult.servicesAreProvided,
-                                _formResult.keyword,
-                                _formResult.languages,
-                                _formResult.chapters,
-                                _formResult.catagories,
-                                Localizations.localeOf(context).languageCode.toUpperCase(),
-                                _formResult.isVerified,
-                                _formResult.startDate,
-                                _formResult.endDate,
-                                true
+                              _formResult.ageGroupsServed,
+                              _formResult.acceptingNewClients,
+                              _formResult.servicesAreProvided,
+                              _formResult.keyword,
+                              _formResult.languages,
+                              _formResult.chapters,
+                              _formResult.catagories,
+                              Localizations.localeOf(context).languageCode.toUpperCase(),
+                              _formResult.isVerified,
+                              _formResult.startDate,
+                              _formResult.endDate,
+                              true
                             ),
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                             var chapters = new List();
                             if (result.loading) {
-                              chapters = getDefaultChapters(translation);
+                              chapters = _loadedResult.chapters;
                             }
                             else if (result.hasException || result.data["searchAPISearch"] == null) {
                               _formResult.chapters = new List();
@@ -179,8 +184,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                             return MultiSelectFormField(
                               initialValue: _formResult.chapters,
                               title: Text(SearchAppLocalizations
-                                .of(context)
-                                .chaptersTitle),
+                                  .of(context)
+                                  .chaptersTitle),
                               dataSource: chapters,
                               valueField: 'entityId',
                               textField: 'entityLabel',
@@ -196,9 +201,8 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               },
                               hintWidget: Text(SearchAppLocalizations
                                   .of(context).chapterHintText),
-                            );
-                          }
-                        ),
+                          );
+                        }),
                         Visibility(
                             visible: (_formResult.catagories != null && _formResult.catagories.contains('Service Listing') || _formResult.catagories == null || _formResult.catagories.isEmpty),
                             child: DropDownFormField(
@@ -263,6 +267,9 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                           ),
                           builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                             var languages = new List();
+                            if (result.loading) {
+                              languages = _loadedResult.languages;
+                            }
                             if (result.hasException) {
                               return Text(result.exception.toString());
                             }
@@ -526,114 +533,5 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
        });
      }
      return newLanguages;
-   }
-
-   getDefaultChapters(translation) {
-     return [
-       {
-         "entityLabel": "Chatham Kent",
-         "entityId": "28"
-       },
-       {
-         "entityLabel": "Durham Region",
-         "entityId": "29"
-       },
-       {
-         "entityLabel": "Hamilton Wentworth",
-         "entityId": "30"
-       },
-       {
-         "entityLabel": "Halton",
-         "entityId": "31"
-       },
-       {
-         "entityLabel": "Kingston",
-         "entityId": "33"
-       },
-       {
-         "entityLabel": "London",
-         "entityId": "34"
-       },
-       {
-         "entityLabel": "Niagara Region",
-         "entityId": "35"
-       },
-       {
-         "entityLabel": "North East",
-         "entityId": "36"
-       },
-       {
-         "entityLabel": "Ottawa",
-         "entityId": "38"
-       },
-       {
-         "entityLabel": "Peel Region",
-         "entityId": "39"
-       },
-       {
-         "entityLabel": "Sarnia Lambton",
-         "entityId": "40"
-       },
-       {
-         "entityLabel": "Sault Ste Marie",
-         "entityId": "41"
-       },
-       {
-         "entityLabel": "Simcoe County",
-         "entityId": "42"
-       },
-       {
-         "entityLabel": "Sudbury and District",
-         "entityId": "43"
-       },
-       {
-         "entityLabel": "Peterborough",
-         "entityId": "44"
-       },
-       {
-         "entityLabel": "Thunder Bay and District",
-         "entityId": "45"
-       },
-       {
-         "entityLabel": "Toronto",
-         "entityId": "46"
-       },
-       {
-         "entityLabel": "Upper Canada",
-         "entityId": "47"
-       },
-       {
-         "entityLabel": "Waterloo Region",
-         "entityId": "48"
-       },
-       {
-         "entityLabel": "Wellington County",
-         "entityId": "49"
-       },
-       {
-         "entityLabel": "Windsor Essex",
-         "entityId": "51"
-       },
-       {
-         "entityLabel": "York Region",
-         "entityId": "52"
-       },
-       {
-         "entityLabel": "Grey Bruce",
-         "entityId": "53"
-       },
-       {
-         "entityLabel": "Huron Perth",
-         "entityId": "54"
-       },
-       {
-         "entityLabel": "Central West",
-         "entityId": "55"
-       },
-       {
-         "entityLabel": "North Halton",
-         "entityId": "56"
-       }
-     ];
    }
 }

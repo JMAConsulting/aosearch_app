@@ -58,11 +58,11 @@ class FullResultsPage extends StatelessWidget {
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
-                  var isVerified = (serviceListingOrg["custom911"] != null
-                      && serviceListingOrg["custom911"] != ''
-                      && serviceListingOrg["custom911"] != 'None'
-                      && serviceListingOrg["custom895"] != null
-                      && serviceListingOrg["custom895"] != '');
+                  var isVerified = ((serviceListingOrg["custom911"] != null
+                        && serviceListingOrg["custom911"] != ''
+                        && serviceListingOrg["custom911"] != 'None'
+                      ) || (serviceListingOrg["custom895"] != null && serviceListingOrg["custom895"] != '')
+                  );
                   return Card(
                       elevation: 5,
                       child: Padding(
@@ -268,7 +268,7 @@ class FullResultsPage extends StatelessWidget {
         ]);
     for (var address in addresses) {
       if (count == 0) {
-        addressTitle = langCode == 'FR' ? 'Lieu de travail principal' : 'Primary Work Location';
+        addressTitle = langCode == 'FR' ? 'Lieu de travail principal:' : 'Primary Work Location:';
       }
       else {
         addressTitle = (langCode == 'FR' ? 'Lieu de travail complémentaire' : 'Supplementary Work Location') + count.toString();
@@ -277,7 +277,7 @@ class FullResultsPage extends StatelessWidget {
       addressBlocks.add(TableRow(
         children: [
           TableCell(
-              child: Text(addressTitle, style: TextStyle(fontSize: 14))
+              child: Center(child: Text(addressTitle, style: TextStyle(fontSize: 14)))
           ),
           TableCell(
               child: Material(
@@ -311,10 +311,17 @@ class FullResultsPage extends StatelessWidget {
                         getTitle(contact)
                     );
                   },
-                  child: Container(
-                    child: Text(
-                       translation.viewMapText
-                    ),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 10.0),
+                        Text(
+                         translation.viewMapText,
+                          style: TextStyle(color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)
+                        ),
+                    ]
                   ),
                 )
             ),

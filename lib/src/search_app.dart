@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/advanced_search_form.dart';
+import 'ui/search_loader.dart';
 import 'package:intl/intl.dart';
 import 'package:aoapp/l10n/messages_all.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -405,14 +405,15 @@ class SearchApp extends StatelessWidget {
             children: [
               Image.asset(
                 'images/AO_logo.png',
-                 height: AppBar().preferredSize.height,
-                 fit: BoxFit.cover,
+                height: AppBar().preferredSize.height,
+                fit: BoxFit.cover,
               )
             ],
           ),
         ),
-        body: new AdvancedSearchForm(),
+        body: new SearchLoader(),
       )
     );
   }
+
 }
