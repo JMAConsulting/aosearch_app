@@ -12,11 +12,8 @@ class FullResultsPage extends StatelessWidget {
 
   FullResultsPage({@required this.id});
 
-
   goBack(BuildContext context){
-
     Navigator.pop(context);
-
   }
 
   @override
@@ -44,74 +41,75 @@ class FullResultsPage extends StatelessWidget {
           children: [
             Card(
               child: Query(
-                 options: QueryOptions(
-                   documentNode: gql(getServiceListingInformationQuery),
-                   variables: {"contact_id": this.id, "contactId": this.id}
-                 ),
+                options: QueryOptions(
+                  documentNode: gql(getServiceListingInformationQuery),
+                  variables: {"contact_id": this.id, "contactId": this.id}
+                ),
                 builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
                   if (result.hasException) {
                     return Text(result.exception.toString());
                   }
                   if (result.loading) {
-                    return Text('Loading');
+                    return Text('');
                   }
                   var websites = getWebsites(result.data['civicrmWebsiteJmaQuery']['entities']);
                   var serviceListingOrg = result.data['civicrmContactById'];
                   var langCode = Localizations.localeOf(context).languageCode.toUpperCase();
                   var isVerified = ((serviceListingOrg["custom911"] != null
-                        && serviceListingOrg["custom911"] != ''
-                        && serviceListingOrg["custom911"] != 'None'
-                      ) || (serviceListingOrg["custom895"] != null && serviceListingOrg["custom895"] != '')
+                    && serviceListingOrg["custom911"] != ''
+                    && serviceListingOrg["custom911"] != 'None'
+                    ) || (serviceListingOrg["custom895"] != null && serviceListingOrg["custom895"] != '')
                   );
                   return Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Container(
-                                padding: EdgeInsets.all(5.0),
-                                height: getTitle(result.data['civicrmContactById']).length > 40 ? 80.0 : 50.0,
-                                child:  Wrap(
-                                    spacing: 2,
-                                    children: <Widget>[
-                                      isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
-                                      Text(
-                                        getTitle(serviceListingOrg),
-                                        style: TextStyle(
-                                            color: Colors.grey[850],
-                                            fontSize: 15.0
-                                        ),
-                                      ),
-                                      Divider(
-                                        color: Color.fromRGBO(171, 173, 0, 100),
-                                        thickness: 3,
-                                        endIndent: MediaQuery.of(context).size.width * 0.70,
-                                      ),
-                                    ]),
-                              ),
-                              subtitle: Wrap(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text('SERVICE LISTING',
-                                        style: TextStyle(
-                                            color: Colors.grey[850],
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 11.0
-                                        ),
-                                      ),
-                                      Text(' '),
-                                      Row(
-                                        children: getServicelistingButtons(serviceListingOrg),
-                                      )
-                                    ]
-                                  )
+                    elevation: 5,
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Container(
+                              padding: EdgeInsets.all(5.0),
+                              height: getTitle(result.data['civicrmContactById']).length > 40 ? 80.0 : 50.0,
+                              child:  Wrap(
+                                spacing: 2,
+                                children: <Widget>[
+                                  isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                                  Text(
+                                    getTitle(serviceListingOrg),
+                                    style: TextStyle(
+                                      color: Colors.grey[850],
+                                      fontSize: 15.0
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Color.fromRGBO(171, 173, 0, 100),
+                                    thickness: 3,
+                                    endIndent: MediaQuery.of(context).size.width * 0.70,
+                                  ),
                                 ]
-                              )
-                        ),
-                        Query(
+                              ),
+                            ),
+                            subtitle: Wrap(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('SERVICE LISTING',
+                                      style: TextStyle(
+                                        color: Colors.grey[850],
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 11.0
+                                      ),
+                                    ),
+                                    Text(' '),
+                                    Row(
+                                      children: getServicelistingButtons(serviceListingOrg),
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          ),
+                          Query(
                             options: QueryOptions(
                               documentNode: gql(optionValueQuery),
                               variables: {"value": "regulated_services_provided_20200226231106"},
@@ -127,77 +125,76 @@ class FullResultsPage extends StatelessWidget {
                                   title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase(), isVerified))
                               );
                             }
-                        ),
-                        ListTile(
-                              title: Text('Description of services offered:', style: TextStyle(fontSize: 14)),
-                              subtitle: Text(result.data['civicrmContactById']['custom893']),
-                        ),
-                        websites == null ? Text('') : ListTile(
-                          title: Linkify(
-                            onOpen: _onOpen,
-                            text: websites,
                           ),
-                        ),
-                            Query(
-                                options: QueryOptions(
-                                  documentNode: gql(getPrimaryContactQuery),
-                                  variables: {"contact_id": getPrimaryContactID(result.data['civicrmRelationshipJmaQuery']['entities'])},
-                                ),
-                                builder: (QueryResult result5, {VoidCallback refetch, FetchMore fetchMore}) {
-                                  if (result5.hasException) {
-                                    return Text(result5.exception.toString());
-                                  }
-                                  if (result5.loading) {
-                                    return Text('Loading');
-                                  }
-                                  return Row(
-                                      children: [
-                                        Expanded(
-                                          child:
-                                            Linkify(
-                                              onOpen: _onOpen,
-                                              text: getPrimaryContactInfo(result5.data["civicrmEmailJmaQuery"]["entities"], result.data['civicrmRelationshipJmaQuery']['entities']),
-                                            ),
-
-                                        )
-                                      ]
-                                  );
-                                }
+                          ListTile(
+                            title: Text('Description of services offered:', style: TextStyle(fontSize: 14)),
+                            subtitle: Text(result.data['civicrmContactById']['custom893']),
+                          ),
+                          websites == null ? Text('') : ListTile(
+                            title: Linkify(
+                              onOpen: _onOpen,
+                              text: websites,
                             ),
-                            ListTile(
-                              title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 5),
-                                    Text((langCode == 'FR' ? 'Groupes d\'âge desservis: ' : 'Age Groups Served: ') + result.data['civicrmContactById']['custom898Jma'].join(", "), style: TextStyle(fontSize: 14)),
-                                    SizedBox(height: 10),
-                                    Text((langCode == 'FR' ? 'Langue(s): ' : 'Language(s): ') +
-                                        result.data['civicrmContactById']['custom899Jma'].join(', ')
-                                          + (result.data['civicrmContactById']['custom905'] == '' ? '' : ', ' + result.data['civicrmContactById']['custom905']), style: TextStyle(fontSize: 14)),
-                                  ]
-                              ),
+                          ),
+                          Query(
+                            options: QueryOptions(
+                              documentNode: gql(getPrimaryContactQuery),
+                              variables: {"contact_id": getPrimaryContactID(result.data['civicrmRelationshipJmaQuery']['entities'])},
                             ),
-                            SizedBox(height: 10),
-                            getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode, translation),
-                            SizedBox(height: 20),
-                            Query(
-                                options: QueryOptions(
-                                  documentNode: gql(optionValueQuery),
-                                  variables: {"value": "regulated_services_provided_20200226231106"},
-                                ),
-                                builder: (QueryResult result2, {VoidCallback refetch, FetchMore fetchMore}) {
-                                  if (result2.hasException) {
-                                    return Text(result2.exception.toString());
-                                  }
-                                  if (result2.loading) {
-                                    return Text('Loading');
-                                  }
-                                  return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], isVerified));
-                                }
-                            )
+                            builder: (QueryResult result5, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result5.hasException) {
+                                return Text(result5.exception.toString());
+                              }
+                              if (result5.loading) {
+                                return Text('');
+                              }
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Linkify(
+                                      onOpen: _onOpen,
+                                      text: getPrimaryContactInfo(result5.data["civicrmEmailJmaQuery"]["entities"], result.data['civicrmRelationshipJmaQuery']['entities']),
+                                    ),
+                                  )
+                                ]
+                              );
+                            }
+                          ),
+                          ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5),
+                                Text((langCode == 'FR' ? 'Groupes d\'âge desservis: ' : 'Age Groups Served: ') + result.data['civicrmContactById']['custom898Jma'].join(", "), style: TextStyle(fontSize: 14)),
+                                SizedBox(height: 10),
+                                Text((langCode == 'FR' ? 'Langue(s): ' : 'Language(s): ') +
+                                  result.data['civicrmContactById']['custom899Jma'].join(', ')
+                                  + (result.data['civicrmContactById']['custom905'] == '' ? '' : ', ' + result.data['civicrmContactById']['custom905']), style: TextStyle(fontSize: 14)),
+                              ]
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          getAddressBlock(result.data['civicrmAddressJmaQuery']['entities'], result.data['civicrmContactById'], result.data['civicrmPhoneJmaQuery']['entities'], langCode, translation),
+                          SizedBox(height: 20),
+                          Query(
+                            options: QueryOptions(
+                              documentNode: gql(optionValueQuery),
+                              variables: {"value": "regulated_services_provided_20200226231106"},
+                            ),
+                            builder: (QueryResult result2, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (result2.hasException) {
+                                return Text(result2.exception.toString());
+                              }
+                              if (result2.loading) {
+                                return Text('Loading');
+                              }
+                              return Column(children :buildRegulatorServices(result2.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], isVerified));
+                            }
+                          )
                         ]
                       )
-                  ));
+                    )
+                  );
                 },
               ),
             ),
@@ -230,24 +227,25 @@ class FullResultsPage extends StatelessWidget {
 
   getPhones(phones) {
     var phoneBlocks = <Material>[];
-    for(var phone in phones) {
+    for (var phone in phones) {
       phoneBlocks.add(Material(
-          child: InkWell(
-            onTap: () {
-              launch('tel:' +
-                  phone['phone']);
-            },
-            child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Text(
-                  phone['phone'],
-                  style: TextStyle(color: Colors.blueAccent,
-                      decoration: TextDecoration.underline,
-                      fontSize: 15),
+        child: InkWell(
+          onTap: () {
+            launch('tel:' + phone['phone']);
+          },
+          child: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Text(
+                phone['phone'],
+                style: TextStyle(color: Colors.blueAccent,
+                  decoration: TextDecoration.underline,
+                  fontSize: 15
                 ),
-              ),),
-          )
+              ),
+            ),
+          ),
+        )
       ));
     }
     return phoneBlocks;
@@ -258,14 +256,15 @@ class FullResultsPage extends StatelessWidget {
     var count = 0;
     var addressTitle = '';
     const rowSpacer=TableRow(
-        children: [
-          SizedBox(
-            height: 18,
-          ),
-          SizedBox(
-            height: 18,
-          )
-        ]);
+      children: [
+        SizedBox(
+          height: 18,
+        ),
+        SizedBox(
+          height: 18,
+        )
+      ]
+    );
     for (var address in addresses) {
       if (count == 0) {
         addressTitle = langCode == 'FR' ? 'Lieu de travail principal:' : 'Primary Work Location:';
@@ -280,22 +279,25 @@ class FullResultsPage extends StatelessWidget {
               child: Center(child: Text(addressTitle, style: TextStyle(fontSize: 14)))
           ),
           TableCell(
-              child: Material(
-                  child: InkWell(
-                    onTap: () {
-                      launch('tel:' + phoneNumber);
-                    },
-                    child: Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Text(
-                          phoneNumber,
-                          style: TextStyle(color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                        ),
-                      ),),
-                  ))
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  launch('tel:' + phoneNumber);
+                },
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Text(
+                      phoneNumber,
+                      style: TextStyle(color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            )
           ),
         ]
       ));
@@ -303,27 +305,28 @@ class FullResultsPage extends StatelessWidget {
         TableRow(
           children: [
             Material(
-                child: InkWell(
-                  onTap: () {
-                    MapsLauncher.launchCoordinates(
-                        double.parse(address['geoCode1'].toString()),
-                        double.parse(address['geoCode2'].toString()),
-                        getTitle(contact)
-                    );
-                  },
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 10.0),
-                        Text(
-                         translation.viewMapText,
-                          style: TextStyle(color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14)
-                        ),
-                    ]
-                  ),
-                )
+              child: InkWell(
+                onTap: () {
+                  MapsLauncher.launchCoordinates(
+                    double.parse(address['geoCode1'].toString()),
+                    double.parse(address['geoCode2'].toString()),
+                    getTitle(contact)
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 10.0),
+                    Text(
+                      translation.viewMapText,
+                      style: TextStyle(color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                      )
+                    ),
+                  ]
+                ),
+              )
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,14 +361,14 @@ class FullResultsPage extends StatelessWidget {
   }
 
   getPrimaryContactInfo(emailInfo, serviceProviders) {
-      for (var serviceProvider in serviceProviders) {
-          if (serviceProvider["relationshipTypeId"] == 74) {
-            for(var email in emailInfo) {
-              return '     ' + serviceProvider["contactIdA"]["entity"]["displayName"] + ' ' + email["email"];
-            }
-          }
+    for (var serviceProvider in serviceProviders) {
+      if (serviceProvider["relationshipTypeId"] == 74) {
+        for(var email in emailInfo) {
+          return '     ' + serviceProvider["contactIdA"]["entity"]["displayName"] + ' ' + email["email"];
         }
+      }
     }
+  }
 
   buildRegulatorServiceProvided(regualtedServices, serviceProviders, langCode, isVerified) {
     var widgets = <Widget>[];
@@ -398,8 +401,8 @@ class FullResultsPage extends StatelessWidget {
             height: 5,
           ),
           Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: newRegulators
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: newRegulators
           ),
         ],
       ));
@@ -422,14 +425,14 @@ class FullResultsPage extends StatelessWidget {
         count++;
       }
       widgets.add(Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(langCode == 'FR' ? 'Titre(s) de compétence détenu(s): ' : 'Credential(s) held: ', style: TextStyle(fontSize: 15)),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: newCreds
-            ),
-          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: newCreds
+          ),
+        ],
       ));
     }
 
@@ -441,9 +444,9 @@ class FullResultsPage extends StatelessWidget {
     for (var serviceProvider in serviceProviders) {
       if (serviceProvider["relationshipTypeId"] == 5) {
         var creds = (serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",") ==
-            '' || serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",") == "null") ? '' : [' (', serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",").replaceAll('&reg;', '®'), ')'].join('');
+          '' || serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",") == "null") ? '' : [' (', serviceProvider["contactIdA"]["entity"]["custom954Jma"].join(",").replaceAll('&reg;', '®'), ')'].join('');
         creds = creds + ((serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(",") ==
-            '' || serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(",") == "null") ? '' : [' (', serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(",").replaceAll('&reg;', '®'), ')'].join(''));
+          '' || serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(",") == "null") ? '' : [' (', serviceProvider["contactIdA"]["entity"]["custom953Jma"].join(",").replaceAll('&reg;', '®'), ')'].join(''));
         widgets.add(
           Row(
             children: [
@@ -451,7 +454,7 @@ class FullResultsPage extends StatelessWidget {
                 children: [
                   isVerified ? Image.asset('images/icon_verified_16px.png') : Text(''),
                   Text(
-                      serviceProvider["contactIdA"]["entity"]["displayName"]  + creds),
+                    serviceProvider["contactIdA"]["entity"]["displayName"]  + creds),
                 ],
               ),
             ],
@@ -460,7 +463,6 @@ class FullResultsPage extends StatelessWidget {
         widgets.add(SizedBox(height: 10));
       }
     }
-
     return widgets;
   }
 
@@ -475,14 +477,14 @@ class FullResultsPage extends StatelessWidget {
   List <Widget> getServicelistingButtons(result) {
     var widgets = <Widget>[];
     if ((result['custom896'] == '' || result['custom896'] == null) &&
-        (result['custom897Jma'] == '' || result['custom897Jma'] == null)) {
+      (result['custom897Jma'] == '' || result['custom897Jma'] == null)) {
       widgets.add(Text(''));
       return widgets;
     }
 
     if (result['custom896'] == true) {
       widgets.add(Image.asset('images/icon_accepting_16px.png'));
-      widgets.add(Text(' '));
+      widgets.add(Text(''));
     }
     else if (result['custom896'] == false) {
       widgets.add(Image.asset('images/icon_not_accepting_16px.png'));
@@ -510,8 +512,8 @@ class FullResultsPage extends StatelessWidget {
 
   String truncateWithEllipsis(int cutoff, String myString) {
     return (myString.length <= cutoff)
-        ? myString
-        : '${myString.substring(0, cutoff)}...';
+      ? myString
+      : '${myString.substring(0, cutoff)}...';
   }
 
 }
