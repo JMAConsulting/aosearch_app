@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "acceptingNewClientsTitle" : MessageLookupByLibrary.simpleMessage("Accepte de nouveaux clients"),
     "advSearchTitle" : MessageLookupByLibrary.simpleMessage("Recherche avancée"),
-    "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Please choose any appropriate age groups"),
+    "ageGroupsHintText" : MessageLookupByLibrary.simpleMessage("Choisir les tranches d’âge applicables"),
     "ageGroupsTitleText" : MessageLookupByLibrary.simpleMessage("Groupes d\'âge desservis"),
     "anyText" : MessageLookupByLibrary.simpleMessage("- Toutes -"),
     "basicPageLabel" : MessageLookupByLibrary.simpleMessage("Page de base"),
@@ -35,10 +35,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "dateErrorMessage" : MessageLookupByLibrary.simpleMessage("La date de début doit être supérieure ou égale à la date d’achèvement"),
     "endDate" : MessageLookupByLibrary.simpleMessage("A"),
     "eventLabel" : MessageLookupByLibrary.simpleMessage("Event"),
-    "eventMapText" : MessageLookupByLibrary.simpleMessage("View event location on map"),
+    "eventMapText" : MessageLookupByLibrary.simpleMessage("Afficher l'emplacement de l'activité sur la carte"),
     "keywordHintText" : MessageLookupByLibrary.simpleMessage("Recherche par mot clé"),
     "keywordText" : MessageLookupByLibrary.simpleMessage("Recherche par mot-clé"),
-    "languagesHintText" : MessageLookupByLibrary.simpleMessage("Please choose one or more language"),
+    "languagesHintText" : MessageLookupByLibrary.simpleMessage("Choisir une ou plusieurs langues"),
     "languagesTitle" : MessageLookupByLibrary.simpleMessage("Langue(s)"),
     "learningResourceLabel" : MessageLookupByLibrary.simpleMessage("Ressources d’apprentissage"),
     "nearbyAreaTravel" : MessageLookupByLibrary.simpleMessage("Se déplace dans les secteurs adjacents"),
@@ -53,11 +53,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchButtonText" : MessageLookupByLibrary.simpleMessage("Recherche"),
     "serviceLegendTitle" : MessageLookupByLibrary.simpleMessage("Répertoire des services Légende"),
     "serviceListingLabel" : MessageLookupByLibrary.simpleMessage("Répertoire des services"),
-    "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Please choose where you would like services to be provided"),
+    "servicesAreProvidedHintText" : MessageLookupByLibrary.simpleMessage("Choisir l’endroit où vous aimeriez obtenir les services"),
     "servicesAreProvidedTitle" : MessageLookupByLibrary.simpleMessage("Fourniture des services"),
     "startDate" : MessageLookupByLibrary.simpleMessage("de"),
     "verifiedListing" : MessageLookupByLibrary.simpleMessage("Agrément confirmé"),
-    "viewMapText" : MessageLookupByLibrary.simpleMessage("View on map"),
+    "viewMapText" : MessageLookupByLibrary.simpleMessage("Voir sur la carte"),
     "yesText" : MessageLookupByLibrary.simpleMessage("Oui")
   };
 }
