@@ -270,7 +270,7 @@ class Result extends StatelessWidget {
                                               result1.exception.toString());
                                         }
                                         if (result1.loading) {
-                                          return Text('Loading');
+                                          return Text('');
                                         }
                                         return Wrap(
                                           spacing: 2,
@@ -393,7 +393,10 @@ class Result extends StatelessWidget {
               child: Container(
                 child: Text(
                    getType(result, true) == 'Event' ? translation.eventMapText :
-                     translation.viewMapText
+                     translation.viewMapText,
+                    style: TextStyle(color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14)
                 ),
               ),
             )
@@ -459,10 +462,6 @@ class Result extends StatelessWidget {
   getTranslatedTitle(translation, originalType) {
     var types = [
       {
-        "entityLabel": translation.basicPageLabel.toString(),
-        "entityId": "page"
-      },
-      {
         "entityLabel": translation.chapterLabel.toString(),
         "entityId": "chapter"
       },
@@ -470,9 +469,12 @@ class Result extends StatelessWidget {
         "entityLabel": translation.eventLabel.toString(),
         "entityId": "Event"
       },
-      //@TODO title name wrong in translation.learningResource.toString()
       {
-        "entityLabel": "Learning Resource",
+        "entityLabel": translation.basicPageLabel.toString(),
+        "entityId": "page"
+      },
+      {
+        "entityLabel": translation.learningResourceLabel.toString(),
         "entityId": "learning_resource"
       },
       {

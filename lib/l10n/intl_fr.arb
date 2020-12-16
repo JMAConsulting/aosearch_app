@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-16T16:54:50.190113",
+  "@@last_modified": "2020-11-24T15:45:42.511035",
   "keywordHintText": "Recherche par mot clé",
   "@keywordHintText": {
     "description": "Keyword hint text",
@@ -30,7 +30,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "languagesHintText": "Please choose one or more language",
+  "languagesHintText": "Choisir une ou plusieurs langues",
   "@languagesHintText": {
     "description": "LanguagesTitleField",
     "type": "text",
@@ -42,7 +42,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "servicesAreProvidedHintText": "Please choose where you would like services to be provided",
+  "servicesAreProvidedHintText": "Choisir l’endroit où vous aimeriez obtenir les services",
   "@servicesAreProvidedHintText": {
     "description": "servicesAreProvidedHint",
     "type": "text",
@@ -54,7 +54,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "ageGroupsHintText": "Please choose any appropriate age groups",
+  "ageGroupsHintText": "Choisir les tranches d’âge applicables",
   "@ageGroupsHintText": {
     "description": "ageGroupsHintText",
     "type": "text",
@@ -210,13 +210,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventMapText": "View event location on map",
+  "eventMapText": "Afficher l'emplacement de l'activité sur la carte",
   "@eventMapText": {
     "description": "eventMapText",
     "type": "text",
     "placeholders": {}
   },
-  "viewMapText": "View on map",
+  "viewMapText": "Voir sur la carte",
   "@viewMapText": {
     "description": "viewMapText",
     "type": "text",

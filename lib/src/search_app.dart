@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/advanced_search_form.dart';
+import 'ui/search_loader.dart';
 import 'package:intl/intl.dart';
 import 'package:aoapp/l10n/messages_all.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -197,7 +197,7 @@ class SearchAppLocalizations {
 
   String get basicPageLabel {
     return Intl.message(
-      'Basic page',
+      'General',
       name: 'basicPageLabel',
       desc: 'basicPageLabel',
       locale: localeName,
@@ -224,7 +224,7 @@ class SearchAppLocalizations {
 
   String get learningResourceLabel {
     return Intl.message(
-      'Basic page',
+      'Learning Resource',
       name: 'learningResourceLabel',
       desc: 'learningResourceLabel',
       locale: localeName,
@@ -405,14 +405,15 @@ class SearchApp extends StatelessWidget {
             children: [
               Image.asset(
                 'images/AO_logo.png',
-                 height: AppBar().preferredSize.height,
-                 fit: BoxFit.cover,
+                height: AppBar().preferredSize.height,
+                fit: BoxFit.cover,
               )
             ],
           ),
         ),
-        body: new AdvancedSearchForm(),
+        body: new SearchLoader(),
       )
     );
   }
+
 }
