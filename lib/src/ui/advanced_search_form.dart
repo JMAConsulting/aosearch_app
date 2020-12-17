@@ -27,6 +27,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   final dateFormat = DateFormat('yyyy-MM-dd');
   final TextEditingController _controller = new TextEditingController();
   DateTime _startDate;
+  bool categoryIsExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -80,19 +81,13 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   },
                 ),
                 SizedBox(height: 8.0),
-                FlatButton(
-                  child: Text(SearchAppLocalizations.of(context).resetText),
-                  onPressed: () {
-                    setState(() {
-                      _formResult = SearchParameters();
-                    });
-                  },
-                ),
                 ExpansionTile(
                   initiallyExpanded: true,
                   title: Text(SearchAppLocalizations
                       .of(context)
-                      .categoryTitle),
+                      .categoryTitle,
+                      style: TextStyle(color: this.categoryIsExpanded ? Colors.transparent :  Colors.black)),
+                  onExpansionChanged: (bool expanding) => setState(() => this.categoryIsExpanded = expanding),
                   children: [
                     Query(
                         options: QueryOptions(
@@ -186,6 +181,14 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   children: [
                     Column(
                       children: [
+                        FlatButton(
+                          child: Text(SearchAppLocalizations.of(context).resetText),
+                          onPressed: () {
+                            setState(() {
+                              _formResult = SearchParameters();
+                            });
+                          },
+                        ),
                         Query(
                           options: QueryOptions(
                             documentNode: gql(facetsQuery),
