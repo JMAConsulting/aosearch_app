@@ -81,99 +81,59 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   },
                 ),
                 SizedBox(height: 8.0),
-                ExpansionTile(
-                  initiallyExpanded: true,
-                  title: Text(SearchAppLocalizations
-                      .of(context)
-                      .categoryTitle,
-                      style: TextStyle(color: this.categoryIsExpanded ? Colors.transparent :  Colors.black)),
-                  onExpansionChanged: (bool expanding) => setState(() => this.categoryIsExpanded = expanding),
-                  children: [
-                    Query(
-                        options: QueryOptions(
-                          documentNode: gql(facetsQuery),
-                          variables: queryVariables(
-                              Localizations.localeOf(context).languageCode,
-                              _formResult.ageGroupsServed,
-                              _formResult.acceptingNewClients,
-                              _formResult.servicesAreProvided,
-                              _formResult.keyword,
-                              _formResult.languages,
-                              _formResult.chapters,
-                              _formResult.catagories,
-                              Localizations.localeOf(context).languageCode.toUpperCase(),
-                              _formResult.isVerified,
-                              _formResult.startDate,
-                              _formResult.endDate,
-                              true
-                          ),
-                        ),
-                        builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                          var catagories = new List();
-                          if (result.loading) {
-                            catagories = _loadedResult.catagories;
-                          }
-                          else if (result.hasException || result.data["searchAPISearch"] == null) {
-                            _formResult.catagories = new List();
-                          }
-                          else {
-                            if (getCatagories(translation, result.data["searchAPISearch"]["facets"], false).isEmpty) {
-                              _formResult.catagories = new List();
-                            }
-                            else {
-                              catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"], false);
-                            }
-                          }
-                          List<Widget> catagoryList = [];
-                          for (var catagory in catagories) {
-                            catagoryList.add(new ListTile(
-                              title: new Row(
-                                children: <Widget>[
-                                  new Expanded(child: new Text(catagory['entityLabel'])),
-                                  new Checkbox(
-                                      value: _formResult.catagories == null ? false : _formResult.catagories.contains(catagory['entityId']) ? true : false,
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          if (value) {
-                                            if (_formResult.catagories == null) {
-                                              _formResult.catagories = new List();
-                                            }
-                                            _formResult.catagories.add(catagory['entityId']);
-                                          }
-                                          else {
-                                            _formResult.catagories = null;
-                                          }
-                                        });
-                                      })
-                                ],
-                              )
-                            )
-                            );
-                          }
-                          /*
-                          return Column(
-                            children: catagoryList,
-                          );
-                          */
-                          return MultiSelectFormField(
-                            initialValue: _formResult.catagories,
-                            title: Text(SearchAppLocalizations
-                                .of(context)
-                                .categoryTitle),
-                            dataSource: catagories,
-                            valueField: 'entityId',
-                            textField: 'entityLabel',
-                            onSaved: (values) {
-                              setState(() {
-                                _formResult.catagories = values;
-                              });
-                            },
-                            hintWidget: Text(SearchAppLocalizations
-                                .of(context).categoryHintText),
-                          );
-                        }
+                Query(
+                    options: QueryOptions(
+                      documentNode: gql(facetsQuery),
+                      variables: queryVariables(
+                          Localizations.localeOf(context).languageCode,
+                          _formResult.ageGroupsServed,
+                          _formResult.acceptingNewClients,
+                          _formResult.servicesAreProvided,
+                          _formResult.keyword,
+                          _formResult.languages,
+                          _formResult.chapters,
+                          _formResult.catagories,
+                          Localizations.localeOf(context).languageCode.toUpperCase(),
+                          _formResult.isVerified,
+                          _formResult.startDate,
+                          _formResult.endDate,
+                          true
+                      ),
                     ),
-                  ],
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      var catagories = new List();
+                      if (result.loading) {
+                        catagories = _loadedResult.catagories;
+                      }
+                      else if (result.hasException || result.data["searchAPISearch"] == null) {
+                        _formResult.catagories = new List();
+                      }
+                      else {
+                        if (getCatagories(translation, result.data["searchAPISearch"]["facets"], false).isEmpty) {
+                          _formResult.catagories = new List();
+                        }
+                        else {
+                          catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"], false);
+                        }
+                      }
+
+                      return MultiSelectFormField(
+                        initialValue: _formResult.catagories,
+                        title: Text(SearchAppLocalizations
+                            .of(context)
+                            .categoryTitle),
+                        dataSource: catagories,
+                        valueField: 'entityId',
+                        textField: 'entityLabel',
+                        onSaved: (values) {
+                          setState(() {
+                            _formResult.catagories = values;
+                          });
+                        },
+                        hintWidget: Text(SearchAppLocalizations
+                            .of(context).categoryHintText),
+                      );
+                    }
                 ),
                 SizedBox(height: 8.0),
                 ExpansionTile(
