@@ -242,7 +242,13 @@ class Result extends StatelessWidget {
                     child:  Wrap(
                       spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
                       children: <Widget>[
-                        (getType(item, true) == 'Service Listing' && item["custom_911"] != null && item["custom_911"] != 'None' && item["custom_895"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                        (getType(item, true) == 'Service Listing' && (
+                            (item["custom_911"] != null &&
+                                item["custom_911"] != '' &&
+                                item["custom_911"] != 'None'
+                            ) || (item["custom_895"] != null && item["custom_895"] != '')
+                          )
+                        ) ? Image.asset('images/icon_verified_16px.png') : Text(''),
                         Text(
                           getTitle(item),
                           style: TextStyle(
