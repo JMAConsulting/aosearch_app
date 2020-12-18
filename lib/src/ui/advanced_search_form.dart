@@ -27,8 +27,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   final dateFormat = DateFormat('yyyy-MM-dd');
   final TextEditingController _controller = new TextEditingController();
   DateTime _startDate;
-  bool categoryIsExpanded = true;
-
+  
   @override
   Widget build(BuildContext context) {
     SearchParameters _loadedResult = widget.search;

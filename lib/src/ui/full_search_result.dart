@@ -109,6 +109,7 @@ class FullResultsPage extends StatelessWidget {
                               ]
                             )
                           ),
+                          SizedBox(height: 10.0),
                           Query(
                             options: QueryOptions(
                               documentNode: gql(optionValueQuery),
@@ -122,7 +123,7 @@ class FullResultsPage extends StatelessWidget {
                                 return Text('Loading');
                               }
                               return ListTile(
-                                  title: Row(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase(), isVerified))
+                                  title: Column(children :buildRegulatorServiceProvided(result1.data["civicrmOptionValueJmaQuery"]['entities'], result.data['civicrmRelationshipJmaQuery']['entities'], Localizations.localeOf(context).languageCode.toUpperCase(), isVerified))
                               );
                             }
                           ),
@@ -160,6 +161,7 @@ class FullResultsPage extends StatelessWidget {
                               );
                             }
                           ),
+                          SizedBox(height: 10),
                           ListTile(
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,13 +406,28 @@ class FullResultsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: newRegulators
           ),
+          SizedBox(height: 10.0),
         ],
       ));
     }
-    if (creds.length == 0 && regulators.length == 0) {
-      creds.add(langCode == 'FR' ? 'Aucune de ces réponses' : 'None of the above');
+    var title = Align(
+      alignment: Alignment.centerLeft,
+      child: Text(langCode == 'FR' ? 'Titre(s) de compétence détenu(s): ' : 'Credential(s) held: ', style: TextStyle(fontSize: 15)),
+    );
+    if (creds.length == 0) {
+      var text = langCode == 'FR' ? 'Aucune de ces réponses' : 'None of the above';
+      widgets.add(
+        Column(
+          children: [
+            title,
+            Row(
+                children: [Text(text, style: TextStyle(fontSize: 12))]
+            )
+          ],
+        )
+      );
     }
-    if (creds.length > 0) {
+    else {
       var newCreds = <Row>[], count = 1;
       creds = LinkedHashSet<String>.from(creds).toList();
       for (var cred in creds) {
@@ -419,21 +436,21 @@ class FullResultsPage extends StatelessWidget {
         newCreds.add(Row(
           children: [
             text == 'None of the above' || text == 'Aucune de ces réponses' ? Text('') : Image.asset('images/icon_verified_16px.png'),
-            Text(text,style: TextStyle(fontSize: 12)),
+            Text(text,style: TextStyle(fontSize: 12),),
           ],
         ));
         count++;
       }
-      widgets.add(Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(langCode == 'FR' ? 'Titre(s) de compétence détenu(s): ' : 'Credential(s) held: ', style: TextStyle(fontSize: 15)),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: newCreds
-          ),
-        ],
-      ));
+      widgets.add(
+          Column(
+            children: [
+              title,
+              Row(
+                  children: newCreds
+              )
+            ],
+          )
+      );
     }
 
     return widgets;

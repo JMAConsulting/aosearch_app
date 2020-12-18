@@ -80,7 +80,7 @@ class _SearchResultsState extends State<SearchResults> {
       builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
         return Column(
           children: [
-            legendIconBlock(translation),
+            legendIconBlock(translation, context),
             Container(
               child: result.hasException
                 ? Text(result.exception.toString())
@@ -95,7 +95,7 @@ class _SearchResultsState extends State<SearchResults> {
   }
 }
 
-  Widget legendIconBlock(translation) {
+  Widget legendIconBlock(translation, context) {
     const rowSpacer=TableRow(
       children: [
         SizedBox(
@@ -114,7 +114,8 @@ class _SearchResultsState extends State<SearchResults> {
           children: [
             SizedBox(height: 10.0),
             Table(
-              children: [
+                defaultColumnWidth: MediaQuery.of(context).size.width > 400 ? FixedColumnWidth(400.0) : FixedColumnWidth(170.0),
+                children: [
                 TableRow(
                   children: [
                     TableCell(
@@ -140,6 +141,7 @@ class _SearchResultsState extends State<SearchResults> {
                   children: [
                     TableCell(
                       child: Column(
+
                         children: [
                           Image.asset('images/icon_videoconferencing_16px.png'),
                           Text(translation.online),
@@ -171,7 +173,7 @@ class _SearchResultsState extends State<SearchResults> {
                       child: Column(
                         children: [
                           Image.asset('images/icon_verified_16px.png'),
-                          Text(translation.verifiedListing),
+                          Text(translation.verifiedListing, textAlign: TextAlign.right),
                         ],
                       )
                     ),
