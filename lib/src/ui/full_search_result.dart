@@ -93,7 +93,7 @@ class FullResultsPage extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Text(translation.serviceListingLabel,
+                                    Text(translation.serviceListingLabel.toUpperCase(),
                                       style: TextStyle(
                                         color: Colors.grey[850],
                                         fontStyle: FontStyle.italic,
