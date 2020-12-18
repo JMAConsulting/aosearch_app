@@ -20,22 +20,22 @@ class ResultsPage extends StatelessWidget {
     return GraphQLProvider(
       client: client,
       child: Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white70,
-        elevation: 4.0,
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white70,
+          elevation: 4.0,
+          brightness: Brightness.light,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          title: Image.asset(
+            'images/AO_logo.png',
+            height: AppBar().preferredSize.height,
+            fit: BoxFit.cover,
+          ),
         ),
-        title: Image.asset(
-          'images/AO_logo.png',
-          height: AppBar().preferredSize.height,
-          fit: BoxFit.cover,
-        ),
+        body: new SearchResults(search: search),
       ),
-      body: new SearchResults(search: search),
-    ),
     );
   }
 }
@@ -83,10 +83,10 @@ class _SearchResultsState extends State<SearchResults> {
             legendIconBlock(translation),
             Container(
               child: result.hasException
-                  ? Text(result.exception.toString())
-                  : result.loading
-                    ? Center(child: CircularProgressIndicator())
-                    : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Expanded(child: Result(list: result.data)),
+                ? Text(result.exception.toString())
+                : result.loading
+                ? Center(child: CircularProgressIndicator())
+                : result.data["searchAPISearch"]["documents"].length == 0 ? Text(SearchAppLocalizations.of(context).noResultText) : Expanded(child: Result(list: result.data)),
             )
           ],
         );
@@ -97,85 +97,93 @@ class _SearchResultsState extends State<SearchResults> {
 
   Widget legendIconBlock(translation) {
     const rowSpacer=TableRow(
-        children: [
-          SizedBox(
-            height: 18,
-          ),
-          SizedBox(
-            height: 18,
-          )
-        ]);
+      children: [
+        SizedBox(
+          height: 18,
+        ),
+        SizedBox(
+          height: 18,
+        )
+      ]
+    );
     return SingleChildScrollView(
-        child: Card(
-          child: ExpansionTile(
-            title: Text(translation.serviceLegendTitle),
-            initiallyExpanded: true,
-            children: [
-              SizedBox(height: 10.0),
-              Table(
+      child: Card(
+        child: ExpansionTile(
+          title: Text(translation.serviceLegendTitle),
+          initiallyExpanded: true,
+          children: [
+            SizedBox(height: 10.0),
+            Table(
+              children: [
+                TableRow(
                   children: [
-                    TableRow(children: [
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_accepting_16px.png'),
-                              Text(translation.acceptingNewClientsTitle),
-                            ],
-                          )
-                      ),
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_not_accepting_16px.png'),
-                              Text(translation.notAcceptingNewClients),
-                            ],
-                          )
-                      ),
-                    ]),
-                    rowSpacer,
-                    TableRow(children: [
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_videoconferencing_16px.png'),
-                              Text(translation.online),
-                            ],
-                          )
-                      ),
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_local_travel_16px.png'),
-                              Text(translation.nearbyAreaTravel),
-                            ],
-                          )
-                      ),
-                    ]),
-                    rowSpacer,
-                    TableRow(children: [
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_remote_travel_16px.png'),
-                              Text(translation.removeAreaTravel),
-                            ],
-                          )
-                      ),
-                      TableCell(
-                          child: Column(
-                            children: [
-                              Image.asset('images/icon_verified_16px.png'),
-                              Text(translation.verifiedListing),
-                            ],
-                          )
-                      ),
-                    ]),
-                    rowSpacer,
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_accepting_16px.png'),
+                          Text(translation.acceptingNewClientsTitle),
+                        ],
+                      )
+                    ),
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_not_accepting_16px.png'),
+                          Text(translation.notAcceptingNewClients),
+                        ],
+                      )
+                    ),
                   ]
-              ),
-            ],
-          ))
-        );
+                ),
+                rowSpacer,
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_videoconferencing_16px.png'),
+                          Text(translation.online),
+                        ],
+                      )
+                    ),
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_local_travel_16px.png'),
+                          Text(translation.nearbyAreaTravel),
+                        ],
+                      )
+                    ),
+                  ]
+                ),
+                rowSpacer,
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_remote_travel_16px.png'),
+                          Text(translation.removeAreaTravel),
+                        ],
+                      )
+                    ),
+                    TableCell(
+                      child: Column(
+                        children: [
+                          Image.asset('images/icon_verified_16px.png'),
+                          Text(translation.verifiedListing),
+                        ],
+                      )
+                    ),
+                  ]
+                ),
+                rowSpacer,
+              ]
+            ),
+          ],
+        )
+      )
+    );
   }
 
 class Result extends StatelessWidget {
@@ -185,160 +193,169 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translation = SearchAppLocalizations.of(context);
-    var baseURL = getbaseUrl(Localizations.localeOf(context).languageCode.toUpperCase());
+    var baseURL = getBaseUrl(Localizations.localeOf(context).languageCode.toUpperCase());
 
     return ListView.builder(
-        itemCount: list["searchAPISearch"]["documents"].length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = list["searchAPISearch"]["documents"][index];
-          SearchParameters items = SearchParameters();
-          items.catagories = [item['type']];
-          items.keyword = item['title'];
-          String title = getTitle(item);
-          String serviceListingID = item['type'] == null ? getItemId(item).toString() : "0";
-          return Card(
-              elevation: 5,
-              child: Padding(
-              padding: EdgeInsets.all(5),
-                child: Column(
-                  children: [
-                    ListTile(
-                      onTap: () {
-                        var path = '';
-                        var type = getType(item, true);
-                        if (type == 'Service Listing') {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => new FullResultsPage(id: getItemId(item).toString())
-                          ));
-                        }
-                        else {
-                          if (type == 'Event') {
-                            path = 'civicrm/event/info?id=';
-                          }
-                          else {
-                            path = 'node/';
-                          }
-                          launch(baseURL + path + getItemId(item).toString());
-                        }
-                      },
-                      title: Container(
-                        padding: EdgeInsets.all(5.0),
-                        height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
-                        child:  Wrap(
-                          spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
-                        children: <Widget>[
-                          (getType(item, true) == 'Service Listing' && item["custom_911"] != null && item["custom_911"] != 'None' && item["custom_895"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
-                          Text(
+      itemCount: list["searchAPISearch"]["documents"].length,
+      itemBuilder: (BuildContext context, int index) {
+        final item = list["searchAPISearch"]["documents"][index];
+        SearchParameters items = SearchParameters();
+        items.catagories = [item['type']];
+        items.keyword = item['title'];
+        String title = getTitle(item);
+        String serviceListingID = item['type'] == null ? getItemId(item).toString() : "0";
+        return Card(
+          elevation: 5,
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    var path = '';
+                    var type = getType(item, true);
+                    if (type == 'Service Listing') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => new FullResultsPage(
+                            id: getItemId(item).toString()
+                          )
+                        )
+                      );
+                    }
+                    else {
+                      if (type == 'Event') {
+                        path = 'civicrm/event/info?id=';
+                      }
+                      else {
+                        path = 'node/';
+                      }
+                      launch(baseURL + path + getItemId(item).toString());
+                    }
+                  },
+                  title: Container(
+                    padding: EdgeInsets.all(5.0),
+                    height: title.length > 50 ? 100.00 : title.length > 40 ? 80.0 : 50.00,
+                    child:  Wrap(
+                      spacing: getType(item, true) == 'Service Listing' ? 2 : 0,
+                      children: <Widget>[
+                        (getType(item, true) == 'Service Listing' && item["custom_911"] != null && item["custom_911"] != 'None' && item["custom_895"] != null) ? Image.asset('images/icon_verified_16px.png') : Text(''),
+                        Text(
                           getTitle(item),
                           style: TextStyle(
-                              color: Colors.grey[850],
-                              fontSize: 18.0,
+                            color: Colors.grey[850],
+                            fontSize: 18.0,
                           ),
                         ),
-                          Divider(
-                            color: Color.fromRGBO(171, 173, 0, 100),
-                            thickness: 3,
-                            endIndent: MediaQuery.of(context).size.width * 0.70,
-                          ),
-                        ]),
-                      ),
-                      subtitle: Wrap(
-                          children: [
-                            Row(
-                                children: [
-                                  Text(getTranslatedTitle(translation, getType(item, false)).toUpperCase(),
-                                    style: TextStyle(
-                                        color: Colors.grey[850],
-                                        fontStyle: FontStyle.italic,
-                                        fontSize: 12.0
-                                    ),
-                                  ),
-                                  Text(' '),
-                                  Query(
-                                      options: QueryOptions(
-                                          documentNode: gql(getServiceListingInformationQuery),
-                                          variables: {"contact_id": serviceListingID, "contactId": serviceListingID}
-                                      ),
-                                      builder: (QueryResult result1, {VoidCallback refetch, FetchMore fetchMore}) {
-                                        if (serviceListingID == "0") {
-                                          return Text('');
-                                        }
-                                        if (result1.hasException) {
-                                          return Text(
-                                              result1.exception.toString());
-                                        }
-                                        if (result1.loading) {
-                                          return Text('');
-                                        }
-                                        return Wrap(
-                                          spacing: 2,
-                                          children: getServicelistingButtons(result1.data["civicrmContactById"]),
-                                        );
-                                      }),
-                                ]
-                            )
-                          ]
-                      ),
+                        Divider(
+                          color: Color.fromRGBO(171, 173, 0, 100),
+                          thickness: 3,
+                          endIndent: MediaQuery.of(context).size.width * 0.70,
+                        ),
+                      ]
                     ),
-                    ListTile(
-                      subtitle: Table(
-                        columnWidths: {
-                          0: FlexColumnWidth(5),
-                          1: FlexColumnWidth(0.5),
-                        },
+                  ),
+                  subtitle: Wrap(
+                    children: [
+                      Row(
                         children: [
-                          TableRow(
-                            children: [
-                              TableCell(child: Text(
-                                getDescription(item),
-                                style: TextStyle(
-                                    color: Colors.grey[850],
-                                    fontSize: 15.0
-                                ),)
-                              ),
-                              TableCell(
-                                  child: new IconButton(
-                                    icon: new Icon(Icons.arrow_right),
-                                    onPressed: () {
-                                      var path = '';
-                                      var type = getType(item, true);
-                                      if (type == 'Service Listing') {
-                                        Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => new FullResultsPage(id: getItemId(item).toString())
-                                              )
-                                        );
-                                      }
-                                      else {
-                                        if (type == 'Event') {
-                                          path = 'civicrm/event/info?id=';
-                                        }
-                                        else {
-                                          path = 'node/';
-                                        }
-                                        launch(baseURL + path + getItemId(item).toString());
-                                      }
-                                    },
-                                  )
-                              )
-                            ]
-                          )
-                        ],
+                          Text(
+                            getTranslatedTitle(translation, getType(item, false)).toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.grey[850],
+                              fontStyle: FontStyle.italic,
+                              fontSize: 12.0
+                            ),
+                          ),
+                          Text(' '),
+                          Query(
+                            options: QueryOptions(
+                             documentNode: gql(getServiceListingInformationQuery),
+                              variables: {"contact_id": serviceListingID, "contactId": serviceListingID}
+                            ),
+                            builder: (QueryResult result1, {VoidCallback refetch, FetchMore fetchMore}) {
+                              if (serviceListingID == "0") {
+                                return Text('');
+                              }
+                              if (result1.hasException) {
+                                return Text(result1.exception.toString());
+                              }
+                              if (result1.loading) {
+                                return Text('');
+                              }
+                              return Wrap(
+                                spacing: 2,
+                                children: getServicelistingButtons(
+                                  result1.data["civicrmContactById"]),
+                              );
+                            }
+                          ),
+                        ]
                       )
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: geolocationButtons(item, translation),
-                    ),
-                  ],
-                )
-              )
-            );
-          });
+                    ]
+                  ),
+                ),
+                ListTile(
+                  subtitle: Table(
+                    columnWidths: {
+                      0: FlexColumnWidth(5),
+                      1: FlexColumnWidth(0.5),
+                    },
+                    children: [
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Text(
+                              getDescription(item),
+                              style: TextStyle(
+                                color: Colors.grey[850],
+                                fontSize: 15.0
+                              ),
+                            )
+                          ),
+                          TableCell(
+                            child: new IconButton(
+                              icon: new Icon(Icons.arrow_right),
+                              onPressed: () {
+                                var path = '';
+                                var type = getType(item, true);
+                                if (type == 'Service Listing') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => new FullResultsPage(id: getItemId(item).toString())
+                                    )
+                                  );
+                                }
+                                else {
+                                  if (type == 'Event') {
+                                    path = 'civicrm/event/info?id=';
+                                  }
+                                  else {
+                                    path = 'node/';
+                                  }
+                                  launch(baseURL + path + getItemId(item).toString());
+                                }
+                              },
+                            )
+                          )
+                        ]
+                      )
+                    ],
+                  )
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: geolocationButtons(item, translation),
+                ),
+              ],
+            )
+          )
+        );
+      }
+    );
 
   }
 
@@ -400,7 +417,8 @@ class Result extends StatelessWidget {
                 ),
               ),
             )
-          ));
+          )
+        );
       }
     }
     else {
@@ -413,14 +431,14 @@ class Result extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 0.0),
       child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.grey[850],
-              fontSize: 18.0
-            ),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.grey[850],
+            fontSize: 18.0
           ),
+        ),
       )
     );
   }
@@ -438,7 +456,6 @@ class Result extends StatelessWidget {
   getTitle(item) {
     var title = item['title'] ?? item["organization_name"] ?? item['tm_x3b_und_title_1'] ?? '';
     title = title.replaceAll('Self-employed ', '');
-
     return title;
   }
 
@@ -449,8 +466,8 @@ class Result extends StatelessWidget {
 
   String truncateWithEllipsis(int cutoff, String myString) {
     return (myString.length <= cutoff)
-        ? myString
-        : '${myString.substring(0, cutoff)}...';
+      ? myString
+      : '${myString.substring(0, cutoff)}...';
   }
 
   getItemId(item) {
@@ -493,7 +510,7 @@ class Result extends StatelessWidget {
     }
   }
 
-  String getbaseUrl(languageCode) {
+  String getBaseUrl(languageCode) {
     var baseURL = 'https://www.autismontario.com/';
     if (languageCode == 'FR') {
       baseURL = baseURL + 'fr/';

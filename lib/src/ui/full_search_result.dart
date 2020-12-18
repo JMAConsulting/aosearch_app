@@ -93,7 +93,7 @@ class FullResultsPage extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Text('SERVICE LISTING',
+                                    Text(translation.serviceListingLabel,
                                       style: TextStyle(
                                         color: Colors.grey[850],
                                         fontStyle: FontStyle.italic,
