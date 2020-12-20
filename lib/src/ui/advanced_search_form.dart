@@ -27,7 +27,7 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
   final dateFormat = DateFormat('yyyy-MM-dd');
   final TextEditingController _controller = new TextEditingController();
   DateTime _startDate;
-
+  
   @override
   Widget build(BuildContext context) {
     SearchParameters _loadedResult = widget.search;
@@ -80,6 +80,61 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                   },
                 ),
                 SizedBox(height: 8.0),
+                Query(
+                    options: QueryOptions(
+                      documentNode: gql(facetsQuery),
+                      variables: queryVariables(
+                          Localizations.localeOf(context).languageCode,
+                          _formResult.ageGroupsServed,
+                          _formResult.acceptingNewClients,
+                          _formResult.servicesAreProvided,
+                          _formResult.keyword,
+                          _formResult.languages,
+                          _formResult.chapters,
+                          _formResult.catagories,
+                          Localizations.localeOf(context).languageCode.toUpperCase(),
+                          _formResult.isVerified,
+                          _formResult.startDate,
+                          _formResult.endDate,
+                          true
+                      ),
+                    ),
+                    builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+                      var catagories = new List();
+                      if (result.loading) {
+                        catagories = _loadedResult.catagories;
+                      }
+                      else if (result.hasException || result.data["searchAPISearch"] == null) {
+                        _formResult.catagories = new List();
+                      }
+                      else {
+                        if (getCatagories(translation, result.data["searchAPISearch"]["facets"], false).isEmpty) {
+                          _formResult.catagories = new List();
+                        }
+                        else {
+                          catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"], false);
+                        }
+                      }
+
+                      return MultiSelectFormField(
+                        initialValue: _formResult.catagories,
+                        title: Text(SearchAppLocalizations
+                            .of(context)
+                            .categoryTitle),
+                        dataSource: catagories,
+                        valueField: 'entityId',
+                        textField: 'entityLabel',
+                        onSaved: (values) {
+                          setState(() {
+                            _formResult.catagories = values;
+                          });
+                        },
+                        hintWidget: Text(SearchAppLocalizations
+                            .of(context).categoryHintText),
+                      );
+                    }
+                ),
+                SizedBox(height: 8.0),
                 ExpansionTile(
                   title: Text(SearchAppLocalizations.of(context).advSearchTitle),
                   children: [
@@ -92,59 +147,6 @@ class _AdvancedSearchFormState extends State<AdvancedSearchForm> {
                               _formResult = SearchParameters();
                             });
                           },
-                        ),
-                        Query(
-                            options: QueryOptions(
-                              documentNode: gql(facetsQuery),
-                              variables: queryVariables(
-                                Localizations.localeOf(context).languageCode,
-                                _formResult.ageGroupsServed,
-                                _formResult.acceptingNewClients,
-                                _formResult.servicesAreProvided,
-                                _formResult.keyword,
-                                _formResult.languages,
-                                _formResult.chapters,
-                                _formResult.catagories,
-                                Localizations.localeOf(context).languageCode.toUpperCase(),
-                                _formResult.isVerified,
-                                _formResult.startDate,
-                                _formResult.endDate,
-                                true
-                              ),
-                            ),
-                            builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
-                              var catagories = new List();
-                              if (result.loading) {
-                                catagories = _loadedResult.catagories;
-                              }
-                              else if (result.hasException || result.data["searchAPISearch"] == null) {
-                                _formResult.catagories = new List();
-                              }
-                              else {
-                                if (getCatagories(translation, result.data["searchAPISearch"]["facets"], false).isEmpty) {
-                                  _formResult.catagories = new List();
-                                }
-                                else {
-                                  catagories = getCatagories(translation, result.data["searchAPISearch"]["facets"], false);
-                                }
-                              }
-                              return MultiSelectFormField(
-                                initialValue: _formResult.catagories,
-                                title: Text(SearchAppLocalizations
-                                    .of(context)
-                                    .categoryTitle),
-                                dataSource: catagories,
-                                valueField: 'entityId',
-                                textField: 'entityLabel',
-                                onSaved: (values) {
-                                  setState(() {
-                                    _formResult.catagories = values;
-                                  });
-                                },
-                                hintWidget: Text(SearchAppLocalizations
-                                    .of(context).categoryHintText),
-                              );
-                            }
                         ),
                         Query(
                           options: QueryOptions(
