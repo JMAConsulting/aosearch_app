@@ -105,7 +105,7 @@ query getContactInformation(\$contact_id: String!, \$contactId: [String]) {
       }
     }
   }
-   civicrmRelationshipJmaQuery(filter: {conditions: {field: "contact_id_b", value: \$contactId, operator: EQUAL}}) {
+   civicrmRelationshipJmaQuery(filter: {conditions: [{field: "contact_id_b", value: \$contactId, operator: EQUAL}, {field: "is_active", value: "1", operator: EQUAL}]) {
     entities { 
       ... on CivicrmRelationship {
         relationshipTypeId
