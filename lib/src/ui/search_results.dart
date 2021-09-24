@@ -518,7 +518,7 @@ class Result extends StatelessWidget {
   }
 
   String getBaseUrl(languageCode) {
-    var baseURL = 'https://www.autismontario.com/';
+    var baseURL = 'https://stage.autismontario.com/';
     if (languageCode == 'FR') {
       baseURL = baseURL + 'fr/';
     }

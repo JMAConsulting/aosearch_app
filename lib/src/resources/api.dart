@@ -4,11 +4,11 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/foundation.dart';
 
 final HttpLink _httpLink = HttpLink(
-  uri: 'https://www.autismontario.com/graphql',
+  uri: 'https://stage.autismontario.com/graphql',
 );
 
 final HttpLink _frenchHttpLink = HttpLink(
-  uri: 'https://www.autismontario.com/fr/graphql',
+  uri: 'https://stage.autismontario.com/fr/graphql',
 );
 
 final AuthLink _authLink = AuthLink(
