@@ -48,8 +48,8 @@ android {
         applicationId "com.jma.aoapp"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 4
-        versionName "1.0"
+        versionCode 8
+        versionName "1.1.1"
         resConfigs "en", "fr"
     }
 

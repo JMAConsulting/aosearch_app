@@ -114,7 +114,6 @@ class _SearchResultsState extends State<SearchResults> {
           children: [
             SizedBox(height: 10.0),
             Table(
-                defaultColumnWidth: MediaQuery.of(context).size.width > 400 ? FixedColumnWidth(400.0) : FixedColumnWidth(170.0),
                 children: [
                 TableRow(
                   children: [
